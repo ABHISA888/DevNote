@@ -214,7 +214,7 @@ Frontend
 | Name | Role |
 |------|------|
 | Abhinivesh S | Backend Developer |
-| Team Member | Frontend Developer |
+| Deva Harsheni S | Frontend Developer |
 
 ---
 
