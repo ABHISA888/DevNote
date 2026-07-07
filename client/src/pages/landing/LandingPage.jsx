@@ -1,26 +1,44 @@
+/**
+ * LandingPage.jsx — Page Orchestrator
+ *
+ * WHY THIS FILE STAYS MINIMAL:
+ * LandingPage.jsx is NOT a component — it is a COMPOSITION ROOT.
+ * Its only job is to import sections and declare their order.
+ * Zero styling, zero data, zero logic lives here.
+ *
+ * This is the "director" pattern used at Linear, Vercel, and Stripe:
+ * the page file reads like a table of contents for your sections.
+ *
+ * When a designer says "move Testimonials above Workflow", you change
+ * TWO lines here — nothing inside any component ever needs to change.
+ *
+ * REACT CONCEPT: Composition over configuration.
+ * We compose complex pages from small, self-contained pieces.
+ * This is the core philosophy of React itself.
+ */
+
+import Navbar from '../../components/landing/Navbar';
+import HeroSection from '../../components/landing/HeroSection';
+import FeaturesSection from '../../components/landing/FeaturesSection';
+import WorkflowSection from '../../components/landing/WorkflowSection';
+import EnvironmentSection from '../../components/landing/EnvironmentSection';
+import TestimonialsSection from '../../components/landing/TestimonialsSection';
+import CTASection from '../../components/landing/CTASection';
+import Footer from '../../components/landing/Footer';
+
 export default function LandingPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
-      <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent sm:text-6xl">
-        DevLaunch
-      </h1>
-      <p className="mt-6 text-lg text-slate-400 max-w-2xl">
-        The ultimate workspace for developers. Manage your projects, notes, API tests, and deployments in one unified dashboard.
-      </p>
-      <div className="mt-10 flex gap-4">
-        <a
-          href="/signup"
-          className="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-medium transition-all shadow-lg shadow-indigo-500/20"
-        >
-          Get Started
-        </a>
-        <a
-          href="/login"
-          className="px-6 py-3 rounded-lg border border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-medium transition-all"
-        >
-          Sign In
-        </a>
-      </div>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <main>
+        <HeroSection />
+        <FeaturesSection />
+        <WorkflowSection />
+        <EnvironmentSection />
+        <TestimonialsSection />
+        <CTASection />
+      </main>
+      <Footer />
     </div>
   );
 }
