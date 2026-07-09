@@ -156,13 +156,14 @@ const ProjectSchema = new mongoose.Schema(
 );
 
 // Pre-save middleware to align casing for status from frontend to backend standard
-ProjectSchema.pre('save', function () {
+ProjectSchema.pre('save', function (next) {
   // Normalize lowercase status values if they come in
   if (this.status) {
     if (this.status.toUpperCase() === 'ACTIVE') this.status = 'In Progress';
     if (this.status.toUpperCase() === 'IN REVIEW') this.status = 'In Review';
     if (this.status.toUpperCase() === 'COMPLETED') this.status = 'Completed';
   }
+  next();
 });
 
 const Project = mongoose.model('Project', ProjectSchema);
