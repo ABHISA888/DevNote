@@ -13,8 +13,8 @@ export default function ResponseViewer({ status, time, body }) {
       <div className="flex items-center justify-between mb-2">
         <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Last Response</h4>
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <span className="flex items-center gap-1.5 text-[10px] font-extrabold text-primary-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />
             {status || '200 OK'}
           </span>
           {time && (

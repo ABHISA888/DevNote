@@ -33,7 +33,7 @@ export default function DeadlineCard({
         <div className="flex items-center gap-3">
           <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
             <div 
-              className="h-full rounded-full bg-indigo-600" 
+              className="h-full rounded-full bg-primary-600" 
               style={{ width: `${progressPercent}%` }}
             />
           </div>

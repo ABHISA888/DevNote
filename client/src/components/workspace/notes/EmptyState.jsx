@@ -10,7 +10,7 @@ import { FileText, ArrowLeft } from 'lucide-react';
 export default function EmptyState() {
   return (
     <div className="flex h-full flex-col items-center justify-center bg-[#f8f9fe]">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-500 mb-4 shadow-sm border border-indigo-100">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 mb-4 shadow-sm border border-primary-100">
         <FileText size={32} />
       </div>
       <h2 className="text-lg font-extrabold text-slate-800 tracking-tight">No Note Selected</h2>

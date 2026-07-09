@@ -43,10 +43,10 @@ export default function LoginPage() {
           </div>
 
           {/* ── RIGHT CARD: Credentials Auth ── */}
-          <div className="w-full rounded-2xl bg-white px-8 py-10 shadow-xl shadow-indigo-100/30 sm:px-10 lg:w-[420px] lg:flex-none">
+          <div className="w-full rounded-2xl bg-white px-8 py-10 shadow-xl shadow-primary-100/30 sm:px-10 lg:w-[420px] lg:flex-none">
             <div className="flex flex-col items-center space-y-1 text-center">
               {/* Logo rocket badge */}
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 shadow-md shadow-indigo-200">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-600 shadow-md shadow-primary-200">
                 <span className="text-xl">🚀</span>
               </div>
 
@@ -77,7 +77,7 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   placeholder="name@company.com"
-                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-slate-700 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-slate-700 placeholder-gray-400 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
                 />
               </div>
 
@@ -89,7 +89,7 @@ export default function LoginPage() {
                   </label>
                   <a
                     href="#"
-                    className="text-xs font-medium text-indigo-500 transition hover:text-indigo-700"
+                    className="text-xs font-medium text-primary-500 transition hover:text-primary-700"
                   >
                     Forgot Password?
                   </a>
@@ -99,7 +99,7 @@ export default function LoginPage() {
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
-                    className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 pr-10 text-sm text-slate-700 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 pr-10 text-sm text-slate-700 placeholder-gray-400 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
                   />
                   <button
                     type="button"
@@ -118,7 +118,7 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={() => setRememberMe((v) => !v)}
-                  className="h-4 w-4 rounded border-gray-300 accent-indigo-600 focus:ring-indigo-500"
+                  className="h-4 w-4 rounded border-gray-300 accent-indigo-600 focus:ring-primary-500"
                 />
                 <span className="text-xs text-slate-500 font-medium select-none">Remember Me</span>
               </label>
@@ -127,7 +127,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition hover:bg-indigo-700"
+                className="w-full rounded-lg bg-primary-600 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary-200 transition hover:bg-primary-700"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -153,7 +153,7 @@ export default function LoginPage() {
             {/* Navigation redirect button */}
             <Link
               to="/signup"
-              className="block w-full rounded-lg border border-gray-200 bg-white py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600"
+              className="block w-full rounded-lg border border-gray-200 bg-white py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
             >
               Create Account
             </Link>
@@ -163,7 +163,7 @@ export default function LoginPage() {
               Don't have an account?{' '}
               <Link
                 to="/signup"
-                className="font-medium text-indigo-500 transition hover:text-indigo-700"
+                className="font-medium text-primary-500 transition hover:text-primary-700"
               >
                 Sign Up
               </Link>
@@ -174,8 +174,8 @@ export default function LoginPage() {
 
       {/* ── Security trust layout footer ── */}
       <div className="pb-6 text-center space-y-4">
-        <div className="inline-flex items-center gap-2 rounded-2xl border border-indigo-100 bg-[#f4f6fc] px-4 py-2 text-xs text-slate-500 shadow-sm">
-          <Shield size={14} className="text-indigo-500" />
+        <div className="inline-flex items-center gap-2 rounded-2xl border border-primary-100 bg-[#f4f6fc] px-4 py-2 text-xs text-slate-500 shadow-sm">
+          <Shield size={14} className="text-primary-500" />
           <span>Your data is securely encrypted using JWT authentication.</span>
         </div>
 

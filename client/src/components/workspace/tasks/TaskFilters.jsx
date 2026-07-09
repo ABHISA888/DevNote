@@ -22,7 +22,7 @@ export default function TaskFilters({ activeView, onViewChange, searchQuery, onS
             placeholder="Filter tasks..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
           />
         </div>
         <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-500 shadow-sm hover:bg-slate-50 transition">
@@ -35,7 +35,7 @@ export default function TaskFilters({ activeView, onViewChange, searchQuery, onS
           onClick={() => onViewChange('board')}
           className={`flex flex-1 sm:w-24 items-center justify-center gap-1.5 rounded-md px-3 text-xs font-bold transition-all h-full ${
             activeView === 'board'
-              ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100'
+              ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100'
               : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
           }`}
         >
@@ -46,7 +46,7 @@ export default function TaskFilters({ activeView, onViewChange, searchQuery, onS
           onClick={() => onViewChange('list')}
           className={`flex flex-1 sm:w-24 items-center justify-center gap-1.5 rounded-md px-3 text-xs font-bold transition-all h-full ${
             activeView === 'list'
-              ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100'
+              ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100'
               : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
           }`}
         >

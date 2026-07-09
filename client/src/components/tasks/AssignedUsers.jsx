@@ -28,7 +28,7 @@ export default function AssignedUsers({ assignees, additionalAssignees }) {
         />
       ))}
       {additionalAssignees > 0 && (
-        <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-indigo-100 text-[10px] font-bold text-indigo-700">
+        <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-primary-100 text-[10px] font-bold text-primary-700">
           +{additionalAssignees}
         </div>
       )}

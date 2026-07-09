@@ -23,7 +23,7 @@ export default function WorkspaceHeader({ projectName }) {
       <nav className="flex items-center gap-1.5 text-sm font-semibold text-slate-500">
         <button
           onClick={() => navigate('/projects')}
-          className="transition hover:text-indigo-600"
+          className="transition hover:text-primary-600"
         >
           /
         </button>
@@ -40,7 +40,7 @@ export default function WorkspaceHeader({ projectName }) {
           <input
             type="text"
             placeholder="Search workspace..."
-            className="h-8 w-48 rounded-lg border border-gray-200 bg-slate-50 pl-9 pr-3 text-xs font-medium text-slate-600 placeholder-slate-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 lg:w-64"
+            className="h-8 w-48 rounded-lg border border-gray-200 bg-slate-50 pl-9 pr-3 text-xs font-medium text-slate-600 placeholder-slate-400 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100 lg:w-64"
           />
         </div>
       </div>

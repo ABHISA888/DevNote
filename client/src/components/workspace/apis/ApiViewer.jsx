@@ -21,7 +21,7 @@ export default function ApiViewer({ activeEndpoint }) {
 
       {/* Add another endpoint placeholder */}
       {activeEndpoint && (
-        <button className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gray-200 bg-slate-50/50 p-6 text-slate-400 hover:border-indigo-300 hover:bg-indigo-50/30 hover:text-indigo-500 transition">
+        <button className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gray-200 bg-slate-50/50 p-6 text-slate-400 hover:border-primary-300 hover:bg-primary-50/30 hover:text-primary-500 transition">
           <div className="flex h-8 w-8 items-center justify-center rounded-full border border-current">
             <Plus size={16} />
           </div>

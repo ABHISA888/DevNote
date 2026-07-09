@@ -16,8 +16,8 @@ export default function ActionButton({
   const baseClasses = "flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all shadow-sm";
   
   const variants = {
-    primary: "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200 border border-indigo-600",
-    outline: "bg-white text-slate-700 border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700",
+    primary: "bg-primary-600 text-white hover:bg-primary-700 shadow-primary-200 border border-primary-600",
+    outline: "bg-white text-slate-700 border border-gray-200 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700",
     dark: "bg-slate-900 text-white hover:bg-slate-800 border border-slate-900",
   };
 

@@ -13,7 +13,7 @@ export default function HelpCard() {
         <p className="text-[11px] leading-relaxed text-slate-300">
           Check out our technical docs for best practices on project structure.
         </p>
-        <a href="#" className="group mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300 transition hover:text-indigo-200">
+        <a href="#" className="group mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-primary-300 transition hover:text-primary-200">
           Read Documentation
           <ExternalLink size={12} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </a>

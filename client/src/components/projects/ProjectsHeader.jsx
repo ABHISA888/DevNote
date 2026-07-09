@@ -15,7 +15,7 @@ export default function ProjectsHeader({ onNewProjectClick }) {
         </button>
         <button 
           onClick={onNewProjectClick}
-          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-indigo-600/20 transition hover:bg-indigo-700"
+          className="flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700"
         >
           <Plus size={14} strokeWidth={2.5} /> New Project
         </button>

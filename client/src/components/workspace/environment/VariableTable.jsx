@@ -13,7 +13,7 @@ export default function VariableTable({ variables, onEdit, onDelete }) {
   if (variables.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 rounded-xl border-2 border-dashed border-gray-200 bg-slate-50/50">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-400 mb-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-400 mb-4">
           <Variable size={28} />
         </div>
         <h3 className="text-sm font-extrabold text-slate-700">No variables found</h3>

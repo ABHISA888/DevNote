@@ -12,7 +12,7 @@ export default function ProductivityCard({ streak, avgTime }) {
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Productivity</h3>
-        <Zap size={14} className="text-indigo-600" />
+        <Zap size={14} className="text-primary-600" />
       </div>
 
       <div className="space-y-3.5">
@@ -22,7 +22,7 @@ export default function ProductivityCard({ streak, avgTime }) {
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Week Streak</span>
             <span className="text-sm font-extrabold text-slate-800">{streak}</span>
           </div>
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
             <TrendingUp size={16} />
           </div>
         </div>
@@ -33,7 +33,7 @@ export default function ProductivityCard({ streak, avgTime }) {
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Time / Task</span>
             <span className="text-sm font-extrabold text-slate-800">{avgTime}</span>
           </div>
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
             <Clock size={16} />
           </div>
         </div>

@@ -1,11 +1,11 @@
-import { Search, Bell, Moon, Menu } from 'lucide-react';
+import { Search, Bell, Menu } from 'lucide-react';
 
 /**
  * 🎓 TEACHING MOMENT: TopNavbar.jsx
  * 
  * WHY THIS EXISTS:
  * The TopNavbar provides global context and actions that are unrelated to the specific page 
- * the user is on. Things like global search, global notifications, and global theme toggling 
+ * the user is on. Things like global search and global notifications
  * belong here because they apply to the entire workspace.
  * 
  * HOW SAAS DASHBOARDS USE IT:
@@ -35,7 +35,7 @@ export default function TopNavbar({ onOpenMobileMenu }) {
           <input
             type="text"
             placeholder="Search projects, tasks, or settings..."
-            className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 pl-10 pr-4 text-sm text-slate-700 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+            className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 pl-10 pr-4 text-sm text-slate-700 placeholder-gray-400 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
           />
         </div>
       </div>
@@ -49,17 +49,9 @@ export default function TopNavbar({ onOpenMobileMenu }) {
           <span className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500 border border-white"></span>
         </button>
 
-        {/* Theme Toggle (Mocked as Moon for design) */}
-        <button className="text-gray-400 transition hover:text-slate-600">
-          <Moon size={18} />
-        </button>
-
-        {/* Vertical Divider */}
-        <div className="h-6 w-px bg-gray-200"></div>
-
         {/* User Profile Dropdown trigger */}
         <button className="flex items-center gap-3 transition hover:opacity-80">
-          <div className="h-8 w-8 overflow-hidden rounded-full bg-indigo-100 ring-2 ring-white">
+          <div className="h-8 w-8 overflow-hidden rounded-full bg-primary-100 ring-2 ring-white">
             <img 
               src="https://api.dicebear.com/7.x/avataaars/svg?seed=Harshu&backgroundColor=6366f1" 
               alt="User Avatar" 

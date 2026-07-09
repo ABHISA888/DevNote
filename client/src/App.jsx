@@ -8,7 +8,7 @@ import AppRoutes from './routes/AppRoutes';
  * - App.jsx is the boundary between the browser mount (main.jsx) and the
  *   route system (AppRoutes.jsx). It should only hold concerns that affect
  *   the *entire* application equally — global styling, toast notifications,
- *   and future global providers (ThemeProvider, AuthProvider, QueryClient).
+ *   and future global providers (AuthProvider, QueryClient).
  *
  * WHY we removed the container wrapper:
  * - Authentication pages (Login, Signup) are designed as full-viewport
@@ -17,15 +17,15 @@ import AppRoutes from './routes/AppRoutes';
  */
 function App() {
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className="min-h-screen bg-white font-sans text-slate-900 antialiased selection:bg-primary-500 selection:text-white">
       <AppRoutes />
       <Toaster
         position="bottom-right"
         toastOptions={{
           style: {
-            background: '#1e293b',
-            color: '#f1f5f9',
-            border: '1px solid rgba(99,102,241,0.2)',
+            background: '#ffffff',
+            color: '#334155',
+            border: '1px solid #e5e7eb',
             fontSize: '0.875rem',
           },
         }}

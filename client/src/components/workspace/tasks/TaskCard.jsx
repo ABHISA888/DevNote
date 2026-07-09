@@ -14,7 +14,7 @@ import { MessageSquare, Paperclip, CheckSquare, MoreHorizontal } from 'lucide-re
 export default function TaskCard({ task }) {
   const priorityColors = {
     HIGH: 'bg-red-50 text-red-600 border-red-100',
-    MEDIUM: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+    MEDIUM: 'bg-primary-50 text-primary-600 border-primary-100',
     NORMAL: 'bg-slate-50 text-slate-500 border-slate-200',
     LOW: 'bg-slate-50 text-slate-400 border-slate-200'
   };
@@ -24,7 +24,7 @@ export default function TaskCard({ task }) {
 
   return (
     <div 
-      className={`group relative flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md cursor-grab active:cursor-grabbing ${
+      className={`group relative flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-primary-200 hover:shadow-md cursor-grab active:cursor-grabbing ${
         isCompleted ? 'opacity-85 hover:opacity-100' : ''
       }`}
     >
@@ -42,7 +42,7 @@ export default function TaskCard({ task }) {
 
       {/* Task Content */}
       <div className="space-y-1.5">
-        <h4 className={`text-xs font-extrabold text-slate-800 leading-snug group-hover:text-indigo-600 transition ${
+        <h4 className={`text-xs font-extrabold text-slate-800 leading-snug group-hover:text-primary-600 transition ${
           isCompleted ? 'line-through text-slate-400' : ''
         }`}>
           {task.name}
@@ -77,7 +77,7 @@ export default function TaskCard({ task }) {
           </div>
           <div className="h-1 w-full overflow-hidden rounded-full bg-slate-100">
             <div 
-              className="h-full bg-indigo-600 transition-all duration-300"
+              className="h-full bg-primary-600 transition-all duration-300"
               style={{ width: `${task.progress}%` }}
             />
           </div>
@@ -133,7 +133,7 @@ export default function TaskCard({ task }) {
 
           {/* Badge indicator text */}
           {task.badgeText && (
-            <span className="rounded bg-indigo-50 px-1 py-0.5 text-[8px] text-indigo-600 uppercase border border-indigo-100">
+            <span className="rounded bg-primary-50 px-1 py-0.5 text-[8px] text-primary-600 uppercase border border-primary-100">
               {task.badgeText}
             </span>
           )}
@@ -144,7 +144,7 @@ export default function TaskCard({ task }) {
               task.dueDate === 'Due Today' 
                 ? 'text-red-500 bg-red-50 border border-red-100 px-1 rounded' 
                 : isCompleted 
-                ? 'text-emerald-500' 
+                ? 'text-primary-500' 
                 : 'text-slate-400'
             }`}>
               {task.dueDate}

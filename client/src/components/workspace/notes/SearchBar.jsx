@@ -17,7 +17,7 @@ export default function SearchBar({ searchQuery, onSearchChange }) {
         placeholder="Search notes..."
         value={searchQuery}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="h-10 w-full rounded-lg border border-gray-200 bg-slate-50 pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+        className="h-10 w-full rounded-lg border border-gray-200 bg-slate-50 pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
       />
     </div>
   );

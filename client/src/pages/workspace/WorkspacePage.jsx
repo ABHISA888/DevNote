@@ -11,8 +11,8 @@ export default function WorkspacePage() {
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-            <span className="text-xs font-medium text-emerald-400">Active Workspace</span>
+            <div className="h-2 w-2 animate-pulse rounded-full bg-primary-400" />
+            <span className="text-xs font-medium text-primary-400">Active Workspace</span>
           </div>
           <h1 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
             {workspaceId
@@ -21,7 +21,7 @@ export default function WorkspacePage() {
           </h1>
           <p className="mt-1 text-sm text-slate-400">
             Workspace ID:{' '}
-            <code className="rounded bg-slate-800 px-1.5 py-0.5 text-xs text-indigo-300">
+            <code className="rounded bg-slate-800 px-1.5 py-0.5 text-xs text-primary-300">
               {workspaceId || 'default'}
             </code>
           </p>
@@ -39,7 +39,7 @@ export default function WorkspacePage() {
             key={tab}
             className={`flex-shrink-0 rounded-md px-4 py-1.5 text-sm font-medium transition ${
               i === 0
-                ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/20'
+                ? 'bg-primary-600 text-white shadow-sm shadow-primary-500/20'
                 : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
             }`}
           >

@@ -48,7 +48,7 @@ export default function Footer() {
           {/* Brand column */}
           <div className="col-span-2 sm:col-span-1 lg:col-span-1">
             <Link to="/" className="flex items-center gap-2" aria-label="DevNote home">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-indigo-600">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary-600">
                 <span className="text-xs font-black text-white">DN</span>
               </div>
               <span className="text-sm font-bold tracking-tight text-gray-900">DevNote</span>

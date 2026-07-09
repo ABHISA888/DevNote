@@ -9,7 +9,7 @@ import React from 'react';
  */
 export default function ProjectCard({ title, description, badges, thumbnailColor }) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition hover:shadow-lg hover:border-indigo-100">
+    <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition hover:shadow-lg hover:border-primary-100">
       
       {/* Mock Image / Thumbnail Area */}
       <div className={`h-36 w-full ${thumbnailColor} flex items-center justify-center relative overflow-hidden`}>
@@ -42,7 +42,7 @@ export default function ProjectCard({ title, description, badges, thumbnailColor
         </div>
 
         {/* Action Footer */}
-        <button className="mt-5 w-full rounded-lg bg-indigo-50 py-2.5 text-sm font-bold text-indigo-600 transition hover:bg-indigo-100 hover:text-indigo-700">
+        <button className="mt-5 w-full rounded-lg bg-primary-50 py-2.5 text-sm font-bold text-primary-600 transition hover:bg-primary-100 hover:text-primary-700">
           Open Project
         </button>
       </div>

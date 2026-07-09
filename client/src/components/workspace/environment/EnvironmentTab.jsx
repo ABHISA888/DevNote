@@ -67,7 +67,7 @@ export default function EnvironmentTab() {
               placeholder="Search keys..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-9 w-48 sm:w-56 rounded-lg border border-gray-200 bg-slate-50 pl-8 pr-3 text-xs font-medium text-slate-700 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+              className="h-9 w-48 sm:w-56 rounded-lg border border-gray-200 bg-slate-50 pl-8 pr-3 text-xs font-medium text-slate-700 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
             />
           </div>
 

@@ -27,7 +27,7 @@ export const PROJECT_INFO = {
   id: 'neural-api-gateway',
   name: 'Neural API Gateway',
   initials: 'NA',
-  initialsColor: 'bg-indigo-100 text-indigo-700',
+  initialsColor: 'bg-primary-100 text-primary-700',
   status: 'ACTIVE',
   description:
     'High-performance Rust-based routing engine for core infrastructure.',
@@ -37,14 +37,14 @@ export const PROJECT_INFO = {
   tags: ['Infrastructure', 'High Priority', 'Internal'],
   tagStyles: {
     Infrastructure: 'bg-slate-100 text-slate-600 border-slate-200',
-    'High Priority': 'bg-indigo-100 text-indigo-700 border-indigo-200',
+    'High Priority': 'bg-primary-100 text-primary-700 border-primary-200',
     Internal: 'bg-slate-100 text-slate-600 border-slate-200',
   },
 };
 
 // ─── Project Statistics ───────────────────────────────────────────────────────
 export const PROJECT_STATS = [
-  { id: 'status',    label: 'STATUS',     value: 'Active',       valueColor: 'text-emerald-600' },
+  { id: 'status',    label: 'STATUS',     value: 'Active',       valueColor: 'text-primary-600' },
   { id: 'progress',  label: 'PROGRESS',   value: '75%',          valueColor: 'text-slate-800' },
   { id: 'tasks',     label: 'TASKS',      value: '12/16',        valueColor: 'text-slate-800' },
   { id: 'days',      label: 'DAYS LEFT',  value: '4',            valueColor: 'text-amber-600' },
@@ -66,8 +66,8 @@ export const WORKSPACE_TABS = [
 export const COMPLETION_DATA = {
   overallPercent: 75,
   modules: [
-    { id: 1, name: 'Core Engine',       progress: 90, color: 'bg-emerald-500' },
-    { id: 2, name: 'Auth Integration',  progress: 55, color: 'bg-indigo-500' },
+    { id: 1, name: 'Core Engine',       progress: 90, color: 'bg-primary-500' },
+    { id: 2, name: 'Auth Integration',  progress: 55, color: 'bg-primary-500' },
   ],
 };
 
@@ -82,8 +82,8 @@ export const RECENT_ACTIVITY = [
   {
     id: 1,
     icon: CheckCircle2,
-    iconBg: 'bg-emerald-100',
-    iconColor: 'text-emerald-600',
+    iconBg: 'bg-primary-100',
+    iconColor: 'text-primary-600',
     title: 'Sarah Jenkins completed task',
     highlight: '"Fix memory leak in buffer pool"',
     time: '22 minutes ago',
@@ -91,8 +91,8 @@ export const RECENT_ACTIVITY = [
   {
     id: 2,
     icon: Code2,
-    iconBg: 'bg-indigo-100',
-    iconColor: 'text-indigo-600',
+    iconBg: 'bg-primary-100',
+    iconColor: 'text-primary-600',
     title: 'Dev Bot added new endpoint',
     highlight: 'POST /v2/token/refresh',
     isCode: true,
@@ -119,14 +119,14 @@ export const HEALTH_SCORE = {
 // ─── Task Snapshot ────────────────────────────────────────────────────────────
 export const TASK_SNAPSHOT = [
   { id: 'todo',        label: 'Todo',        value: 4,  color: 'text-slate-700' },
-  { id: 'inprogress',  label: 'In Progress', value: 8,  color: 'text-indigo-600' },
-  { id: 'endpoints',   label: 'Endpoints',   value: 12, color: 'text-emerald-600' },
+  { id: 'inprogress',  label: 'In Progress', value: 8,  color: 'text-primary-600' },
+  { id: 'endpoints',   label: 'Endpoints',   value: 12, color: 'text-primary-600' },
 ];
 
 // ─── Technology Stack ─────────────────────────────────────────────────────────
 export const TECH_STACK = [
   { id: 1, name: 'Rust',        color: 'bg-orange-50 text-orange-700 border-orange-200' },
-  { id: 2, name: 'gRPC',        color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+  { id: 2, name: 'gRPC',        color: 'bg-primary-50 text-primary-700 border-primary-200' },
   { id: 3, name: 'Kubernetes',  color: 'bg-blue-50 text-blue-700 border-blue-200' },
   { id: 4, name: 'Redis',       color: 'bg-red-50 text-red-700 border-red-200' },
 ];

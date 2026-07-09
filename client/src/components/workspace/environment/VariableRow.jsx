@@ -61,7 +61,7 @@ export default function VariableRow({ variable, onEdit, onDelete }) {
         <div className="relative flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onEdit?.(variable)}
-            className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition"
+            className="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded transition"
             title="Edit variable"
           >
             <Pencil size={14} />

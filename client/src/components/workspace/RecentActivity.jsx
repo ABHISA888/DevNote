@@ -14,7 +14,7 @@ export default function RecentActivity({ activities }) {
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="mb-5 flex items-center justify-between">
         <h2 className="text-base font-bold text-slate-800">Recent Activity</h2>
-        <button className="text-xs font-bold text-indigo-600 transition hover:text-indigo-700">
+        <button className="text-xs font-bold text-primary-600 transition hover:text-primary-700">
           View All
         </button>
       </div>

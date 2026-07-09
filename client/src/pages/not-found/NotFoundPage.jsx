@@ -10,7 +10,7 @@ export default function NotFoundPage() {
         <div className="pt-4">
           <a
             href="/"
-            className="inline-block px-6 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-medium transition-all shadow-lg shadow-indigo-500/20"
+            className="inline-block px-6 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-500 font-medium transition-all shadow-lg shadow-primary-500/20"
           >
             Go to Home
           </a>

@@ -18,14 +18,14 @@ export default function NoteCard({ note, isActive, onClick }) {
       onClick={() => onClick(note)}
       className={`w-full flex flex-col text-left p-3 rounded-xl transition-all border ${
         isActive 
-          ? 'bg-indigo-50 border-indigo-200 shadow-sm' 
+          ? 'bg-primary-50 border-primary-200 shadow-sm' 
           : 'bg-transparent border-transparent hover:bg-slate-50'
       }`}
     >
       <div className="flex items-start justify-between mb-1">
         <div className="flex items-center gap-2">
-          <FileText size={14} className={isActive ? 'text-indigo-600' : 'text-slate-400'} />
-          <span className={`text-xs font-bold truncate ${isActive ? 'text-indigo-900' : 'text-slate-700'}`}>
+          <FileText size={14} className={isActive ? 'text-primary-600' : 'text-slate-400'} />
+          <span className={`text-xs font-bold truncate ${isActive ? 'text-primary-900' : 'text-slate-700'}`}>
             {note.title || 'Untitled Note'}
           </span>
         </div>

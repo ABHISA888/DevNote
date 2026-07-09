@@ -18,7 +18,7 @@ export default function EndpointCard({ endpoint }) {
       <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 bg-slate-50">
         <div className="flex items-center gap-3">
           <span className={`flex h-6 items-center justify-center rounded px-2 text-[10px] font-extrabold uppercase tracking-widest text-white ${
-            endpoint.method === 'GET' ? 'bg-emerald-500' : 
+            endpoint.method === 'GET' ? 'bg-primary-500' : 
             endpoint.method === 'POST' ? 'bg-blue-500' : 
             endpoint.method === 'PUT' ? 'bg-orange-500' : 'bg-red-500'
           }`}>

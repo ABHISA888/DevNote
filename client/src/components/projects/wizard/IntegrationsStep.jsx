@@ -33,7 +33,7 @@ export default function IntegrationsStep({ projectData, onChange }) {
       label: 'API Documentation URL',
       placeholder: 'e.g. https://api.project.com/docs',
       icon: BookOpen,
-      color: 'text-emerald-500'
+      color: 'text-primary-500'
     },
     {
       key: 'postmanUrl',
@@ -47,7 +47,7 @@ export default function IntegrationsStep({ projectData, onChange }) {
       label: 'Deployment URL (Optional)',
       placeholder: 'e.g. https://project.vercel.app',
       icon: Layers,
-      color: 'text-indigo-600'
+      color: 'text-primary-600'
     }
   ];
 
@@ -75,7 +75,7 @@ export default function IntegrationsStep({ projectData, onChange }) {
                   placeholder={field.placeholder}
                   value={projectData[field.key]}
                   onChange={(e) => onChange({ [field.key]: e.target.value })}
-                  className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                  className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
                 />
               </div>
             );
@@ -84,18 +84,18 @@ export default function IntegrationsStep({ projectData, onChange }) {
       </div>
 
       {/* Connection Help Card */}
-      <div className="flex flex-col gap-4 rounded-xl bg-indigo-50/40 border border-indigo-100/40 p-5 lg:col-span-1 h-fit">
+      <div className="flex flex-col gap-4 rounded-xl bg-primary-50/40 border border-primary-100/40 p-5 lg:col-span-1 h-fit">
         <div className="flex items-start gap-2.5">
-          <Link2 size={18} className="text-indigo-600 shrink-0 mt-0.5" />
+          <Link2 size={18} className="text-primary-600 shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-xs font-extrabold text-indigo-900 uppercase tracking-wider">Sync & Integrations</h4>
-            <p className="mt-1 text-[11px] leading-relaxed text-indigo-700 font-medium">
+            <h4 className="text-xs font-extrabold text-primary-900 uppercase tracking-wider">Sync & Integrations</h4>
+            <p className="mt-1 text-[11px] leading-relaxed text-primary-700 font-medium">
               Connecting resources creates dynamic references on your project overview screen, allowing team members to quickly fetch docs and assets.
             </p>
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-indigo-100/60 space-y-2 text-[10px] text-slate-500 font-semibold leading-relaxed">
+        <div className="mt-3 pt-3 border-t border-primary-100/60 space-y-2 text-[10px] text-slate-500 font-semibold leading-relaxed">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
             <span>All fields are completely optional.</span>

@@ -1,20 +1,42 @@
+const SETTINGS_SECTIONS = [
+  {
+    title: 'Profile',
+    description: 'Manage your personal details and workspace identity.',
+  },
+  {
+    title: 'Notifications',
+    description: 'Control alerts for projects, tasks, and workspace activity.',
+  },
+  {
+    title: 'Security',
+    description: 'Review password, sessions, and account protection settings.',
+  },
+  {
+    title: 'Account',
+    description: 'Update account preferences and connected workspace options.',
+  },
+];
+
 export default function SettingsPage() {
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight text-white">Settings</h1>
-        <p className="text-slate-400">Configure global app settings, API vaults, and third-party integrations.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Settings</h1>
+        <p className="text-slate-500">Configure your DevNote workspace preferences.</p>
       </div>
 
-      <div className="p-6 rounded-xl bg-slate-800/40 border border-slate-700/60 max-w-xl space-y-4">
-        <h3 className="text-lg font-semibold text-slate-200">Global Configurations</h3>
-        <p className="text-sm text-slate-400">Toggle developer options and system behavior.</p>
-        <div className="pt-4 border-t border-slate-700 space-y-2">
-          <label className="flex items-center gap-2 text-sm text-slate-300">
-            <input type="checkbox" defaultChecked className="rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-indigo-500" />
-            Enable API polling telemetry
-          </label>
-        </div>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        {SETTINGS_SECTIONS.map((section) => (
+          <section
+            key={section.title}
+            className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm"
+          >
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800">
+              {section.title}
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-500">{section.description}</p>
+          </section>
+        ))}
       </div>
     </div>
   );

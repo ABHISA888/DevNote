@@ -24,7 +24,7 @@ const testimonials = [
     name: 'Grant Jordan',
     role: 'Dev Team Lead, Fintech Startup',
     initials: 'GJ',
-    color: 'bg-indigo-500',
+    color: 'bg-primary-500',
   },
   {
     quote:
@@ -40,14 +40,14 @@ const testimonials = [
     name: 'Ana Rodriguez',
     role: 'CTO, SaaS Platform',
     initials: 'AR',
-    color: 'bg-emerald-500',
+    color: 'bg-primary-500',
   },
 ];
 
 function TestimonialCard({ quote, name, role, initials, color }) {
   return (
     <article className="group flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-      <Quote size={20} className="mb-4 text-indigo-200" />
+      <Quote size={20} className="mb-4 text-primary-200" />
       <p className="flex-1 text-sm leading-relaxed text-gray-600">"{quote}"</p>
       <div className="mt-6 flex items-center gap-3">
         <div

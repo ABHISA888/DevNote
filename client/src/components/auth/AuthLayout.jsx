@@ -18,13 +18,13 @@ export default function AuthLayout({ children }) {
       {/* ── LEFT PANEL: Value Proposition (Desktop Only) ── */}
       <div className="hidden lg:flex flex-1 flex-col items-center justify-start pt-28 pb-16 bg-gradient-to-b from-[#f8f9fe] to-[#ecf0fc] text-slate-800 px-16 relative overflow-hidden">
         {/* Glow decoration */}
-        <div className="absolute -left-20 top-1/4 h-80 w-80 rounded-full bg-indigo-500/5 blur-3xl pointer-events-none" />
+        <div className="absolute -left-20 top-1/4 h-80 w-80 rounded-full bg-primary-500/5 blur-3xl pointer-events-none" />
         <div className="absolute right-0 bottom-1/4 h-64 w-64 rounded-full bg-violet-500/5 blur-3xl pointer-events-none" />
 
         <div className="max-w-md space-y-10 relative z-10 text-left">
           {/* Header */}
           <div className="space-y-4">
-            <h1 className="text-3xl font-extrabold tracking-tight text-indigo-950">
+            <h1 className="text-3xl font-extrabold tracking-tight text-primary-950">
               Start Building Smarter.
             </h1>
             <p className="text-xs leading-relaxed text-slate-500 font-medium max-w-sm">
@@ -43,7 +43,7 @@ export default function AuthLayout({ children }) {
               const Icon = f.icon;
               return (
                 <div key={f.title} className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-gray-100 shadow-sm text-indigo-600">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-gray-100 shadow-sm text-primary-600">
                     <Icon size={16} strokeWidth={2.5} />
                   </div>
                   <span className="text-xs font-semibold text-slate-600">{f.title}</span>
@@ -60,8 +60,8 @@ export default function AuthLayout({ children }) {
           {children}
 
           {/* Security Shield Trust Badge */}
-          <div className="flex items-start gap-3 rounded-2xl border border-indigo-100 bg-[#f4f6fc] p-4 text-left shadow-sm">
-            <Shield size={16} className="mt-0.5 text-indigo-500 flex-shrink-0" />
+          <div className="flex items-start gap-3 rounded-2xl border border-primary-100 bg-[#f4f6fc] p-4 text-left shadow-sm">
+            <Shield size={16} className="mt-0.5 text-primary-500 flex-shrink-0" />
             <p className="text-[11px] leading-relaxed text-slate-500 font-medium">
               Your account and project data are securely protected using modern authentication
               and encrypted storage.

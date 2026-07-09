@@ -94,7 +94,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 relative min-h-screen">
-      
+
       {/* ── Header Area ── */}
       <ProjectsHeader onNewProjectClick={() => setIsWizardOpen(true)} />
       
@@ -131,7 +131,7 @@ export default function ProjectsPage() {
       )}
 
       {/* ── Global Action ── */}
-      <FloatingActionButton onClick={() => setIsWizardOpen(true)} />
+      <FloatingActionButton onClick={openCreateWizard} />
 
       {/* ── Create Project Wizard Modal ── */}
       <CreateProjectWizard 
