@@ -46,7 +46,7 @@ export default function TimelineStep({ projectData, onChange }) {
             id="projStatus"
             value={projectData.status || 'Todo'}
             onChange={handleStatusChange}
-            className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
           >
             <option value="Todo">Todo</option>
             <option value="In Progress">In Progress</option>
@@ -67,7 +67,7 @@ export default function TimelineStep({ projectData, onChange }) {
                 type="date"
                 value={projectData.startDate}
                 onChange={(e) => onChange({ startDate: e.target.value })}
-                className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
               />
               <Calendar size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
@@ -84,7 +84,7 @@ export default function TimelineStep({ projectData, onChange }) {
                 required
                 value={projectData.deadline}
                 onChange={(e) => onChange({ deadline: e.target.value })}
-                className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
               />
               <Calendar size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
@@ -95,7 +95,7 @@ export default function TimelineStep({ projectData, onChange }) {
         <div className="rounded-xl border border-gray-100 bg-slate-50/50 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <BellRing size={16} className="text-indigo-600" />
+              <BellRing size={16} className="text-primary-600" />
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-slate-700">Reminders Schedule</span>
                 <span className="text-[10px] text-slate-400 font-semibold">Notify key stakeholders before deadlines approach</span>
@@ -106,7 +106,7 @@ export default function TimelineStep({ projectData, onChange }) {
               type="button"
               onClick={() => onChange({ reminderToggle: !projectData.reminderToggle })}
               className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${
-                projectData.reminderToggle ? 'bg-indigo-600' : 'bg-gray-200'
+                projectData.reminderToggle ? 'bg-primary-600' : 'bg-gray-200'
               }`}
             >
               <span
@@ -123,7 +123,7 @@ export default function TimelineStep({ projectData, onChange }) {
               <select
                 value={projectData.reminderDaysBefore}
                 onChange={(e) => onChange({ reminderDaysBefore: parseInt(e.target.value) })}
-                className="h-8 rounded-lg border border-gray-200 bg-white px-2.5 text-xs font-bold text-slate-700 outline-none focus:border-indigo-400"
+                className="h-8 rounded-lg border border-gray-200 bg-white px-2.5 text-xs font-bold text-slate-700 outline-none focus:border-primary-400"
               >
                 <option value={1}>1 day before</option>
                 <option value={3}>3 days before</option>
@@ -149,8 +149,8 @@ export default function TimelineStep({ projectData, onChange }) {
                   onClick={() => handleMemberToggle(member.id)}
                   className={`flex items-center gap-2 rounded-xl border p-2.5 text-left transition ${
                     isSelected
-                      ? 'border-indigo-500 bg-indigo-50/20 text-indigo-700 shadow-sm shadow-indigo-100/30'
-                      : 'border-gray-200 bg-white text-slate-600 hover:border-indigo-100 hover:bg-indigo-50/10'
+                      ? 'border-primary-500 bg-primary-50/20 text-primary-700 shadow-sm shadow-primary-100/30'
+                      : 'border-gray-200 bg-white text-slate-600 hover:border-primary-100 hover:bg-primary-50/10'
                   }`}
                 >
                   <img
@@ -170,22 +170,22 @@ export default function TimelineStep({ projectData, onChange }) {
       </div>
 
       {/* Pro Tip Sidebar */}
-      <div className="flex flex-col gap-4 rounded-xl bg-indigo-50/40 border border-indigo-100/40 p-5 lg:col-span-1 h-fit">
+      <div className="flex flex-col gap-4 rounded-xl bg-primary-50/40 border border-primary-100/40 p-5 lg:col-span-1 h-fit">
         <div className="flex items-start gap-2.5">
-          <Clock size={18} className="text-indigo-600 shrink-0 mt-0.5" />
+          <Clock size={18} className="text-primary-600 shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-xs font-extrabold text-indigo-900 uppercase tracking-wider">Pro Tip</h4>
-            <p className="mt-1 text-[11px] leading-relaxed text-indigo-700 font-medium">
+            <h4 className="text-xs font-extrabold text-primary-900 uppercase tracking-wider">Pro Tip</h4>
+            <p className="mt-1 text-[11px] leading-relaxed text-primary-700 font-medium">
               Clear deadlines help calculate project health scores, velocity indexes, and upcoming schedule warnings automatically.
             </p>
           </div>
         </div>
 
-        <div className="mt-2 pt-3 border-t border-indigo-100/60 space-y-3">
-          <h5 className="text-[10px] font-extrabold text-indigo-900 uppercase tracking-widest">Velocity Insights</h5>
+        <div className="mt-2 pt-3 border-t border-primary-100/60 space-y-3">
+          <h5 className="text-[10px] font-extrabold text-primary-900 uppercase tracking-widest">Velocity Insights</h5>
           {/* Decorative velocity meter */}
-          <div className="flex items-center gap-2 bg-white rounded-lg border border-indigo-100 p-2.5">
-            <span className="text-[9px] font-extrabold text-indigo-500 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded uppercase">Metric</span>
+          <div className="flex items-center gap-2 bg-white rounded-lg border border-primary-100 p-2.5">
+            <span className="text-[9px] font-extrabold text-primary-500 bg-primary-50 border border-primary-100 px-1.5 py-0.5 rounded uppercase">Metric</span>
             <span className="text-[10px] font-bold text-slate-600">Calculated automatically upon task completion</span>
           </div>
         </div>

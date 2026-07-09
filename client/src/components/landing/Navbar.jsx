@@ -34,7 +34,7 @@ export default function Navbar() {
       >
         {/* ── Logo ── */}
         <Link to="/" className="flex items-center gap-2" aria-label="DevNote home">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-indigo-600">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary-600">
             <span className="text-xs font-black text-white">DN</span>
           </div>
           <span className="text-sm font-bold tracking-tight text-gray-900">DevNote</span>
@@ -64,7 +64,7 @@ export default function Navbar() {
           </Link>
           <Link
             to="/signup"
-            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+            className="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
           >
             Get Started
           </Link>
@@ -108,7 +108,7 @@ export default function Navbar() {
             <Link
               to="/signup"
               onClick={() => setMobileOpen(false)}
-              className="rounded-md bg-indigo-600 px-4 py-2.5 text-center text-sm font-semibold text-white"
+              className="rounded-md bg-primary-600 px-4 py-2.5 text-center text-sm font-semibold text-white"
             >
               Get Started
             </Link>

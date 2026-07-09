@@ -32,8 +32,8 @@ export default function PasswordStrengthIndicator({ value = '' }) {
     if (score === 0) return 'bg-gray-100';
     if (score === 1) return index < 1 ? 'bg-red-500' : 'bg-gray-100';
     if (score === 2) return index < 2 ? 'bg-yellow-500' : 'bg-gray-100';
-    if (score === 3) return index < 3 ? 'bg-indigo-400' : 'bg-gray-100';
-    return 'bg-emerald-500';
+    if (score === 3) return index < 3 ? 'bg-primary-400' : 'bg-gray-100';
+    return 'bg-primary-500';
   };
 
   return (
@@ -55,13 +55,13 @@ export default function PasswordStrengthIndicator({ value = '' }) {
         {/* Requirement 1: 8+ chars */}
         <div
           className={`flex items-center gap-1 transition ${
-            hasMinLength ? 'text-indigo-600 font-semibold' : 'text-slate-400'
+            hasMinLength ? 'text-primary-600 font-semibold' : 'text-slate-400'
           }`}
         >
           <div
             className={`flex h-3.5 w-3.5 items-center justify-center rounded-full border transition ${
               hasMinLength
-                ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
+                ? 'border-primary-600 bg-primary-50 text-primary-600'
                 : 'border-slate-300 bg-transparent text-transparent'
             }`}
           >
@@ -73,13 +73,13 @@ export default function PasswordStrengthIndicator({ value = '' }) {
         {/* Requirement 2: One symbol */}
         <div
           className={`flex items-center gap-1 transition ${
-            hasSymbol ? 'text-indigo-600 font-semibold' : 'text-slate-400'
+            hasSymbol ? 'text-primary-600 font-semibold' : 'text-slate-400'
           }`}
         >
           <div
             className={`flex h-3.5 w-3.5 items-center justify-center rounded-full border transition ${
               hasSymbol
-                ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
+                ? 'border-primary-600 bg-primary-50 text-primary-600'
                 : 'border-slate-300 bg-transparent text-transparent'
             }`}
           >

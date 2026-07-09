@@ -136,7 +136,7 @@ export default function SignupForm() {
       {/* Outlined navigation link button */}
       <Link
         to="/login"
-        className="block w-full rounded-lg border border-gray-200 bg-white py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600"
+        className="block w-full rounded-lg border border-gray-200 bg-white py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
       >
         Sign In to Existing Account
       </Link>

@@ -25,10 +25,10 @@ export default function DashboardFooter() {
         <a href="#" className="hover:text-slate-800 transition">Docs</a>
         <a href="#" className="hover:text-slate-800 transition">Support</a>
         
-        <div className="flex items-center gap-2 text-indigo-700">
+        <div className="flex items-center gap-2 text-primary-700">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-600"></span>
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-600"></span>
           </span>
           ALL SYSTEMS OPERATIONAL
         </div>

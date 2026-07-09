@@ -28,15 +28,15 @@ export default function TaskRow({ id, name, priority, status, dueDate, progress,
   const isHighlighted = status === 'IN_PROGRESS';
 
   return (
-    <tr className={`group border-b border-gray-100 transition-colors hover:bg-indigo-50/40 ${isHighlighted ? 'border-l-2 border-l-indigo-500' : ''}`}>
+    <tr className={`group border-b border-gray-100 transition-colors hover:bg-primary-50/40 ${isHighlighted ? 'border-l-2 border-l-indigo-500' : ''}`}>
       
       {/* ── Task Name Column ── */}
       <td className="py-4 pl-6 pr-4">
         <div className="flex items-start gap-3">
           {/* Checkbox / Selected indicator */}
-          <div className="mt-0.5 shrink-0 text-slate-300 transition group-hover:text-indigo-400">
+          <div className="mt-0.5 shrink-0 text-slate-300 transition group-hover:text-primary-400">
             {isSelected
-              ? <CheckCircle2 size={18} className="text-indigo-600 fill-indigo-100" strokeWidth={2} />
+              ? <CheckCircle2 size={18} className="text-primary-600 fill-primary-100" strokeWidth={2} />
               : <Circle size={18} strokeWidth={1.5} />
             }
           </div>

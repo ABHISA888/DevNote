@@ -27,7 +27,7 @@ const PasswordInput = forwardRef(({ label, id, error, placeholder = '•••�
           className={`w-full rounded-lg border bg-gray-50 px-4 py-2.5 pr-10 text-sm text-slate-700 placeholder-gray-400 outline-none transition focus:bg-white focus:ring-2 ${
             error
               ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-              : 'border-gray-200 focus:border-indigo-400 focus:ring-indigo-100'
+              : 'border-gray-200 focus:border-primary-400 focus:ring-primary-100'
           }`}
           {...props}
         />

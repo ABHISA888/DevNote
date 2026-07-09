@@ -14,16 +14,16 @@ const TermsCheckbox = forwardRef(({ id, error, ...props }, ref) => {
           ref={ref}
           id={id}
           type="checkbox"
-          className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-indigo-600 focus:ring-indigo-500"
+          className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-indigo-600 focus:ring-primary-500"
           {...props}
         />
         <span className="text-xs text-slate-500 leading-relaxed">
           I agree to the{' '}
-          <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-700 transition">
+          <a href="#" className="font-semibold text-primary-600 hover:text-primary-700 transition">
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-700 transition">
+          <a href="#" className="font-semibold text-primary-600 hover:text-primary-700 transition">
             Privacy Policy
           </a>
           .

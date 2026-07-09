@@ -39,7 +39,7 @@ export default function ConfigurationStep({ projectData, onChange }) {
   const priorities = ['High', 'Medium', 'Low'];
   const priorityStyles = {
     High: 'bg-red-600 border-red-600 text-white hover:bg-red-700 shadow-sm shadow-red-100',
-    Medium: 'bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-100',
+    Medium: 'bg-primary-600 border-primary-600 text-white hover:bg-primary-700 shadow-sm shadow-primary-100',
     Low: 'bg-slate-700 border-slate-700 text-white hover:bg-slate-800 shadow-sm shadow-slate-100'
   };
 
@@ -65,7 +65,7 @@ export default function ConfigurationStep({ projectData, onChange }) {
               placeholder="Search technologies (e.g. React, Docker...)"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+              className="h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
             />
           </div>
 
@@ -80,8 +80,8 @@ export default function ConfigurationStep({ projectData, onChange }) {
                   onClick={() => handleTechToggle(tech)}
                   className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${
                     isSelected
-                      ? 'border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm shadow-indigo-100/50'
-                      : 'border-gray-200 bg-white text-slate-600 hover:border-indigo-100 hover:bg-indigo-50/10'
+                      ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-sm shadow-primary-100/50'
+                      : 'border-gray-200 bg-white text-slate-600 hover:border-primary-100 hover:bg-primary-50/10'
                   }`}
                 >
                   {tech}
@@ -101,13 +101,13 @@ export default function ConfigurationStep({ projectData, onChange }) {
                 {projectData.techStack.map((tech) => (
                   <span
                     key={tech}
-                    className="inline-flex items-center gap-1 rounded bg-indigo-100/70 border border-indigo-200 px-2 py-0.5 text-[10px] font-bold text-indigo-700"
+                    className="inline-flex items-center gap-1 rounded bg-primary-100/70 border border-primary-200 px-2 py-0.5 text-[10px] font-bold text-primary-700"
                   >
                     {tech}
                     <button
                       type="button"
                       onClick={() => handleTechToggle(tech)}
-                      className="ml-1 text-[11px] font-black text-indigo-500 hover:text-indigo-800"
+                      className="ml-1 text-[11px] font-black text-primary-500 hover:text-primary-800"
                     >
                       ×
                     </button>
@@ -156,7 +156,7 @@ export default function ConfigurationStep({ projectData, onChange }) {
               placeholder="e.g. 3 months, 6 weeks, etc."
               value={projectData.estimatedDuration}
               onChange={(e) => onChange({ estimatedDuration: e.target.value })}
-              className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+              className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
             />
             <Clock size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           </div>
@@ -164,19 +164,19 @@ export default function ConfigurationStep({ projectData, onChange }) {
       </div>
 
       {/* Developer Tip Sidebar */}
-      <div className="flex flex-col gap-4 rounded-xl bg-indigo-50/40 border border-indigo-100/40 p-5 lg:col-span-1 h-fit">
+      <div className="flex flex-col gap-4 rounded-xl bg-primary-50/40 border border-primary-100/40 p-5 lg:col-span-1 h-fit">
         <div className="flex items-start gap-2.5">
-          <Flame size={18} className="text-indigo-600 shrink-0 mt-0.5" />
+          <Flame size={18} className="text-primary-600 shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-xs font-extrabold text-indigo-900 uppercase tracking-wider">Developer Tip</h4>
-            <p className="mt-1 text-[11px] leading-relaxed text-indigo-700 font-medium">
+            <h4 className="text-xs font-extrabold text-primary-900 uppercase tracking-wider">Developer Tip</h4>
+            <p className="mt-1 text-[11px] leading-relaxed text-primary-700 font-medium">
               Base stack selection sets up default language and dependency checks inside environment vaults and API documentation builders.
             </p>
           </div>
         </div>
         
-        <div className="mt-3 pt-3 border-t border-indigo-100/60 flex items-start gap-2 text-slate-400">
-          <Info size={14} className="shrink-0 mt-0.5 text-indigo-600" />
+        <div className="mt-3 pt-3 border-t border-primary-100/60 flex items-start gap-2 text-slate-400">
+          <Info size={14} className="shrink-0 mt-0.5 text-primary-600" />
           <span className="text-[10px] leading-relaxed text-slate-500 font-semibold">
             Make sure to choose at least one core framework or library to satisfy workspace validation rules.
           </span>

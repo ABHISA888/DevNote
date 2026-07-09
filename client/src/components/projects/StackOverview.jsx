@@ -1,4 +1,4 @@
-function ProgressBar({ progress, colorClass = 'bg-indigo-600' }) {
+function ProgressBar({ progress, colorClass = 'bg-primary-600' }) {
   return (
     <div className="w-full overflow-hidden rounded-full bg-slate-100 h-1">
       <div className={`h-full rounded-full transition-all duration-500 ${colorClass}`} style={{ width: `${progress}%` }} />

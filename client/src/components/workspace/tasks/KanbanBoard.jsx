@@ -39,7 +39,7 @@ export default function KanbanBoard({ tasks }) {
           <KanbanColumn 
             id="IN_PROGRESS" 
             title="In Progress" 
-            colorClass="bg-indigo-500" 
+            colorClass="bg-primary-500" 
             tasks={inProgressTasks} 
             onAddTask={handleAddTask} 
           />
@@ -53,7 +53,7 @@ export default function KanbanBoard({ tasks }) {
           <KanbanColumn 
             id="COMPLETED" 
             title="Completed" 
-            colorClass="bg-emerald-500" 
+            colorClass="bg-primary-500" 
             tasks={completedTasks} 
           />
         </div>

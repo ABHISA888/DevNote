@@ -27,12 +27,12 @@ export const SIDEBAR_NAV = [
 ];
 
 export const STATS = [
-  { id: 'total', label: 'TOTAL PROJECTS', value: '12', metaText: '+2 new', metaColor: 'text-indigo-600' },
+  { id: 'total', label: 'TOTAL PROJECTS', value: '12', metaText: '+2 new', metaColor: 'text-primary-600' },
   { id: 'active', label: 'ACTIVE', value: '8', type: 'progress', progressValue: 65 },
-  { id: 'completed', label: 'COMPLETED', value: '24', icon: CheckCircle2, iconColor: 'text-indigo-600' },
+  { id: 'completed', label: 'COMPLETED', value: '24', icon: CheckCircle2, iconColor: 'text-primary-600' },
   { id: 'deadlines', label: 'DEADLINES', value: '3', metaText: 'Critical', metaColor: 'text-red-500' },
   { id: 'tasks', label: 'TASKS', value: '15', metaText: 'Pending', metaColor: 'text-slate-500' },
-  { id: 'favorites', label: 'FAVORITES', value: '5', icon: Star, iconColor: 'text-indigo-600', fill: true },
+  { id: 'favorites', label: 'FAVORITES', value: '5', icon: Star, iconColor: 'text-primary-600', fill: true },
 ];
 
 export const UPCOMING_DEADLINES = [
@@ -42,8 +42,8 @@ export const UPCOMING_DEADLINES = [
     timeLabel: 'Tomorrow',
     timeColor: 'text-red-500',
     progressPercent: 85,
-    iconBg: 'bg-indigo-50',
-    iconColor: 'text-indigo-600',
+    iconBg: 'bg-primary-50',
+    iconColor: 'text-primary-600',
   },
   {
     id: 2,
@@ -78,7 +78,7 @@ export const RECENT_ACTIVITY = [
     time: '12 minutes ago',
     category: 'Deployment',
     icon: Rocket,
-    iconBg: 'bg-indigo-600',
+    iconBg: 'bg-primary-600',
     iconColor: 'text-white',
   },
   {
@@ -113,14 +113,14 @@ export const RECENT_PROJECTS = [
     title: 'NeoStock Portfolio',
     description: 'A high-frequency trading simulation engine with...',
     badges: ['Rust', 'Wasm'],
-    thumbnailColor: 'bg-indigo-50',
+    thumbnailColor: 'bg-primary-50',
   },
   {
     id: 2,
     title: 'PyLens AI',
     description: 'Computer vision library for identifying hardware...',
     badges: ['Python', 'PyTorch'],
-    thumbnailColor: 'bg-emerald-50',
+    thumbnailColor: 'bg-primary-50',
   },
   {
     id: 3,

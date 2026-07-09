@@ -7,7 +7,7 @@
  */
 export default function PinnedProjectCard({ title, badges, progressPercent }) {
   return (
-    <div className="group rounded-xl border border-gray-100 bg-white p-4 transition hover:border-indigo-200 hover:shadow-md">
+    <div className="group rounded-xl border border-gray-100 bg-white p-4 transition hover:border-primary-200 hover:shadow-md">
       <div className="flex items-start justify-between">
         <h4 className="text-sm font-bold text-slate-800">{title}</h4>
         
@@ -16,7 +16,7 @@ export default function PinnedProjectCard({ title, badges, progressPercent }) {
           {badges.map((badge) => (
             <span 
               key={badge} 
-              className="rounded bg-indigo-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-indigo-600"
+              className="rounded bg-primary-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-600"
             >
               {badge}
             </span>
@@ -28,7 +28,7 @@ export default function PinnedProjectCard({ title, badges, progressPercent }) {
       <div className="mt-4 flex items-center justify-between">
         <div className="h-1.5 w-[75%] overflow-hidden rounded-full bg-gray-100">
           <div 
-            className="h-full rounded-full bg-indigo-600 transition-all duration-500" 
+            className="h-full rounded-full bg-primary-600 transition-all duration-500" 
             style={{ width: `${progressPercent}%` }}
           />
         </div>

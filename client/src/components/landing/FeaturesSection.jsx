@@ -14,7 +14,7 @@ import { LayoutDashboard, CheckSquare, FileCode, Rocket } from 'lucide-react';
  * TAILWIND:
  * - `group` on the card + `group-hover:` on children enables parent-driven hover.
  * - `transition-all duration-300` for smooth animations.
- * - `bg-indigo-50 group-hover:bg-indigo-100` — icon container changes on card hover.
+ * - `bg-primary-50 group-hover:bg-primary-100` — icon container changes on card hover.
  */
 
 const features = [
@@ -23,9 +23,9 @@ const features = [
     title: 'Unified Workspaces',
     description:
       'Centralize all your projects in one workspace for your team or individual review across multiple domains.',
-    iconBg: 'bg-indigo-50',
-    iconColor: 'text-indigo-600',
-    hoverBg: 'group-hover:bg-indigo-100',
+    iconBg: 'bg-primary-50',
+    iconColor: 'text-primary-600',
+    hoverBg: 'group-hover:bg-primary-100',
   },
   {
     icon: CheckSquare,
@@ -50,9 +50,9 @@ const features = [
     title: 'Instant Deployment',
     description:
       'Configure your environment and deployments in a single command without complex configuration setups.',
-    iconBg: 'bg-emerald-50',
-    iconColor: 'text-emerald-600',
-    hoverBg: 'group-hover:bg-emerald-100',
+    iconBg: 'bg-primary-50',
+    iconColor: 'text-primary-600',
+    hoverBg: 'group-hover:bg-primary-100',
   },
 ];
 

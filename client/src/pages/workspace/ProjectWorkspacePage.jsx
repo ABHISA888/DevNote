@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Braces, ClipboardList, Settings } from 'lucide-react';
 
 // Layout
 import WorkspaceHeader from '../../components/workspace/WorkspaceHeader';
@@ -7,6 +8,7 @@ import ProjectHeader from '../../components/workspace/ProjectHeader';
 import ProjectStats from '../../components/workspace/ProjectStats';
 import WorkspaceTabs from '../../components/workspace/WorkspaceTabs';
 import WorkspaceFooter from '../../components/workspace/WorkspaceFooter';
+import ComingSoonTab from '../../components/workspace/ComingSoonTab';
 
 // Left Column — Overview content
 import ProjectSummary from '../../components/workspace/ProjectSummary';
@@ -20,14 +22,8 @@ import TaskSnapshotCard from '../../components/workspace/TaskSnapshotCard';
 import TechnologyStackCard from '../../components/workspace/TechnologyStackCard';
 import TeamMembersCard from '../../components/workspace/TeamMembersCard';
 
-// Tasks Tab
-import TasksTab from '../../components/workspace/tasks/TasksTab';
-
 // Notes Tab
 import NotesTab from '../../components/workspace/notes/NotesTab';
-
-// APIs Tab
-import ApisTab from '../../components/workspace/apis/ApisTab';
 
 // Environment Tab
 import EnvironmentTab from '../../components/workspace/environment/EnvironmentTab';
@@ -44,6 +40,48 @@ import {
   TECH_STACK,
   TEAM_MEMBERS,
 } from '../../constants/workspaceData';
+
+const COMING_SOON_TABS = {
+  tasks: {
+    title: 'Tasks',
+    description: 'Plan, assign, and track project work from inside your DevNote workspace.',
+    icon: ClipboardList,
+    features: [
+      'Create Tasks',
+      'Assign Members',
+      'Priority Levels',
+      'Due Dates',
+      'Kanban Board',
+      'Progress Tracking',
+    ],
+  },
+  apis: {
+    title: 'APIs',
+    description: 'Document endpoints, examples, authentication, and test flows for your project APIs.',
+    icon: Braces,
+    features: [
+      'API Collection',
+      'Endpoint Documentation',
+      'Request & Response Examples',
+      'Authentication Guide',
+      'Import Postman Collection',
+      'API Testing',
+    ],
+  },
+  settings: {
+    title: 'Settings',
+    description: 'Manage project-level preferences, permissions, notifications, and lifecycle actions.',
+    icon: Settings,
+    features: [
+      'Project Preferences',
+      'Team Permissions',
+      'Notification Settings',
+      'Archive Project',
+      'Danger Zone',
+      'Activity Logs',
+    ],
+  },
+};
 
 /**
  * 🎓 TEACHING MOMENT: ProjectWorkspacePage.jsx — Composition Root
@@ -81,6 +119,7 @@ import {
 export default function ProjectWorkspacePage() {
   const { projectId } = useParams();
   const [activeTab, setActiveTab] = useState('overview');
+  const comingSoonTab = COMING_SOON_TABS[activeTab];
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f8f9fe]">
@@ -144,26 +183,21 @@ export default function ProjectWorkspacePage() {
           </div>
         )}
 
-        {/* ── Tasks Tab Content ── */}
-        {activeTab === 'tasks' && <TasksTab />}
-
         {/* ── Notes Tab Content ── */}
         {activeTab === 'notes' && <NotesTab />}
-
-        {/* ── APIs Tab Content ── */}
-        {activeTab === 'apis' && <ApisTab />}
 
         {/* ── Environment Tab Content ── */}
         {activeTab === 'environment' && <EnvironmentTab />}
 
-        {/* ── Placeholder for other tabs ── */}
-        {activeTab !== 'overview' && activeTab !== 'tasks' && activeTab !== 'notes' && activeTab !== 'apis' && activeTab !== 'environment' && (
-          <div className="flex items-center justify-center py-32 text-slate-400">
-            <div className="text-center">
-              <p className="text-xl font-bold text-slate-600 capitalize">{activeTab}</p>
-              <p className="mt-2 text-sm">This tab will be implemented next.</p>
-            </div>
-          </div>
+        {/* ── Coming Soon Tabs ── */}
+        {comingSoonTab && (
+          <ComingSoonTab
+            title={comingSoonTab.title}
+            description={comingSoonTab.description}
+            features={comingSoonTab.features}
+            icon={comingSoonTab.icon}
+            onBackToOverview={() => setActiveTab('overview')}
+          />
         )}
       </div>
 

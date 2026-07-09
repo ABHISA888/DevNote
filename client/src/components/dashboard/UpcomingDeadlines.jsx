@@ -13,7 +13,7 @@ export default function UpcomingDeadlines() {
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-base font-bold text-slate-800">Upcoming Deadlines</h2>
-        <a href="#" className="text-xs font-bold text-indigo-600 hover:text-indigo-700">
+        <a href="#" className="text-xs font-bold text-primary-600 hover:text-primary-700">
           View all
         </a>
       </div>

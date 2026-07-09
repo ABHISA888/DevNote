@@ -8,7 +8,7 @@ export default function AuthHeader() {
   return (
     <div className="flex flex-col items-center space-y-1 text-center">
       {/* Brand logo rocket icon */}
-      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-md shadow-indigo-200">
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-violet-600 shadow-md shadow-primary-200">
         <span className="text-xl">🚀</span>
       </div>
 

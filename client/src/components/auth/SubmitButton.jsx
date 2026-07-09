@@ -9,7 +9,7 @@ export default function SubmitButton({ children, isLoading, ...props }) {
     <button
       type="submit"
       disabled={isLoading}
-      className="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+      className="w-full rounded-lg bg-primary-600 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary-200 transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
       {...props}
     >
       {isLoading ? (

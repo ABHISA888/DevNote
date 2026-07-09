@@ -25,7 +25,7 @@ export default function ActivityItem({ icon: Icon, iconBg, iconColor, title, hig
           {highlight && (
             isCode
               ? <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs font-mono font-bold text-slate-700">{highlight}</code>
-              : <span className="font-semibold text-indigo-600">{highlight}</span>
+              : <span className="font-semibold text-primary-600">{highlight}</span>
           )}
         </p>
         <p className="mt-0.5 text-[11px] font-semibold text-slate-400">{time}</p>

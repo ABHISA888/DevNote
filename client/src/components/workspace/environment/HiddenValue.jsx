@@ -47,7 +47,7 @@ export default function HiddenValue({ value }) {
       <button
         onClick={handleCopy}
         className={`shrink-0 transition p-1 rounded ${
-          copied ? 'text-emerald-500' : 'text-slate-400 hover:text-slate-700'
+          copied ? 'text-primary-500' : 'text-slate-400 hover:text-slate-700'
         }`}
         aria-label="Copy value"
         title={copied ? 'Copied!' : 'Copy'}

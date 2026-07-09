@@ -11,7 +11,7 @@
  */
 export default function TaskProgressBar({ progress }) {
   const isDone = progress === 100;
-  const barColor = isDone ? 'bg-emerald-500' : 'bg-indigo-600';
+  const barColor = isDone ? 'bg-primary-500' : 'bg-primary-600';
 
   return (
     <div className="flex items-center gap-3 w-full min-w-[120px]">

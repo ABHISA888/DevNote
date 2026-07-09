@@ -8,7 +8,7 @@ export default function ProfilePage() {
 
       <div className="p-6 rounded-xl bg-slate-800/40 border border-slate-700/60 max-w-xl space-y-4">
         <div className="flex items-center gap-4">
-          <div className="h-16 w-16 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xl font-bold text-indigo-400">
+          <div className="h-16 w-16 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center text-xl font-bold text-primary-400">
             DL
           </div>
           <div>

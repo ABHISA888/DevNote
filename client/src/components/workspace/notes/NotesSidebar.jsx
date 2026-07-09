@@ -24,7 +24,7 @@ export default function NotesSidebar({
         <h3 className="text-sm font-extrabold text-slate-800 tracking-tight">Project Notes</h3>
         <button 
           onClick={onCreateNote}
-          className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition"
+          className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600 hover:bg-primary-100 transition"
           aria-label="Create New Note"
         >
           <Plus size={16} strokeWidth={2.5} />

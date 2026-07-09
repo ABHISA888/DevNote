@@ -24,11 +24,11 @@ import { CheckCircle, Users, GitBranch } from 'lucide-react';
 /* ── Dashboard card mock (right side illustration) ── */
 function DashboardCard() {
   return (
-    <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-indigo-100/50">
+    <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-primary-100/50">
       {/* Card header */}
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
         <div className="flex gap-3">
-          <button className="text-xs font-semibold text-indigo-600 border-b-2 border-indigo-600 pb-1">
+          <button className="text-xs font-semibold text-primary-600 border-b-2 border-primary-600 pb-1">
             Workspaces
           </button>
           <button className="text-xs font-medium text-gray-400 pb-1">Tasks</button>
@@ -40,7 +40,7 @@ function DashboardCard() {
       <div className="flex items-center justify-between px-5 py-3">
         <span className="text-xs font-semibold text-gray-600">Active Projects</span>
         {/* Toggle */}
-        <div className="flex h-5 w-9 items-center rounded-full bg-indigo-600 px-0.5">
+        <div className="flex h-5 w-9 items-center rounded-full bg-primary-600 px-0.5">
           <div className="h-4 w-4 rounded-full bg-white shadow-sm translate-x-4" />
         </div>
       </div>
@@ -48,7 +48,7 @@ function DashboardCard() {
       {/* Project rows */}
       <div className="space-y-1 px-5 pb-3">
         {[
-          { name: 'Project A', progress: 72, color: 'bg-indigo-500' },
+          { name: 'Project A', progress: 72, color: 'bg-primary-500' },
           { name: 'Project B', progress: 45, color: 'bg-violet-400' },
         ].map((p) => (
           <div key={p.name} className="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-2.5">
@@ -84,12 +84,12 @@ function DashboardCard() {
       </div>
 
       {/* Stats badge */}
-      <div className="m-5 mt-2 flex items-center justify-between rounded-xl bg-gradient-to-r from-indigo-50 to-violet-50 px-4 py-3">
+      <div className="m-5 mt-2 flex items-center justify-between rounded-xl bg-gradient-to-r from-primary-50 to-violet-50 px-4 py-3">
         <div>
           <div className="text-xs text-gray-400">Team Velocity</div>
           <div className="text-lg font-bold text-gray-800">+128%</div>
         </div>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white text-xs font-bold shadow-lg shadow-indigo-200">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white text-xs font-bold shadow-lg shadow-primary-200">
           ↑
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function HeroSection() {
       {/* Subtle background gradient */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-indigo-50/60 via-white to-violet-50/40"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary-50/60 via-white to-violet-50/40"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -131,7 +131,7 @@ export default function HeroSection() {
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
               <Link
                 to="/signup"
-                className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition hover:bg-indigo-700"
+                className="inline-flex items-center justify-center rounded-lg bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-primary-200 transition hover:bg-primary-700"
               >
                 Get Started Free
               </Link>
@@ -150,7 +150,7 @@ export default function HeroSection() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               {stats.map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-1.5 text-xs text-gray-400">
-                  <Icon size={13} className="text-indigo-400" />
+                  <Icon size={13} className="text-primary-400" />
                   <span>{label}</span>
                 </div>
               ))}
