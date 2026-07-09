@@ -139,3 +139,26 @@ exports.createProject = async (req, res, next) => {
     });
   }
 };
+
+/**
+ * @desc    Get all developer projects
+ * @route   GET /api/projects
+ * @access  Public (Auth to be added later)
+ */
+exports.getProjects = async (req, res, next) => {
+  try {
+    const projects = await Project.find({}).sort({ createdAt: -1 });
+    
+    return res.status(200).json({
+      success: true,
+      count: projects.length,
+      data: projects
+    });
+  } catch (error) {
+    console.error(`Error inside getProjects controller: ${error.message}`);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error. Something went wrong on our end.'
+    });
+  }
+};

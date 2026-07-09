@@ -2,6 +2,11 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
+// Polyfill global crypto for Node 18 environments where mongoose 9 expects it
+if (!globalThis.crypto) {
+  globalThis.crypto = require('crypto');
+}
+
 const app = require('./app');
 const connectDB = require('./config/db');
 

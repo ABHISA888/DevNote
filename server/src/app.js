@@ -21,10 +21,27 @@ const app = express();
  */
 
 // 1. CORS Configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:5176'
+];
+
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL);
+}
+
 const corsOptions = {
-  // Allow requests from client dev server (usually localhost:5173 or localhost:3000)
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
-  credentials: true, // Allow cookies/auth headers to be sent
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+      return callback(null, true);
+    }
+    return callback(new Error('CORS Not Allowed'));
+  },
+  credentials: true,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));

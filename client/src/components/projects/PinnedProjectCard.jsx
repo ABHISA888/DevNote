@@ -1,4 +1,4 @@
-import { Pin } from 'lucide-react';
+import { Pin, Rocket } from 'lucide-react';
 import ProjectActionMenu from './ProjectActionMenu';
 
 export default function PinnedProjectCard({
@@ -6,7 +6,18 @@ export default function PinnedProjectCard({
   onEdit,
   onDelete,
 }) {
-  const { title, description, badges, icon: Icon, iconBg, iconColor, isPinned } = project;
+  if (!project) return null;
+
+  const {
+    name: title = '',
+    description = '',
+    techStack: badges = [],
+    isFavorite: isPinned = false,
+  } = project;
+
+  const Icon = Rocket;
+  const iconBg = 'bg-indigo-50';
+  const iconColor = 'text-indigo-600';
 
   return (
     <div className="group relative flex flex-col justify-between rounded-xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-primary-100 hover:shadow-md h-full">
