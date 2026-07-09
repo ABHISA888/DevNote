@@ -2,6 +2,9 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
+// Polyfill global.crypto for compatibility in environments where MongoDB driver expects it globally
+global.crypto = require('crypto');
+
 const app = require('./app');
 const connectDB = require('./config/db');
 
