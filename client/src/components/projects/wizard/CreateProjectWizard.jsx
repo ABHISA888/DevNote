@@ -8,6 +8,7 @@ import ConfigurationStep from './ConfigurationStep';
 import IntegrationsStep from './IntegrationsStep';
 import TimelineStep from './TimelineStep';
 import ReviewStep from './ReviewStep';
+import { projectService } from '../../../services/api/projectService';
 
 /**
  * 🎓 TEACHING MOMENT: CreateProjectWizard.jsx
@@ -105,15 +106,60 @@ export default function CreateProjectWizard({ isOpen, onClose, onProjectCreated 
     setStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleCreateProject = () => {
-    // Backend API would be called here: axios.post('/api/projects', projectData)
-    toast.success(`Successfully initialized project: ${projectData.name}!`);
-    onProjectCreated && onProjectCreated(projectData);
-    
-    // Reset state & Close modal
-    setStep(1);
-    setProjectData(INITIAL_PROJECT_DATA);
-    onClose();
+  const handleCreateProject = async () => {
+    try {
+      // 🎓 TEACHING MOMENT: Data Integrity Mapping
+      // Before posting, we transform the local UI state fields to strict backend schema types.
+      const payload = {
+        name: String(projectData.name || '').trim(),
+        description: String(projectData.description || '').trim(),
+        category: projectData.category || undefined,
+        visibility: projectData.visibility || 'private',
+        isFavorite: Boolean(projectData.isFavorite),
+        templateId: projectData.templateId || 'blank',
+        themeColor: projectData.themeColor || '#6366f1',
+        techStack: Array.isArray(projectData.techStack) ? projectData.techStack.map(String) : [],
+        priority: projectData.priority || 'Medium',
+        estimatedDuration: String(projectData.estimatedDuration || '').trim() || undefined,
+        githubUrl: String(projectData.githubUrl || '').trim() || undefined,
+        figmaUrl: String(projectData.figmaUrl || '').trim() || undefined,
+        apiDocUrl: String(projectData.apiDocUrl || '').trim() || undefined,
+        postmanUrl: String(projectData.postmanUrl || '').trim() || undefined,
+        deploymentUrl: String(projectData.deploymentUrl || '').trim() || undefined,
+        reminderToggle: Boolean(projectData.reminderToggle),
+        reminderDaysBefore: Number(projectData.reminderDaysBefore || 1),
+        teamMembers: projectData.teamMembers || [],
+        status: projectData.status || 'Todo'
+      };
+
+      // Ensure dates are parsed only if they are not empty, preventing CastError
+      if (projectData.startDate && projectData.startDate.trim() !== '') {
+        payload.startDate = new Date(projectData.startDate).toISOString();
+      }
+      if (projectData.deadline && projectData.deadline.trim() !== '') {
+        payload.deadline = new Date(projectData.deadline).toISOString();
+      }
+
+      console.log('Final serialized payload for backend:', payload);
+
+      const result = await projectService.createProject(payload);
+      
+      if (result.success) {
+        toast.success(`Successfully initialized project: ${result.data.name}!`);
+        onProjectCreated && onProjectCreated(result.data);
+        
+        // Reset state & Close modal
+        setStep(1);
+        setProjectData(INITIAL_PROJECT_DATA);
+        onClose();
+      } else {
+        toast.error(result.message || 'Failed to create project.');
+      }
+    } catch (error) {
+      console.error('Error creating project:', error);
+      const serverMessage = error.response?.data?.message || error.response?.data?.errors?.join(', ') || 'Failed to connect to server.';
+      toast.error(serverMessage);
+    }
   };
 
   const renderStepContent = () => {
