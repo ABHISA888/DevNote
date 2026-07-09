@@ -14,7 +14,7 @@ import { ShieldCheck } from 'lucide-react';
  */
 export default function HealthScoreCard({ score, riskLabel, docsStatus }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-indigo-700 p-5 text-white shadow-lg shadow-indigo-700/30">
+    <div className="relative overflow-hidden rounded-2xl bg-primary-700 p-5 text-white shadow-lg shadow-primary-700/30">
       {/* Decorative circles */}
       <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/5" />
       <div className="absolute -bottom-8 -right-2 h-32 w-32 rounded-full bg-white/5" />
@@ -22,22 +22,22 @@ export default function HealthScoreCard({ score, riskLabel, docsStatus }) {
       <div className="relative z-10">
         {/* Header */}
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-200">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-primary-200">
             Health Score
           </span>
-          <ShieldCheck size={16} className="text-indigo-300" />
+          <ShieldCheck size={16} className="text-primary-300" />
         </div>
 
         {/* Score */}
         <p className="text-2xl font-extrabold text-white">{score}</p>
-        <p className="mt-1 text-xs font-semibold text-indigo-300">{riskLabel}</p>
+        <p className="mt-1 text-xs font-semibold text-primary-300">{riskLabel}</p>
 
         {/* Divider */}
         <div className="my-4 border-t border-white/10" />
 
         {/* Docs Status */}
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-300">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-primary-300">
             DOCS STATUS
           </span>
           <span className="text-sm font-bold text-white">{docsStatus}</span>

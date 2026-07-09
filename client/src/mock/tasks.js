@@ -100,8 +100,8 @@ export const BOARD_TASKS = [
 
 export const TASK_STATS = [
   { id: 'total', label: 'Total Tasks', value: '24' },
-  { id: 'completed', label: 'Completed', value: '18', valueColor: 'text-emerald-600' },
-  { id: 'inprogress', label: 'In Progress', value: '4', valueColor: 'text-indigo-600' },
+  { id: 'completed', label: 'Completed', value: '18', valueColor: 'text-primary-600' },
+  { id: 'inprogress', label: 'In Progress', value: '4', valueColor: 'text-primary-600' },
   { id: 'overdue', label: 'Overdue', value: '2', valueColor: 'text-red-500' },
   { id: 'high', label: 'High Priority', value: '6' },
   { id: 'percent', label: '75% Done', isPercent: true }
@@ -125,7 +125,7 @@ export const TASK_DEADLINES = [
     time: 'Oct 24, 10:00 AM',
     taskName: 'Beta Release v0.4',
     label: 'Milestone Reach',
-    colorClass: 'text-indigo-600'
+    colorClass: 'text-primary-600'
   },
   {
     id: 3,

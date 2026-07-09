@@ -108,12 +108,12 @@ export default function EnvironmentSection() {
             <div className="space-y-6">
               {envFeatures.map(({ icon: Icon, title, desc }) => (
                 <div key={title} className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-100">
-                    <Icon size={18} className="text-indigo-600" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary-100">
+                    <Icon size={18} className="text-primary-600" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <CheckCircle size={13} className="text-emerald-500" />
+                      <CheckCircle size={13} className="text-primary-500" />
                       <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
                     </div>
                     <p className="mt-1 text-sm leading-relaxed text-gray-500">{desc}</p>

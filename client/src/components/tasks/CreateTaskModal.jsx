@@ -75,7 +75,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
         <div className="flex items-start justify-between border-b border-gray-100 px-6 py-5">
           <div>
             <h2 className="text-lg font-bold text-slate-800">Create New Task</h2>
-            <p className="mt-0.5 text-xs font-medium text-indigo-500">Add a new task to one of your projects.</p>
+            <p className="mt-0.5 text-xs font-medium text-primary-500">Add a new task to one of your projects.</p>
           </div>
           <button
             onClick={onClose}
@@ -96,7 +96,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
               <input
                 type="text"
                 defaultValue="Nexus API Security Audit"
-                className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 pr-9 text-sm font-semibold text-slate-700 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 pr-9 text-sm font-semibold text-slate-700 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
               />
               <Pencil size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
             </div>
@@ -108,7 +108,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
             <textarea
               rows={3}
               defaultValue="Conduct a full security audit of the Nexus API Gateway endpoints, focusing on rate limiting and token validation mechanisms."
-              className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+              className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
             />
           </div>
 
@@ -117,7 +117,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
             <div>
               <label className="mb-1.5 block text-xs font-bold text-slate-700">Project</label>
               <div className="relative">
-                <select className="h-10 w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100">
+                <select className="h-10 w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100">
                   {TASK_PROJECTS.map((p) => (
                     <option key={p.value} value={p.value}>{p.label}</option>
                   ))}
@@ -135,7 +135,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
               <div className="relative">
                 <input
                   type="date"
-                  className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs font-semibold text-slate-500 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                  className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs font-semibold text-slate-500 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
                 />
                 <Calendar size={14} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
               </div>
@@ -165,7 +165,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
             <div>
               <label className="mb-1.5 block text-xs font-bold text-slate-700">Status</label>
               <div className="relative">
-                <select className="h-10 w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100">
+                <select className="h-10 w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100">
                   {STATUSES.map((s) => (
                     <option key={s}>{s}</option>
                   ))}
@@ -190,7 +190,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
                   className="h-6 w-6 rounded-full"
                 />
                 <span className="text-xs font-semibold text-slate-700">Alex Rivera</span>
-                <button className="ml-auto text-slate-400 hover:text-indigo-600 transition">
+                <button className="ml-auto text-slate-400 hover:text-primary-600 transition">
                   <UserPlus size={14} />
                 </button>
               </div>
@@ -203,7 +203,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
                   type="number"
                   defaultValue={0}
                   min={0}
-                  className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 pr-12 text-sm font-semibold text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                  className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 pr-12 text-sm font-semibold text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
                 />
                 <span className="absolute right-3 text-xs font-semibold text-slate-400">hrs</span>
               </div>
@@ -217,13 +217,13 @@ export default function CreateTaskModal({ isOpen, onClose }) {
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-0.5 text-[10px] font-bold text-indigo-700"
+                  className="flex items-center gap-1 rounded-full bg-primary-100 px-2.5 py-0.5 text-[10px] font-bold text-primary-700"
                 >
                   {tag}
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="ml-0.5 text-indigo-400 hover:text-indigo-700"
+                    className="ml-0.5 text-primary-400 hover:text-primary-700"
                   >
                     ×
                   </button>
@@ -243,8 +243,8 @@ export default function CreateTaskModal({ isOpen, onClose }) {
           {/* Attachments */}
           <div>
             <label className="mb-1.5 block text-xs font-bold text-slate-700">Attachments</label>
-            <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 py-8 text-center transition hover:border-indigo-300 hover:bg-indigo-50/30 cursor-pointer">
-              <Upload size={28} className="text-indigo-400" />
+            <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 py-8 text-center transition hover:border-primary-300 hover:bg-primary-50/30 cursor-pointer">
+              <Upload size={28} className="text-primary-400" />
               <p className="text-xs font-semibold text-slate-600">Click to upload or drag and drop</p>
               <p className="text-[10px] text-slate-400">Max file size: 25MB (ZIP, PDF, PNG, JPG)</p>
             </div>
@@ -262,7 +262,7 @@ export default function CreateTaskModal({ isOpen, onClose }) {
           </button>
           <button
             type="button"
-            className="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-md shadow-indigo-600/20 transition hover:bg-indigo-700 active:scale-95"
+            className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700 active:scale-95"
           >
             Create Task
           </button>

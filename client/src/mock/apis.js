@@ -36,7 +36,7 @@ export const RECENTLY_VIEWED = [
 ];
 
 export const API_STATS = [
-  { id: 'total', label: 'TOTAL APIS', value: '24', icon: 'Box', color: 'text-indigo-600' },
+  { id: 'total', label: 'TOTAL APIS', value: '24', icon: 'Box', color: 'text-primary-600' },
   { id: 'rest', label: 'REST APIS', value: '18', icon: 'Server', color: 'text-slate-500' },
   { id: 'graphql', label: 'GRAPHQL', value: '6', icon: 'Share2', color: 'text-slate-500' },
   { id: 'auth', label: 'AUTHENTICATED', value: '12', icon: 'Lock', color: 'text-slate-500' }

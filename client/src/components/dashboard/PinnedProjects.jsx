@@ -14,7 +14,7 @@ export default function PinnedProjects() {
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-base font-bold text-slate-800">Pinned Projects</h2>
-        <Pin size={16} className="text-indigo-600" />
+        <Pin size={16} className="text-primary-600" />
       </div>
       
       <div className="flex flex-col gap-4">

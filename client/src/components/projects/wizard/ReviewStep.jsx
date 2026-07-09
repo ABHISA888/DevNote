@@ -49,7 +49,7 @@ export default function ReviewStep({ projectData, onEditStep }) {
             <button
               type="button"
               onClick={() => onEditStep(1)}
-              className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700 transition"
+              className="flex items-center gap-1 text-[11px] font-bold text-primary-600 hover:text-primary-700 transition"
             >
               <Pencil size={11} /> Edit
             </button>
@@ -84,7 +84,7 @@ export default function ReviewStep({ projectData, onEditStep }) {
             <button
               type="button"
               onClick={() => onEditStep(4)}
-              className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700 transition"
+              className="flex items-center gap-1 text-[11px] font-bold text-primary-600 hover:text-primary-700 transition"
             >
               <Pencil size={11} /> Edit
             </button>
@@ -98,7 +98,7 @@ export default function ReviewStep({ projectData, onEditStep }) {
                   projectData.priority === 'High'
                     ? 'bg-red-50 text-red-600 border border-red-100'
                     : projectData.priority === 'Medium'
-                    ? 'bg-indigo-50 text-indigo-600 border border-indigo-100'
+                    ? 'bg-primary-50 text-primary-600 border border-primary-100'
                     : 'bg-slate-50 text-slate-500 border border-slate-200'
                 }`}>
                   {projectData.priority} Priority
@@ -137,7 +137,7 @@ export default function ReviewStep({ projectData, onEditStep }) {
             <button
               type="button"
               onClick={() => onEditStep(2)}
-              className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700 transition"
+              className="flex items-center gap-1 text-[11px] font-bold text-primary-600 hover:text-primary-700 transition"
             >
               <Pencil size={11} /> Edit
             </button>
@@ -147,7 +147,7 @@ export default function ReviewStep({ projectData, onEditStep }) {
             {projectData.techStack.map((tech) => (
               <span
                 key={tech}
-                className="rounded bg-indigo-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-600"
+                className="rounded bg-primary-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-600"
               >
                 {tech}
               </span>
@@ -162,7 +162,7 @@ export default function ReviewStep({ projectData, onEditStep }) {
             <button
               type="button"
               onClick={() => onEditStep(3)}
-              className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700 transition"
+              className="flex items-center gap-1 text-[11px] font-bold text-primary-600 hover:text-primary-700 transition"
             >
               <Pencil size={11} /> Edit
             </button>
@@ -180,7 +180,7 @@ export default function ReviewStep({ projectData, onEditStep }) {
                       <Icon size={14} className="text-slate-400" />
                       <span className="text-[10px] font-bold text-slate-600">{integrationLabels[key]}</span>
                     </div>
-                    <span className="text-[11px] font-semibold text-indigo-600 truncate max-w-[200px]" title={url}>
+                    <span className="text-[11px] font-semibold text-primary-600 truncate max-w-[200px]" title={url}>
                       {url}
                     </span>
                   </div>

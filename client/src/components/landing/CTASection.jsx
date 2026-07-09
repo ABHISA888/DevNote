@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
  * This covers both buyer types without alienating either.
  *
  * TAILWIND:
- * - `bg-gradient-to-br from-indigo-600 to-violet-700` matches the design.
+ * - `bg-gradient-to-br from-primary-600 to-violet-700` matches the design.
  * - The ambient glow (`blur-3xl bg-white/10`) adds depth without images.
  */
 
@@ -21,7 +21,7 @@ export default function CTASection() {
   return (
     <section className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-700 px-8 py-16 text-center shadow-2xl shadow-indigo-300/30 sm:py-20">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 to-violet-700 px-8 py-16 text-center shadow-2xl shadow-primary-300/30 sm:py-20">
           {/* Ambient glow overlay */}
           <div
             aria-hidden
@@ -37,7 +37,7 @@ export default function CTASection() {
             <h2 className="text-2xl font-extrabold text-white sm:text-3xl lg:text-4xl">
               Ready to accelerate your launch?
             </h2>
-            <p className="mx-auto mt-4 max-w-lg text-base text-indigo-200">
+            <p className="mx-auto mt-4 max-w-lg text-base text-primary-200">
               Join thousands of developers who have simplified their entire development
               workflow with DevNote.
             </p>
@@ -45,7 +45,7 @@ export default function CTASection() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 to="/signup"
-                className="inline-flex items-center justify-center rounded-xl bg-white px-7 py-3 text-sm font-semibold text-indigo-700 shadow-lg transition hover:bg-indigo-50"
+                className="inline-flex items-center justify-center rounded-xl bg-white px-7 py-3 text-sm font-semibold text-primary-700 shadow-lg transition hover:bg-primary-50"
               >
                 Start Building Now
               </Link>

@@ -20,7 +20,7 @@ export default function StatCard({
   fill 
 }) {
   return (
-    <div className="flex flex-col justify-between rounded-xl bg-white p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all">
+    <div className="flex flex-col justify-between rounded-xl bg-white p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-100 transition-all">
       <h3 className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         {label}
       </h3>
@@ -50,7 +50,7 @@ export default function StatCard({
       {type === 'progress' && (
         <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-gray-100">
           <div 
-            className="h-full rounded-full bg-indigo-600" 
+            className="h-full rounded-full bg-primary-600" 
             style={{ width: `${progressValue}%` }}
           />
         </div>

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, ChevronLeft, ChevronRight, Sparkles, Pencil } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import StepIndicator from './StepIndicator';
@@ -11,24 +11,24 @@ import ReviewStep from './ReviewStep';
 
 /**
  * 🎓 TEACHING MOMENT: CreateProjectWizard.jsx
- * 
- * WHY THIS EXISTS:
- * This orchestrator component acts as the parent container for the multi-step project creation flow.
- * It houses the active wizard state, manages transition animations, and implements validation.
- * 
- * WHY A SINGLE SHARED STATE?
- * Keeping a single shared state object `projectData` at the wizard level allows us to:
- * - Validate the form state seamlessly before step transitions.
- * - Share data inputs directly down to child form components as read/write props.
- * - Build a complete review schema on the final step without intermediate serialization.
- * 
+ *
+ * WHY ONE MODAL FOR BOTH CREATE AND EDIT?
+ * The 5 step sub-components (BasicInfoStep, ConfigurationStep, …) are fully
+ * controlled — they receive `projectData` and `onChange`, and know nothing
+ * about whether we're creating or editing. This means the wizard shell can
+ * simply seed state differently on open and call a different callback on submit.
+ *
+ * mode="create"  → seeds from INITIAL_PROJECT_DATA, submit calls onProjectCreated
+ * mode="edit"    → seeds from initialData (existing project), submit calls onProjectUpdated
+ *
+ * WHY useEffect TO RE-SEED?
+ * If we only seeded in useState() the state would be stale after the first open.
+ * useEffect([isOpen]) ensures fresh data every time the dialog is toggled.
+ *
  * FUTURE BACKEND INTEGRATION:
- * The "Create Project" action on Step 5 will later send the full `projectData` payload to the backend:
- *   const response = await fetch('/api/projects', {
- *     method: 'POST',
- *     headers: { 'Content-Type': 'application/json' },
- *     body: JSON.stringify(projectData)
- *   });
+ * Create:  POST   /api/projects
+ * Edit:    PATCH  /api/projects/:id
+ * Only the callback body changes — zero component restructuring.
  */
 
 const INITIAL_PROJECT_DATA = {
@@ -38,7 +38,6 @@ const INITIAL_PROJECT_DATA = {
   visibility: 'private',
   isFavorite: false,
   templateId: 'blank',
-  themeColor: '#6366f1',
   techStack: [],
   priority: 'Medium',
   estimatedDuration: '',
@@ -54,9 +53,33 @@ const INITIAL_PROJECT_DATA = {
   teamMembers: []
 };
 
-export default function CreateProjectWizard({ isOpen, onClose, onProjectCreated }) {
+/**
+ * @param {object}  props
+ * @param {boolean}  props.isOpen
+ * @param {function} props.onClose
+ * @param {'create'|'edit'} [props.mode='create']
+ * @param {object|null}    [props.initialData=null]  — existing project's _raw wizard data
+ * @param {function} [props.onProjectCreated]
+ * @param {function} [props.onProjectUpdated]
+ */
+export default function CreateProjectWizard({
+  isOpen,
+  onClose,
+  mode = 'create',
+  initialData = null,
+  onProjectCreated,
+  onProjectUpdated,
+}) {
   const [step, setStep] = useState(1);
   const [projectData, setProjectData] = useState(INITIAL_PROJECT_DATA);
+
+  // Re-seed state each time the modal opens so stale data never leaks.
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setProjectData(mode === 'edit' && initialData ? initialData : INITIAL_PROJECT_DATA);
+    }
+  }, [isOpen, mode, initialData]);
 
   if (!isOpen) return null;
 
@@ -105,14 +128,16 @@ export default function CreateProjectWizard({ isOpen, onClose, onProjectCreated 
     setStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleCreateProject = () => {
-    // Backend API would be called here: axios.post('/api/projects', projectData)
-    toast.success(`Successfully initialized project: ${projectData.name}!`);
-    onProjectCreated && onProjectCreated(projectData);
-    
-    // Reset state & Close modal
-    setStep(1);
-    setProjectData(INITIAL_PROJECT_DATA);
+  const handleSubmit = () => {
+    if (mode === 'edit') {
+      // Future: axios.patch(`/api/projects/${projectData.id}`, projectData)
+      toast.success(`Project "${projectData.name}" updated successfully!`);
+      onProjectUpdated && onProjectUpdated({ ...projectData, id: initialData?.id });
+    } else {
+      // Future: axios.post('/api/projects', projectData)
+      toast.success(`Successfully initialized project: ${projectData.name}!`);
+      onProjectCreated && onProjectCreated(projectData);
+    }
     onClose();
   };
 
@@ -144,7 +169,7 @@ export default function CreateProjectWizard({ isOpen, onClose, onProjectCreated 
         {/* Progress Bar Header wrapper */}
         <div className="h-1 w-full bg-gray-100">
           <div 
-            className="h-full bg-indigo-600 transition-all duration-300"
+            className="h-full bg-primary-600 transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -152,11 +177,13 @@ export default function CreateProjectWizard({ isOpen, onClose, onProjectCreated 
         {/* Wizard Header */}
         <div className="flex items-center justify-between border-b border-gray-100 bg-white px-5 py-4">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-              <Sparkles size={16} />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
+              {mode === 'edit' ? <Pencil size={16} /> : <Sparkles size={16} />}
             </div>
             <div>
-              <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Initialize Workspace</h2>
+              <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
+                {mode === 'edit' ? 'Edit Project' : 'Initialize Workspace'}
+              </h2>
               <p className="text-[10px] font-semibold text-slate-400">DEVNOTE SYSTEM BUILDER</p>
             </div>
           </div>
@@ -195,7 +222,7 @@ export default function CreateProjectWizard({ isOpen, onClose, onProjectCreated 
               className={`flex items-center gap-1.5 rounded-lg px-5 py-2 text-xs font-bold text-white shadow-md transition ${
                 isNextDisabled
                   ? 'bg-slate-300 shadow-none cursor-not-allowed'
-                  : 'bg-indigo-600 shadow-indigo-600/20 hover:bg-indigo-700 active:scale-95'
+                  : 'bg-primary-600 shadow-primary-600/20 hover:bg-primary-700 active:scale-95'
               }`}
             >
               Next <ChevronRight size={14} />
@@ -203,10 +230,10 @@ export default function CreateProjectWizard({ isOpen, onClose, onProjectCreated 
           ) : (
             <button
               type="button"
-              onClick={handleCreateProject}
-              className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-5 py-2 text-xs font-bold text-white shadow-md shadow-indigo-600/20 transition hover:bg-indigo-700 active:scale-95"
+              onClick={handleSubmit}
+              className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-5 py-2 text-xs font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700 active:scale-95"
             >
-              Create Project
+              {mode === 'edit' ? 'Save Changes' : 'Create Project'}
             </button>
           )}
         </div>

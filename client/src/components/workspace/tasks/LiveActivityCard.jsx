@@ -11,7 +11,7 @@ export default function LiveActivityCard({ activities }) {
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Live Activity</h3>
-        <Activity size={14} className="text-indigo-600" />
+        <Activity size={14} className="text-primary-600" />
       </div>
 
       <div className="space-y-3">

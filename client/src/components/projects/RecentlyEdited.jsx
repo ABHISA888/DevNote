@@ -18,7 +18,7 @@ function RecentItem({ title, time, initials, color }) {
 export default function RecentlyEdited() {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <div className="mb-5 flex items-center gap-2 text-indigo-600">
+      <div className="mb-5 flex items-center gap-2 text-primary-600">
         <History size={16} strokeWidth={2.5} />
         <h3 className="text-sm font-bold text-slate-800">Recently Edited</h3>
       </div>

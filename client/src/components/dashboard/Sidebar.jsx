@@ -31,12 +31,12 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileMenuOpen, onMob
       {/* ── Logo Section ── */}
       <div className="flex h-16 items-center justify-between px-5 pt-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 shadow-md shadow-indigo-200">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-600 shadow-md shadow-primary-200">
             <Rocket className="h-5 w-5 text-white" />
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-indigo-700 leading-tight">DevNote</span>
+              <span className="text-lg font-bold tracking-tight text-primary-700 leading-tight">DevNote</span>
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Developer Workspace</span>
             </div>
           )}
@@ -54,8 +54,8 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileMenuOpen, onMob
               className={({ isActive }) =>
                 `group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
-                    : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'
+                    ? 'bg-primary-600 text-white shadow-md shadow-primary-200'
+                    : 'text-slate-500 hover:bg-primary-50 hover:text-primary-600'
                 } ${isCollapsed ? 'justify-center' : 'justify-start'}`
               }
             >
@@ -63,7 +63,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileMenuOpen, onMob
                 <>
                   <Icon 
                     className={`h-[18px] w-[18px] shrink-0 transition-colors ${
-                      isActive ? 'text-white' : 'text-slate-400 group-hover:text-indigo-500'
+                      isActive ? 'text-white' : 'text-slate-400 group-hover:text-primary-500'
                     }`} 
                     strokeWidth={isActive ? 2.5 : 2} 
                   />

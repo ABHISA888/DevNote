@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { Star, ArrowRight, Calendar } from 'lucide-react';
+import ProjectActionMenu from './ProjectActionMenu';
 
 function ProgressBar({ progress }) {
-  const color = progress === 100 ? 'bg-emerald-500' : 'bg-indigo-600';
+  const color = progress === 100 ? 'bg-primary-500' : 'bg-primary-600';
   return (
     <div className="w-full overflow-hidden rounded-full bg-slate-100 h-1.5">
       <div className={`h-full rounded-full transition-all duration-500 ${color}`} style={{ width: `${progress}%` }} />
@@ -16,10 +17,19 @@ function StatusBadge({ status, statusColor }) {
   );
 }
 
-export default function ProjectCard({ id, title, initials, initialsColor, lastUpdated, isFavorite, description, badges, progress, members, additionalMembers, status, statusColor }) {
+export default function ProjectCard({
+  id, title, initials, initialsColor, lastUpdated,
+  isFavorite, description, badges, progress,
+  members, additionalMembers, status, statusColor,
+  onEdit, onDelete,
+  // Pass the entire project object through for the action menu
+  ...rest
+}) {
   const navigate = useNavigate();
+  // Reconstruct a project reference for the action menu
+  const project = { id, title, initials, initialsColor, lastUpdated, isFavorite, description, badges, progress, members, additionalMembers, status, statusColor, ...rest };
   return (
-    <div className="group flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:border-indigo-100 hover:shadow-md">
+    <div className="group flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:border-primary-100 hover:shadow-md">
       <div>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -33,9 +43,14 @@ export default function ProjectCard({ id, title, initials, initialsColor, lastUp
               </div>
             </div>
           </div>
-          <button className="text-gray-300 transition hover:text-indigo-400">
-            <Star size={16} className={isFavorite ? 'fill-indigo-600 text-indigo-600' : ''} />
-          </button>
+          <div className="flex items-center gap-1">
+            <Star size={14} className={`shrink-0 ${isFavorite ? 'fill-primary-500 text-primary-500' : 'text-gray-200'}`} />
+            <ProjectActionMenu
+              project={project}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          </div>
         </div>
         <p className="mt-4 text-xs leading-relaxed text-slate-500 line-clamp-3 h-12">{description}</p>
         <div className="mt-4 flex flex-wrap gap-1.5 h-6">
@@ -48,7 +63,7 @@ export default function ProjectCard({ id, title, initials, initialsColor, lastUp
         <div>
           <div className="mb-2 flex items-center justify-between text-[11px] font-bold">
             <span className="text-slate-500">Progress</span>
-            <span className="text-indigo-600">{progress}%</span>
+            <span className="text-primary-600">{progress}%</span>
           </div>
           <ProgressBar progress={progress} />
         </div>
@@ -64,7 +79,7 @@ export default function ProjectCard({ id, title, initials, initialsColor, lastUp
             </div>
             <StatusBadge status={status} statusColor={statusColor} />
           </div>
-          <button onClick={() => navigate(`/project/${id}`)} className="group/btn flex items-center gap-1 text-[11px] font-bold text-indigo-600 transition hover:text-indigo-700">
+          <button onClick={() => navigate(`/project/${id}`)} className="group/btn flex items-center gap-1 text-[11px] font-bold text-primary-600 transition hover:text-primary-700">
             Open Project <ArrowRight size={12} className="transition-transform group-hover/btn:translate-x-0.5" />
           </button>
         </div>

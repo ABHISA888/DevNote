@@ -20,7 +20,7 @@ export default function EnvironmentSelector({ environments, activeEnvId, onEnvCh
         <select
           value={activeEnvId}
           onChange={(e) => onEnvChange(e.target.value)}
-          className="w-full appearance-none rounded-lg border border-gray-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+          className="w-full appearance-none rounded-lg border border-gray-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
         >
           {environments.map(env => (
             <option key={env.id} value={env.id}>{env.name}</option>

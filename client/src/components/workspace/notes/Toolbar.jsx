@@ -25,7 +25,7 @@ export default function Toolbar({
             onClick={() => onTogglePreview(false)}
             className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition-all ${
               !isPreviewMode 
-                ? 'bg-white text-indigo-600 shadow-sm' 
+                ? 'bg-white text-primary-600 shadow-sm' 
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -35,7 +35,7 @@ export default function Toolbar({
             onClick={() => onTogglePreview(true)}
             className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition-all ${
               isPreviewMode 
-                ? 'bg-white text-indigo-600 shadow-sm' 
+                ? 'bg-white text-primary-600 shadow-sm' 
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -50,12 +50,12 @@ export default function Toolbar({
         <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400">
           {isSaving ? (
             <>
-              <RefreshCcw size={12} className="animate-spin text-indigo-500" />
-              <span className="text-indigo-500">Saving...</span>
+              <RefreshCcw size={12} className="animate-spin text-primary-500" />
+              <span className="text-primary-500">Saving...</span>
             </>
           ) : (
             <>
-              <CheckCircle2 size={12} className="text-emerald-500" />
+              <CheckCircle2 size={12} className="text-primary-500" />
               <span>Saved</span>
             </>
           )}
@@ -76,7 +76,7 @@ export default function Toolbar({
         <div className="flex items-center gap-1">
           <button 
             onClick={onDuplicate}
-            className="rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-indigo-600 transition"
+            className="rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-primary-600 transition"
             aria-label="Duplicate Note"
             title="Duplicate"
           >

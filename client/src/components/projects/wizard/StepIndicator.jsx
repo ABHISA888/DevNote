@@ -36,9 +36,9 @@ export default function StepIndicator({ currentStep }) {
                 <div 
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 border-2 ${
                     isCompleted
-                      ? 'bg-indigo-600 border-indigo-600 text-white'
+                      ? 'bg-primary-600 border-primary-600 text-white'
                       : isActive
-                      ? 'border-indigo-600 bg-white text-indigo-600 shadow-md shadow-indigo-100 scale-105'
+                      ? 'border-primary-600 bg-white text-primary-600 shadow-md shadow-primary-100 scale-105'
                       : 'border-gray-200 bg-white text-gray-400'
                   }`}
                 >
@@ -46,7 +46,7 @@ export default function StepIndicator({ currentStep }) {
                 </div>
                 <span 
                   className={`mt-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${
-                    isActive ? 'text-indigo-600' : isCompleted ? 'text-slate-700' : 'text-gray-400'
+                    isActive ? 'text-primary-600' : isCompleted ? 'text-slate-700' : 'text-gray-400'
                   }`}
                 >
                   {step.label}
@@ -57,7 +57,7 @@ export default function StepIndicator({ currentStep }) {
               {index < steps.length - 1 && (
                 <div 
                   className={`h-0.5 flex-1 transition-all duration-500 mx-2 -mt-4 ${
-                    isCompleted ? 'bg-indigo-600' : 'bg-gray-200'
+                    isCompleted ? 'bg-primary-600' : 'bg-gray-200'
                   }`}
                 />
               )}

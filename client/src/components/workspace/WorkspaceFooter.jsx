@@ -9,10 +9,10 @@ export default function WorkspaceFooter() {
         <span>v2.4.0-stable</span>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-emerald-500" />
+            <div className="h-2 w-2 rounded-full bg-primary-500" />
             <span>System Operational</span>
           </div>
-          <button className="transition hover:text-indigo-600">Support</button>
+          <button className="transition hover:text-primary-600">Support</button>
         </div>
       </div>
     </footer>

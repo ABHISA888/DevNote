@@ -19,7 +19,7 @@ export default function ProjectHeader({ initials, initialsColor, name, status, d
     <div className="flex flex-col gap-4 px-4 pt-5 pb-0 sm:px-6 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex items-start gap-4">
         {/* Project Icon / Avatar */}
-        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border text-sm font-bold tracking-wider ${initialsColor} border-indigo-100`}>
+        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border text-sm font-bold tracking-wider ${initialsColor} border-primary-100`}>
           {initials}
         </div>
 
@@ -27,7 +27,7 @@ export default function ProjectHeader({ initials, initialsColor, name, status, d
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-xl font-extrabold tracking-tight text-slate-800">{name}</h1>
             {/* Status Badge */}
-            <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+            <span className="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary-700">
               {status}
             </span>
           </div>
@@ -37,8 +37,8 @@ export default function ProjectHeader({ initials, initialsColor, name, status, d
 
       {/* Actions */}
       <div className="flex shrink-0 items-center gap-2 self-start">
-        <button className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${isFavorite ? 'border-indigo-200 bg-indigo-50 text-indigo-600' : 'border-gray-200 bg-white text-slate-500 hover:bg-slate-50'}`}>
-          <Star size={13} className={isFavorite ? 'fill-indigo-600' : ''} />
+        <button className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${isFavorite ? 'border-primary-200 bg-primary-50 text-primary-600' : 'border-gray-200 bg-white text-slate-500 hover:bg-slate-50'}`}>
+          <Star size={13} className={isFavorite ? 'fill-primary-600' : ''} />
         </button>
         <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
           <Share2 size={13} />
