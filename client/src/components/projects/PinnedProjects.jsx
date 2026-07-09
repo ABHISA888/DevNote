@@ -37,13 +37,7 @@ export default function PinnedProjects({ projects = [] }) {
         {pinnedList.map((project) => (
           <PinnedProjectCard 
             key={project._id}
-            title={project.name}
-            description={project.description}
-            badges={project.techStack || []}
-            icon={Rocket}
-            iconBg="bg-indigo-50"
-            iconColor="text-indigo-600"
-            isPinned={project.isFavorite}
+            project={project}
           />
         ))}
       </div>

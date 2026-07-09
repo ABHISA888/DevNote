@@ -9,7 +9,7 @@ import axios from 'axios';
  *   instructing the browser to automatically attach authentication cookies on cross-origin requests.
  */
 const api = axios.create({
-  baseURL: '/api', // Vite proxy forwards /api -> http://localhost:5000/api
+  baseURL: 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
   },

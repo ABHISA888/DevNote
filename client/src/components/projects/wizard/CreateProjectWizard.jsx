@@ -185,6 +185,18 @@ export default function CreateProjectWizard({
     }
   };
 
+  const handleSubmit = async () => {
+    if (mode === 'edit') {
+      if (onProjectUpdated) {
+        onProjectUpdated(projectData);
+      }
+      toast.success('Successfully updated project!');
+      onClose();
+    } else {
+      await handleCreateProject();
+    }
+  };
+
   const renderStepContent = () => {
     switch (step) {
       case 1:

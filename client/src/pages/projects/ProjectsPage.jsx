@@ -131,7 +131,7 @@ export default function ProjectsPage() {
       )}
 
       {/* ── Global Action ── */}
-      <FloatingActionButton onClick={openCreateWizard} />
+      <FloatingActionButton onClick={() => setIsWizardOpen(true)} />
 
       {/* ── Create Project Wizard Modal ── */}
       <CreateProjectWizard 
