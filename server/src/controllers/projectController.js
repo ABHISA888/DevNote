@@ -112,15 +112,7 @@ exports.createProject = async (req, res, next) => {
     });
 
   } catch (error) {
-    // 🎓 TEACHING MOMENT: Detailed Error Diagnostics for Audits
-    console.error('=================== BACKEND ERROR DIAGNOSTICS ===================');
-    console.error('Request Body:', JSON.stringify(req.body, null, 2));
-    console.error('Error Name:', error.name);
-    console.error('Error Message:', error.message);
-    if (error.stack) {
-      console.error('Stack Trace:', error.stack);
-    }
-    console.error('=================================================================');
+    console.error(`Error inside createProject controller: ${error.message}`);
 
     // Handle Mongoose Validation Error (built-in validation rules)
     if (error.name === 'ValidationError') {
@@ -136,47 +128,14 @@ exports.createProject = async (req, res, next) => {
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
-        message: `Invalid format for field: ${error.path}`,
-        error: error.message
-      });
-    }
-
-    // Handle duplicate key errors (e.g., Code 11000)
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: 'Duplicate key error: A resource with this value already exists.',
-        error: error.keyValue
+        message: `Invalid format for field: ${error.path}`
       });
     }
 
     // General fallback for unhandled server issues
     return res.status(500).json({
       success: false,
-      message: `Internal Server Error: ${error.message}`
-    });
-  }
-};
-
-/**
- * @desc    Get all project workspaces
- * @route   GET /api/projects
- * @access  Public (Auth to be added later)
- */
-exports.getProjects = async (req, res, next) => {
-  try {
-    const projects = await Project.find({}).sort({ createdAt: -1 });
-    
-    return res.status(200).json({
-      success: true,
-      count: projects.length,
-      data: projects
-    });
-  } catch (error) {
-    console.error(`Error inside getProjects controller: ${error.message}`);
-    return res.status(500).json({
-      success: false,
-      message: 'Internal Server Error. Could not retrieve projects.'
+      message: 'Internal Server Error. Something went wrong on our end.'
     });
   }
 };
