@@ -1,5 +1,6 @@
 import { Toaster } from 'react-hot-toast';
 import AppRoutes from './routes/AppRoutes';
+import { AuthProvider } from './context/AuthContext';
 
 /**
  * App.jsx — Root Application Shell
@@ -8,7 +9,7 @@ import AppRoutes from './routes/AppRoutes';
  * - App.jsx is the boundary between the browser mount (main.jsx) and the
  *   route system (AppRoutes.jsx). It should only hold concerns that affect
  *   the *entire* application equally — global styling, toast notifications,
- *   and future global providers (AuthProvider, QueryClient).
+ *   and global providers (AuthProvider).
  *
  * WHY we removed the container wrapper:
  * - Authentication pages (Login, Signup) are designed as full-viewport
@@ -17,20 +18,22 @@ import AppRoutes from './routes/AppRoutes';
  */
 function App() {
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 antialiased selection:bg-primary-500 selection:text-white">
-      <AppRoutes />
-      <Toaster
-        position="bottom-right"
-        toastOptions={{
-          style: {
-            background: '#ffffff',
-            color: '#334155',
-            border: '1px solid #e5e7eb',
-            fontSize: '0.875rem',
-          },
-        }}
-      />
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen bg-white font-sans text-slate-900 antialiased selection:bg-primary-500 selection:text-white">
+        <AppRoutes />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              background: '#ffffff',
+              color: '#334155',
+              border: '1px solid #e5e7eb',
+              fontSize: '0.875rem',
+            },
+          }}
+        />
+      </div>
+    </AuthProvider>
   );
 }
 

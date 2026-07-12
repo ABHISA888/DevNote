@@ -1,3 +1,5 @@
+import { useAuth } from '../../context/AuthContext';
+
 /**
  * 🎓 TEACHING MOMENT: WelcomeSection.jsx
  * 
@@ -7,10 +9,13 @@
  * require computation.
  */
 export default function WelcomeSection() {
+  const { user } = useAuth();
+  const name = user?.name || 'Developer';
+
   return (
     <div className="mb-8 border-b border-dashed border-gray-300 pb-6">
       <h1 className="text-3xl font-extrabold tracking-tight text-slate-800">
-        Good Morning, Harshu <span className="inline-block animate-wave origin-bottom-right">👋</span>
+        Good Morning, {name} <span className="inline-block animate-wave origin-bottom-right">👋</span>
       </h1>
       <p className="mt-2 text-sm font-medium text-slate-500">
         Here's what's happening with your projects today.

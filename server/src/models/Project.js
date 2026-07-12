@@ -82,9 +82,9 @@ const ProjectSchema = new mongoose.Schema(
       trim: true,
       validate: {
         validator: function (v) {
-          // Allow empty strings, otherwise validate as a basic URL pattern
+          // Allow empty strings, otherwise validate as a basic URL pattern supporting localhost and ports
           if (!v || v.trim() === '') return true;
-          return /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/.test(v);
+          return /^(https?:\/\/)?(localhost|[\da-z.-]+)(:\d+)?([\/\w .-]*)*\/?$/i.test(v);
         },
         message: 'Please provide a valid GitHub URL',
       },
@@ -147,7 +147,7 @@ const ProjectSchema = new mongoose.Schema(
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: false, // Set to false to accommodate the mock setup, ready for JWT auth later
+      required: [true, 'Project owner is required'],
     },
   },
   {
