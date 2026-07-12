@@ -6,6 +6,9 @@ import LoginPage from '../pages/auth/LoginPage';
 import SignupPage from '../pages/auth/SignupPage';
 import ContactPage from '../pages/contact/ContactPage';
 
+// ─── Protected Routes Wrapper ──────────────────────────────────────────────────
+import ProtectedRoute from '../components/common/ProtectedRoute';
+
 // ─── App Pages & Layout ───────────────────────────────────────────────────────
 import DashboardLayout from '../layouts/DashboardLayout';
 import DashboardPage from '../pages/dashboard/DashboardPage';
@@ -31,26 +34,29 @@ export default function AppRoutes() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/contact" element={<ContactPage />} />
 
-      {/* ── Project Workspace (outside DashboardLayout — has its own header) ── */}
-      <Route path="/project/:projectId" element={<ProjectWorkspacePage />} />
+      {/* ── Protected Route Group ── */}
+      <Route element={<ProtectedRoute />}>
+        {/* ── Project Workspace (outside DashboardLayout — has its own header) ── */}
+        <Route path="/project/:projectId" element={<ProjectWorkspacePage />} />
 
-      {/* ── Interior app routes (Dashboard Layout Shell) ──── */}
-      <Route element={<DashboardLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/workspace/:workspaceId" element={<WorkspacePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/notifications" element={<NotificationsPage />} />
+        {/* ── Interior app routes (Dashboard Layout Shell) ──── */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/workspace/:workspaceId" element={<WorkspacePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
 
-        {/* ── Feature Modules ── */}
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/tasks" element={<TasksPage />} />
+          {/* ── Feature Modules ── */}
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/tasks" element={<TasksPage />} />
 
-        {/* ── Placeholder routes ── */}
-        <Route path="/notes" element={<div className="p-8 text-slate-500 font-semibold">Notes — Coming Soon</div>} />
-        <Route path="/apis" element={<div className="p-8 text-slate-500 font-semibold">APIs — Coming Soon</div>} />
-        <Route path="/env" element={<div className="p-8 text-slate-500 font-semibold">Environment Variables — Coming Soon</div>} />
-        <Route path="/favorites" element={<div className="p-8 text-slate-500 font-semibold">Favorites — Coming Soon</div>} />
+          {/* ── Placeholder routes ── */}
+          <Route path="/notes" element={<div className="p-8 text-slate-500 font-semibold">Notes — Coming Soon</div>} />
+          <Route path="/apis" element={<div className="p-8 text-slate-500 font-semibold">APIs — Coming Soon</div>} />
+          <Route path="/env" element={<div className="p-8 text-slate-500 font-semibold">Environment Variables — Coming Soon</div>} />
+          <Route path="/favorites" element={<div className="p-8 text-slate-500 font-semibold">Favorites — Coming Soon</div>} />
+        </Route>
       </Route>
 
       {/* ── Wildcard 404 ─────────────────────────── */}
