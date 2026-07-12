@@ -1,17 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { createProject, getProjects } = require('../controllers/projectController');
+const {
+  createProject,
+  getProjects,
+  getProjectById,
+  updateProject,
+  deleteProject
+} = require('../controllers/projectController');
+const { protect } = require('../middleware/authMiddleware');
 
-/**
- * 🎓 TEACHING MOMENT: RESTful Routing
- * 
- * In REST APIs, the URI maps to a collection of resources, and the HTTP method defines the action.
- * - POST /api/projects: Creates a new project resource.
- * - GET /api/projects: Retrieves the collection of project resources.
- * - This router is mounted in app.js at the prefix '/api/projects', meaning all paths defined
- *   in this file are relative to that prefix. Thus, router.post('/') handles POST requests to '/api/projects'.
- */
+// 🎓 TEACHING MOMENT: Route Protection middleware
+// By mounting `protect` as a router-level middleware, we guarantee that all routes
+// defined in this file require a valid JWT token.
+router.use(protect);
+
 router.post('/', createProject);
 router.get('/', getProjects);
+router.get('/:id', getProjectById);
+router.put('/:id', updateProject);
+router.delete('/:id', deleteProject);
 
 module.exports = router;
