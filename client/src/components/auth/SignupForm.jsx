@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 import TextInput from './TextInput';
 import PasswordInput from './PasswordInput';
@@ -39,6 +40,7 @@ const signupSchema = z
 
 export default function SignupForm() {
   const navigate = useNavigate();
+  const { register: registerUser } = useAuth();
   
   const {
     register,
@@ -61,14 +63,19 @@ export default function SignupForm() {
   const passwordValue = watch('password', '');
 
   const onSubmit = async (data) => {
-    // Simulate API request (backend code is isolated as requested)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    toast.success('Account created! Please sign in.', {
-      icon: '🎉',
-    });
-    console.log('Valid Form Data Submitted:', data);
-    reset();
-    navigate('/login');
+    try {
+      const result = await registerUser(data.fullName, data.email, data.password);
+      if (result && result.success) {
+        toast.success('Account created successfully!', {
+          icon: '🎉',
+        });
+        reset();
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Registration failed. Email might already be registered.');
+    }
   };
 
   return (

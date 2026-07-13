@@ -1,7 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const passport = require('passport');
 const projectRoutes = require('./routes/projectRoutes');
+const authRoutes = require('./routes/authRoutes');
+
+// Load Passport config
+require('./config/passport');
 
 // Initialize the Express app
 const app = express();
@@ -13,12 +19,15 @@ const app = express();
  * object (res), and the next middleware function in the application’s request-response cycle.
  * 
  * Order is critical:
- * 1. CORS: Must be defined first so that pre-flight OPTIONS requests from browsers are resolved immediately.
- * 2. express.json(): Parses incoming requests with JSON payloads. If a POST request has no JSON parser,
- *    `req.body` will be undefined inside the controller.
- * 3. express.urlencoded(): Parses incoming requests with URL-encoded payloads (useful for form submissions).
- * 4. cookieParser(): Parses cookie headers and populates `req.cookies`. Essential for secure JWT storage in cookies.
+ * 1. CORS & Helmet: Security headers and cross-origin setup must be defined first.
+ * 2. express.json(): Parses incoming requests with JSON payloads.
+ * 3. express.urlencoded(): Parses incoming requests with URL-encoded payloads.
+ * 4. cookieParser(): Parses cookie headers and populates `req.cookies`.
+ * 5. passport.initialize(): Prepares Passport OAuth.
  */
+
+// Use Helmet to secure Express headers
+app.use(helmet());
 
 // 1. CORS Configuration
 const allowedOrigins = [
@@ -51,8 +60,11 @@ app.use(express.json({ limit: '10mb' })); // Limit body sizes to protect from DO
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
+// Initialize passport
+app.use(passport.initialize());
+
 // 3. API Routes Mount Points
-// We mount all project routes at the prefix '/api/projects'
+app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 
 // Simple health check endpoint to check server availability

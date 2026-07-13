@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Star, ArrowRight, Calendar } from 'lucide-react';
+import { Star, ArrowRight, Calendar, Pin } from 'lucide-react';
 import ProjectActionMenu from './ProjectActionMenu';
 
 function ProgressBar({ progress }) {
@@ -19,15 +19,15 @@ function StatusBadge({ status, statusColor }) {
 
 export default function ProjectCard({
   id, title, initials, initialsColor, lastUpdated,
-  isFavorite, description, badges, progress,
+  isFavorite, isPinned, description, badges, progress,
   members, additionalMembers, status, statusColor,
-  onEdit, onDelete,
+  onEdit, onDelete, onPinToggle, onFavoriteToggle,
   // Pass the entire project object through for the action menu
   ...rest
 }) {
   const navigate = useNavigate();
   // Reconstruct a project reference for the action menu
-  const project = { id, title, initials, initialsColor, lastUpdated, isFavorite, description, badges, progress, members, additionalMembers, status, statusColor, ...rest };
+  const project = { id, title, initials, initialsColor, lastUpdated, isFavorite, isPinned, description, badges, progress, members, additionalMembers, status, statusColor, ...rest };
   return (
     <div className="group flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:border-primary-100 hover:shadow-md">
       <div>
@@ -44,7 +44,40 @@ export default function ProjectCard({
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Star size={14} className={`shrink-0 ${isFavorite ? 'fill-primary-500 text-primary-500' : 'text-gray-200'}`} />
+            {/* Star Favorite Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onFavoriteToggle && onFavoriteToggle(id);
+              }}
+              title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 focus:outline-none"
+            >
+              <Star
+                size={14}
+                className={`shrink-0 transition-colors ${
+                  isFavorite ? 'fill-amber-400 text-amber-400' : 'text-gray-300 hover:text-gray-400'
+                }`}
+              />
+            </button>
+
+            {/* Pin Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onPinToggle && onPinToggle(id);
+              }}
+              title={isPinned ? "Unpin Project" : "Pin Project"}
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 focus:outline-none"
+            >
+              <Pin
+                size={14}
+                className={`shrink-0 transition-colors ${
+                  isPinned ? 'fill-primary-600 text-primary-600' : 'text-gray-300 hover:text-gray-400'
+                }`}
+              />
+            </button>
+
             <ProjectActionMenu
               project={project}
               onEdit={onEdit}

@@ -1,10 +1,12 @@
-import { Pin, Rocket } from 'lucide-react';
+import { Pin, Rocket, Star } from 'lucide-react';
 import ProjectActionMenu from './ProjectActionMenu';
 
 export default function PinnedProjectCard({
   project,
   onEdit,
   onDelete,
+  onPinToggle,
+  onFavoriteToggle,
 }) {
   if (!project) return null;
 
@@ -12,7 +14,8 @@ export default function PinnedProjectCard({
     name: title = '',
     description = '',
     techStack: badges = [],
-    isFavorite: isPinned = false,
+    isPinned = false,
+    isFavorite = false,
   } = project;
 
   const Icon = Rocket;
@@ -21,12 +24,40 @@ export default function PinnedProjectCard({
 
   return (
     <div className="group relative flex flex-col justify-between rounded-xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-primary-100 hover:shadow-md h-full">
-      {/* Top-right: pin + action menu */}
-      <div className="absolute right-3 top-3 flex items-center gap-0.5">
-        <Pin
-          size={14}
-          className={`transition-colors ${isPinned ? 'fill-primary-600 text-primary-600' : 'text-gray-300 group-hover:text-gray-400'}`}
-        />
+      {/* Top-right: star + pin + action menu */}
+      <div className="absolute right-3 top-3 flex items-center gap-1 z-10">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onFavoriteToggle && onFavoriteToggle(project._id || project.id);
+          }}
+          title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+          className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 focus:outline-none"
+        >
+          <Star
+            size={14}
+            className={`shrink-0 transition-colors ${
+              isFavorite ? 'fill-amber-400 text-amber-400' : 'text-gray-300 hover:text-gray-400'
+            }`}
+          />
+        </button>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onPinToggle && onPinToggle(project._id || project.id);
+          }}
+          title={isPinned ? "Unpin Project" : "Pin Project"}
+          className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 focus:outline-none"
+        >
+          <Pin
+            size={14}
+            className={`shrink-0 transition-colors ${
+              isPinned ? 'fill-primary-600 text-primary-600' : 'text-gray-300 hover:text-gray-400'
+            }`}
+          />
+        </button>
+
         <ProjectActionMenu
           project={project}
           onEdit={onEdit}

@@ -21,8 +21,16 @@ import { projectService } from '../../services/api/projectService';
  * This component orchestrates the API call, handles loading/error overlays, and feeds the resulting
  * data down to its children (StatsCards, PinnedProjects, ProjectGrid) as read-only props.
  */
+import toast from 'react-hot-toast';
+import DeleteConfirmModal from '../../components/projects/DeleteConfirmModal';
+
 export default function ProjectsPage() {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [isEditWizardOpen, setIsEditWizardOpen] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
+
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,6 +63,83 @@ export default function ProjectsPage() {
   // Append new project to state when created by the wizard
   const handleProjectCreated = (newProject) => {
     setProjects((prev) => [newProject, ...prev]);
+  };
+
+  const handleEditClick = (project) => {
+    setProjectToEdit(project);
+    setIsEditWizardOpen(true);
+  };
+
+  const handleProjectUpdated = (updatedProject) => {
+    setProjects((prev) => prev.map((p) => p._id === updatedProject._id ? updatedProject : p));
+  };
+
+  const handleDeleteClick = (project) => {
+    setProjectToDelete(project);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!projectToDelete) return;
+    try {
+      const res = await projectService.deleteProject(projectToDelete._id);
+      if (res.success) {
+        toast.success('Project deleted successfully');
+        setProjects((prev) => prev.filter((p) => p._id !== projectToDelete._id));
+      } else {
+        toast.error(res.message || 'Failed to delete project');
+      }
+    } catch (err) {
+      console.error('Error deleting project:', err);
+      toast.error(err.response?.data?.message || 'Failed to delete project');
+    } finally {
+      setIsDeleteModalOpen(false);
+      setProjectToDelete(null);
+    }
+  };
+
+  const handlePinToggle = async (projectId) => {
+    // Optimistic UI update
+    const originalProjects = [...projects];
+    setProjects((prev) => prev.map((p) => p._id === projectId ? { ...p, isPinned: !p.isPinned } : p));
+    
+    try {
+      const res = await projectService.pinProject(projectId);
+      if (res.success) {
+        // Update with fresh database data
+        setProjects((prev) => prev.map((p) => p._id === projectId ? res.data : p));
+        toast.success(res.message || 'Pin status updated');
+      } else {
+        toast.error(res.message || 'Failed to update pin status');
+        setProjects(originalProjects);
+      }
+    } catch (err) {
+      console.error('Error toggling pin status:', err);
+      toast.error(err.response?.data?.message || 'Failed to update pin status');
+      setProjects(originalProjects);
+    }
+  };
+
+  const handleFavoriteToggle = async (projectId) => {
+    // Optimistic UI update
+    const originalProjects = [...projects];
+    setProjects((prev) => prev.map((p) => p._id === projectId ? { ...p, isFavorite: !p.isFavorite } : p));
+    
+    try {
+      const res = await projectService.favoriteProject(projectId);
+      if (res.success) {
+        // Update with fresh database data
+        setProjects((prev) => prev.map((p) => p._id === projectId ? res.data : p));
+        toast.success(res.message || 'Favorite status updated');
+      } else {
+        toast.error(res.message || 'Failed to update favorite status');
+        setProjects(originalProjects);
+      }
+    } catch (err) {
+      console.error('Error toggling favorite status:', err);
+      toast.error(err.response?.data?.message || 'Failed to update favorite status');
+      setProjects(originalProjects);
+    }
   };
 
   // Calculate dynamic stack stats for StackOverview sidebar component
@@ -115,8 +200,24 @@ export default function ProjectsPage() {
             
             {/* Left Column: Projects Feed */}
             <div className="flex flex-col gap-8 lg:col-span-2">
-              <PinnedProjects projects={projects} />
-              <ProjectGrid projects={projects} />
+              <PinnedProjects
+                projects={projects}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteClick}
+                onPinToggle={handlePinToggle}
+                onFavoriteToggle={handleFavoriteToggle}
+              />
+              <ProjectGrid
+                projects={[...projects].sort((a, b) => {
+                  if (a.isPinned && !b.isPinned) return -1;
+                  if (!a.isPinned && b.isPinned) return 1;
+                  return new Date(b.createdAt) - new Date(a.createdAt);
+                })}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteClick}
+                onPinToggle={handlePinToggle}
+                onFavoriteToggle={handleFavoriteToggle}
+              />
             </div>
             
             {/* Right Column: Context Widgets */}
@@ -138,6 +239,29 @@ export default function ProjectsPage() {
         isOpen={isWizardOpen} 
         onClose={() => setIsWizardOpen(false)} 
         onProjectCreated={handleProjectCreated}
+      />
+
+      {/* ── Edit Project Wizard Modal ── */}
+      <CreateProjectWizard 
+        isOpen={isEditWizardOpen}
+        onClose={() => {
+          setIsEditWizardOpen(false);
+          setProjectToEdit(null);
+        }}
+        mode="edit"
+        initialData={projectToEdit}
+        onProjectUpdated={handleProjectUpdated}
+      />
+
+      {/* ── Delete Confirmation Modal ── */}
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        projectTitle={projectToDelete?.name || ''}
+        onCancel={() => {
+          setIsDeleteModalOpen(false);
+          setProjectToDelete(null);
+        }}
+        onConfirm={handleConfirmDelete}
       />
 
     </div>

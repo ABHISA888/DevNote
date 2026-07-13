@@ -98,7 +98,7 @@ exports.createProject = async (req, res, next) => {
       reminderDaysBefore,
       teamMembers,
       status,
-      owner // owner field is ready for JWT auth later
+      owner: req.user._id // Automatically assign owner from authenticated user
     });
 
     // Save to MongoDB Atlas
@@ -141,13 +141,13 @@ exports.createProject = async (req, res, next) => {
 };
 
 /**
- * @desc    Get all developer projects
+ * @desc    Get all developer projects for the logged-in user
  * @route   GET /api/projects
- * @access  Public (Auth to be added later)
+ * @access  Private
  */
 exports.getProjects = async (req, res, next) => {
   try {
-    const projects = await Project.find({}).sort({ createdAt: -1 });
+    const projects = await Project.find({ owner: req.user._id }).sort({ createdAt: -1 });
     
     return res.status(200).json({
       success: true,
@@ -159,6 +159,224 @@ exports.getProjects = async (req, res, next) => {
     return res.status(500).json({
       success: false,
       message: 'Internal Server Error. Something went wrong on our end.'
+    });
+  }
+};
+
+/**
+ * @desc    Get single project by ID
+ * @route   GET /api/projects/:id
+ * @access  Private
+ */
+exports.getProjectById = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: 'Project not found',
+      });
+    }
+
+    // Verify owner
+    if (project.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access Forbidden: You do not own this project',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: project,
+    });
+  } catch (error) {
+    console.error(`Error inside getProjectById controller: ${error.message}`);
+    if (error.name === 'CastError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid project ID format',
+      });
+    }
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+/**
+ * @desc    Update a project
+ * @route   PUT /api/projects/:id
+ * @access  Private
+ */
+exports.updateProject = async (req, res, next) => {
+  try {
+    let project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: 'Project not found',
+      });
+    }
+
+    // Verify owner
+    if (project.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access Forbidden: You do not own this project',
+      });
+    }
+
+    // Prevent modifying the owner field manually
+    delete req.body.owner;
+
+    project = await Project.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Project updated successfully',
+      data: project,
+    });
+  } catch (error) {
+    console.error(`Error inside updateProject controller: ${error.message}`);
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Validation Error',
+        errors: messages
+      });
+    }
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+/**
+ * @desc    Delete a project
+ * @route   DELETE /api/projects/:id
+ * @access  Private
+ */
+exports.deleteProject = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: 'Project not found',
+      });
+    }
+
+    // Verify owner
+    if (project.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access Forbidden: You do not own this project',
+      });
+    }
+
+    await project.deleteOne();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Project deleted successfully',
+    });
+  } catch (error) {
+    console.error(`Error inside deleteProject controller: ${error.message}`);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+/**
+ * @desc    Pin/Unpin a project
+ * @route   PATCH /api/projects/:id/pin
+ * @access  Private
+ */
+exports.pinProject = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: 'Project not found',
+      });
+    }
+
+    // Verify owner
+    if (project.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access Forbidden: You do not own this project',
+      });
+    }
+
+    project.isPinned = !project.isPinned;
+    await project.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Project ${project.isPinned ? 'pinned' : 'unpinned'} successfully`,
+      data: project,
+    });
+  } catch (error) {
+    console.error(`Error inside pinProject controller: ${error.message}`);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+/**
+ * @desc    Favorite/Unfavorite a project
+ * @route   PATCH /api/projects/:id/favorite
+ * @access  Private
+ */
+exports.favoriteProject = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: 'Project not found',
+      });
+    }
+
+    // Verify owner
+    if (project.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access Forbidden: You do not own this project',
+      });
+    }
+
+    project.isFavorite = !project.isFavorite;
+    await project.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Project ${project.isFavorite ? 'favorited' : 'unfavorited'} successfully`,
+      data: project,
+    });
+  } catch (error) {
+    console.error(`Error inside favoriteProject controller: ${error.message}`);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
     });
   }
 };
