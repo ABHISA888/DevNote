@@ -1,16 +1,16 @@
 /**
  * Email Service Facade
- * Forwards calls to the Resend Service.
+ * Forwards calls to the Brevo SMTP Service.
  */
-const resendService = require('./email/resendService');
+const emailService = require('./email');
 
 module.exports = {
-  sendWelcomeEmail: resendService.sendWelcomeEmail,
-  sendPasswordResetEmail: resendService.sendPasswordResetEmail,
-  futureNotificationEmail: resendService.futureNotificationEmail,
-  sendEmailVerification: resendService.sendEmailVerification,
-  sendTaskNotification: resendService.sendTaskNotification,
-  sendProjectInvitation: resendService.sendProjectInvitation,
-  sendDeadlineReminder: resendService.sendDeadlineReminder,
-  sendWeeklyReport: resendService.sendWeeklyReport,
+  sendWelcomeEmail: emailService.sendWelcomeEmail,
+  sendPasswordResetEmail: emailService.sendPasswordResetEmail,
+  futureNotificationEmail: emailService.futureNotificationEmail,
+  sendEmailVerification: emailService.sendEmailVerification,
+  sendTaskNotification: emailService.sendTaskNotification,
+  sendProjectInvitation: emailService.sendProjectInvitation,
+  sendDeadlineReminder: emailService.sendDeadlineReminder,
+  sendWeeklyReport: emailService.sendWeeklyReport,
 };

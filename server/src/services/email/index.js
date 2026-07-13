@@ -1,20 +1,5 @@
-const { Resend } = require('resend');
-const fs = require('fs').promises;
-const path = require('path');
-
-// Initialize the Resend client
-const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key');
-
-/**
- * Helper to compile placeholders in HTML template
- */
-const compileTemplate = (html, data) => {
-  let compiled = html;
-  for (const [key, value] of Object.entries(data)) {
-    compiled = compiled.replace(new RegExp(`{{${key}}}`, 'g'), value);
-  }
-  return compiled;
-};
+const brevoService = require('./brevoService');
+const template = require('./template');
 
 /**
  * Send Welcome Email to a newly registered user
@@ -24,9 +9,6 @@ const compileTemplate = (html, data) => {
 const sendWelcomeEmail = async (user) => {
   const recipient = user.email;
   try {
-    const templatePath = path.join(__dirname, '../../templates/welcomeEmail.html');
-    const templateHtml = await fs.readFile(templatePath, 'utf8');
-
     const firstName = user.name ? user.name.split(' ')[0] : 'Developer';
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
     
@@ -37,72 +19,46 @@ const sendWelcomeEmail = async (user) => {
       supportEmail: 'support@devnote.com',
     };
 
-    const htmlContent = compileTemplate(templateHtml, dataContent);
+    const htmlContent = await template.getCompiledTemplate('welcomeEmail', dataContent);
 
-    console.log(`✓ Sending Welcome Email to ${recipient} via Resend`);
-    
-    const fromAddress = process.env.MAIL_FROM || 'DevNote <onboarding@resend.dev>';
-    const response = await resend.emails.send({
-      from: fromAddress,
+    console.log(`[Email Service] Sending Welcome Email to ${recipient}`);
+    const result = await brevoService.sendMailWithRetry({
+      from: process.env.MAIL_FROM || '"DevNote" <no-reply@devnote.com>',
       to: recipient,
       subject: '🎉 Welcome to DevNote!',
       html: htmlContent,
     });
 
-    if (response.error) {
-      console.log('❌ Email Failed');
-      console.log(`Recipient: ${recipient}`);
-      console.log(`Provider Response: ${response.error.message || JSON.stringify(response.error)}`);
-      return { success: false, error: response.error.message };
-    }
-
-    const messageId = response.data ? response.data.id : 'N/A';
-    console.log('✓ Email Sent');
-    console.log(`Recipient: ${recipient}`);
-    console.log(`Request ID: ${messageId}`);
-    console.log(`Provider Response: Email accepted by Resend API`);
-
-    return { success: true, messageId };
+    return result;
   } catch (error) {
-    console.log('❌ Email Failed');
-    console.log(`Recipient: ${recipient}`);
-    console.log(`Provider Response: ${error.message}`);
+    console.error(`[Email Service] Failed to send welcome email to ${recipient}: ${error.message}`);
     return { success: false, error: error.message };
   }
 };
 
 /**
- * Other future/placeholder email actions
+ * Send Password Reset Email
  */
 const sendPasswordResetEmail = async (user, resetUrl) => {
   const recipient = user.email;
-  console.log(`✓ Sending Password Reset Email to ${recipient} via Resend`);
+  console.log(`[Email Service] Sending Password Reset Email to ${recipient}`);
   try {
-    const fromAddress = process.env.MAIL_FROM || 'DevNote <onboarding@resend.dev>';
-    const response = await resend.emails.send({
-      from: fromAddress,
+    const result = await brevoService.sendMailWithRetry({
+      from: process.env.MAIL_FROM || '"DevNote" <no-reply@devnote.com>',
       to: recipient,
       subject: 'Reset your DevNote password',
       html: `<p>Please reset your password by clicking here: <a href="${resetUrl}">${resetUrl}</a></p>`,
     });
-    if (response.error) {
-      console.log('❌ Email Failed');
-      console.log(`Recipient: ${recipient}`);
-      console.log(`Provider Response: ${response.error.message}`);
-      return { success: false, error: response.error.message };
-    }
-    console.log('✓ Email Sent');
-    console.log(`Recipient: ${recipient}`);
-    console.log(`Request ID: ${response.data.id}`);
-    return { success: true, messageId: response.data.id };
+    return result;
   } catch (error) {
-    console.log('❌ Email Failed');
-    console.log(`Recipient: ${recipient}`);
-    console.log(`Provider Response: ${error.message}`);
+    console.error(`[Email Service] Failed to send password reset to ${recipient}: ${error.message}`);
     return { success: false, error: error.message };
   }
 };
 
+/**
+ * Other future notification placeholder functions
+ */
 const futureNotificationEmail = async (user, details) => {
   console.log(`[Future Email Service] futureNotificationEmail triggered for ${user.email}`, details);
   return { success: true };

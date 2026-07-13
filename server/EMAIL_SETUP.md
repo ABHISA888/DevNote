@@ -1,68 +1,86 @@
-# Resend API Email Integration Guide for DevNote
+# Brevo SMTP Integration Guide for DevNote
 
-This guide walks you through setting up and configuring the Resend Email API for the DevNote application.
+This guide walks you through setting up and configuring the Brevo SMTP service for the DevNote application.
 
 ---
 
-## 🚀 1. Resend API Key Creation
+## 🚀 1. Brevo SMTP Key Generation
 
-To use Resend for email delivery, you need a Resend account and an API Key.
+To use Brevo for email delivery, you need a Brevo account and a Transactional SMTP Key.
 
-### Steps to Generate an API Key:
-1. Sign up/Login to the [Resend Dashboard](https://resend.com).
-2. Navigate to the **API Keys** section in the sidebar.
-3. Click **Create API Key**.
-4. Give it a descriptive name (e.g. `DevNote Dev`).
-5. Choose **Full Access** or **Sending Access**.
-6. Click **Add**.
-7. Copy the key (starts with `re_`) and save it securely.
+### Steps to Generate an SMTP Key:
+1. Log in to your [Brevo Dashboard](https://brevo.com).
+2. Click on your profile name in the top-right corner and select **SMTP & API**.
+3. Under the **SMTP** tab, locate your **SMTP Server/Host** (`smtp-relay.brevo.com`), **Port** (`587`), and **SMTP Login**.
+4. Click **Generate a new SMTP key**.
+5. Give the key a descriptive name (e.g. `DevNote Prod`).
+6. Click **Generate** and copy the generated SMTP key immediately.
+   * *Note*: Standard API keys (which start with `xkeysib-`) **cannot** be used for SMTP authentication. You must generate an SMTP key (which starts with `smtpsib-` or `xsmtpsib-`).
 
 ---
 
 ## ⚙️ 2. Environment Configuration
 
-Open your server environment file at `src/.env` and update the email section to the following:
+Open your server environment file at `src/.env` and update the SMTP section to the following:
 
 ```ini
-# Resend Email Configuration
-RESEND_API_KEY=your_resend_api_key_here
-MAIL_FROM="DevNote <onboarding@resend.dev>"
+# Brevo SMTP Configuration
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_USER=your_brevo_smtp_login@smtp-brevo.com
+MAIL_PASS=your_brevo_smtp_key_here
+MAIL_FROM="DevNote <your_verified_sender@domain.com>"
 ```
 
 > [!IMPORTANT]
-> * Replace `your_resend_api_key_here` with your actual Resend API Key.
-> * By default, Resend allows sending to your own login email address using the `onboarding@resend.dev` sender. To send emails to external domains, you must verify a sending domain under **Domains** in the Resend Dashboard and update `MAIL_FROM` to use that verified domain.
+> * Replace `your_brevo_smtp_login@smtp-brevo.com` with the SMTP login displayed on the Brevo SMTP & API tab.
+> * Replace `your_brevo_smtp_key_here` with your generated SMTP key.
+> * The `MAIL_FROM` address **must** match a sender email address that is verified under the **Senders & Domains** section in the Brevo Dashboard. If you attempt to send from an unverified address (especially `gmail.com`), Brevo may reject the delivery.
 
 ---
 
-## 🛠️ 3. Verification Tool
+## 🛠️ 3. Verification & Diagnostics
 
-We have provided a verification script to test your Resend email setup.
+On server startup, the application performs isolated diagnostics of your Brevo SMTP transporter.
 
-To test your credentials:
+To run the diagnostics manually:
 ```bash
-cd server
 node src/test/testEmailService.js
 ```
 
-### Successful Connection Output:
+### Healthy Connection Log:
 ```text
---- Running emailService.sendWelcomeEmail Test ---
-✓ Sending Welcome Email to devcodeflows+test@gmail.com via Resend
-✓ Email Sent
-Recipient: devcodeflows+test@gmail.com
-Request ID: 12345678-abcd-1234-abcd-1234567890ab
-Provider Response: Email accepted by Resend API
+==================================================
+       Brevo SMTP Startup Diagnostics             
+==================================================
+MAIL_HOST: smtp-relay.brevo.com
+MAIL_PORT: 587
+MAIL_USER length: 24
+MAIL_PASS length: 89
+MAIL_FROM: DevNote <verified_sender@domain.com>
+--------------------------------------------------
+✓ SMTP Connected
+==================================================
 ```
 
 ---
 
-## 🔍 4. Common Resend Errors & Troubleshooting
+## 🔍 4. Common Brevo SMTP Errors & Troubleshooting
 
-### 1. `API key is invalid`
-* **Cause**: Incorrect or inactive `RESEND_API_KEY`.
-* **Fix**: Double check that your API key is correctly copied into `server/src/.env` without spaces or quotes.
+### 1. `535 5.7.8 Authentication failed`
+* **Cause**: The SMTP login or key is incorrect, expired, or you are trying to use an API v3 key instead of an SMTP key.
+* **Fix**: Generate a fresh SMTP key in the Brevo dashboard and verify that `MAIL_USER` matches the SMTP login exactly.
 
-### 2. `Restricted to domain email addresses`
-* **Cause**: Trying to send an email to a recipient other than your registered account email while on the free/unverified tier.
-* **Fix**: Either verify your domain in the Resend Dashboard under **Domains** tab, or only send tests to the email address associated with your Resend account.
+### 2. `550 Sender address rejected` / `Sender not allowed`
+* **Cause**: The `MAIL_FROM` address is not verified in your Brevo account.
+* **Fix**: Go to Brevo dashboard -> Senders & Domains, verify the sending email/domain, and update your `MAIL_FROM` in `.env` to match it.
+
+### 3. `ETIMEDOUT` / `ECONNREFUSED`
+* **Cause**: Network block or outgoing port block on port 587.
+* **Fix**: Ensure your host environment allows outgoing TCP traffic on port 587.
+
+---
+
+## 🔄 5. Retry & Backoff Configuration
+
+DevNote includes an automated 3-attempt sending mechanism with exponential backoff delays. If the Brevo cluster returns a temporary failure, Nodemailer waits and retries automatically before reporting a failure, protecting registration from being blocked.
