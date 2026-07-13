@@ -1,7 +1,9 @@
 // 1. Load environment variables before importing any config/app dependencies
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+// const path = require('path');
+// require('dotenv').config({ path: path.join(__dirname, '.env') });
 
+require('dotenv').config();
+console.log("MONGODB_URI:", process.env.MONGODB_URI ? "Loaded ✅" : "Not Loaded ❌");
 // Polyfill global crypto for Node 18 environments where mongoose 9 expects it
 if (!globalThis.crypto) {
   globalThis.crypto = require('crypto');
@@ -43,7 +45,7 @@ const handleGracefulShutdown = (signal) => {
       const mongoose = require('mongoose');
       await mongoose.connection.close();
       console.log('🔌 MongoDB connection closed successfully.');
-      
+
       console.log('✅ Graceful shutdown completed. Exiting process.');
       process.exit(0);
     } catch (err) {
