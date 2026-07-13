@@ -1,5 +1,7 @@
 const Project = require('../models/Project');
 const axios = require('axios');
+const User = require('../models/User');
+const TeamMember = require('../models/TeamMember');
 
 function parseGithubUrl(url) {
   if (!url) return null;
@@ -143,6 +145,38 @@ exports.createProject = async (req, res, next) => {
 
     // Save to MongoDB Atlas
     const savedProject = await newProject.save();
+
+    // Create TeamMember documents if teamMembers are passed in the creation payload
+    if (teamMembers && Array.isArray(teamMembers)) {
+      for (const tm of teamMembers) {
+        try {
+          if (!tm.githubUsername) continue;
+          
+          const fallbackEmail = `${tm.githubUsername.toLowerCase()}@github.tmp`;
+          let user = await User.findOne({ email: fallbackEmail });
+          if (!user) {
+            user = await User.create({
+              name: tm.displayName || tm.githubUsername,
+              email: fallbackEmail,
+              avatar: tm.githubAvatar,
+              provider: 'local',
+              role: 'user'
+            });
+          }
+          await TeamMember.create({
+            project: savedProject._id,
+            user: user._id,
+            githubUsername: tm.githubUsername,
+            githubAvatar: tm.githubAvatar,
+            githubUrl: tm.githubUrl || `https://github.com/${tm.githubUsername}`,
+            displayName: tm.displayName || tm.githubUsername,
+            role: tm.role || 'Viewer'
+          });
+        } catch (err) {
+          console.error('Failed to seed team member during project creation:', err.message);
+        }
+      }
+    }
 
     // Send successful response with 201 Created status code
     return res.status(201).json({
