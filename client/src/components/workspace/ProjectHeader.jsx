@@ -14,7 +14,7 @@ import { Star, Share2, MoreHorizontal } from 'lucide-react';
  *   const { data: project } = useFetchProject(projectId);
  * Then: <ProjectHeader {...project} onFavoriteToggle={...} />
  */
-export default function ProjectHeader({ initials, initialsColor, name, status, description, isFavorite }) {
+export default function ProjectHeader({ initials, initialsColor, name, status, description, isFavorite, onFavoriteToggle }) {
   return (
     <div className="flex flex-col gap-4 px-4 pt-5 pb-0 sm:px-6 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex items-start gap-4">
@@ -37,7 +37,10 @@ export default function ProjectHeader({ initials, initialsColor, name, status, d
 
       {/* Actions */}
       <div className="flex shrink-0 items-center gap-2 self-start">
-        <button className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${isFavorite ? 'border-primary-200 bg-primary-50 text-primary-600' : 'border-gray-200 bg-white text-slate-500 hover:bg-slate-50'}`}>
+        <button
+          onClick={onFavoriteToggle}
+          className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${isFavorite ? 'border-primary-200 bg-primary-50 text-primary-600' : 'border-gray-200 bg-white text-slate-500 hover:bg-slate-50'}`}
+        >
           <Star size={13} className={isFavorite ? 'fill-primary-600' : ''} />
         </button>
         <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">

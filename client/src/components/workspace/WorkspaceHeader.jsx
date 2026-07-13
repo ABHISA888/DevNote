@@ -20,15 +20,22 @@ export default function WorkspaceHeader({ projectName }) {
   return (
     <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-gray-100 bg-white/90 px-4 sm:px-6 backdrop-blur-md">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-sm font-semibold text-slate-500">
+      <nav className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500">
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="transition hover:text-primary-600"
+        >
+          DevNote
+        </button>
+        <ChevronRight size={14} className="text-slate-300" />
         <button
           onClick={() => navigate('/projects')}
           className="transition hover:text-primary-600"
         >
-          /
+          Projects
         </button>
         <ChevronRight size={14} className="text-slate-300" />
-        <span className="text-slate-800">{projectName}</span>
+        <span className="text-slate-800 truncate max-w-[120px] sm:max-w-none">{projectName}</span>
       </nav>
 
       {/* Right: Search */}

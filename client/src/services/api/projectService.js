@@ -15,6 +15,11 @@ export const projectService = {
     return response.data; // e.g. { success: true, count: 12, data: [...] }
   },
 
+  getProjectById: async (id) => {
+    const response = await api.get(`/projects/${id}`);
+    return response.data;
+  },
+
   createProject: async (projectData) => {
     const response = await api.post('/projects', projectData);
     return response.data; // e.g. { success: true, message: "...", data: {...} }
