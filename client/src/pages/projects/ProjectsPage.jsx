@@ -35,6 +35,13 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Search & Filter state variables
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [priorityFilter, setPriorityFilter] = useState('All');
+  const [techStackFilter, setTechStackFilter] = useState('All');
+  const [sortOrder, setSortOrder] = useState('Newest');
+
   // 🎓 TEACHING MOMENT: Asynchronous API Handling
   const fetchProjects = async () => {
     try {
@@ -177,6 +184,50 @@ export default function ProjectsPage() {
     }));
   };
 
+  // Compute available tech stacks dynamically
+  const availableTechStacks = [...new Set(projects.flatMap(p => p.techStack || []))].filter(Boolean).sort();
+
+  // Filter projects based on toolbar parameters
+  const filteredProjects = projects.filter((p) => {
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const nameMatch = p.name?.toLowerCase().includes(query);
+      const descMatch = p.description?.toLowerCase().includes(query);
+      if (!nameMatch && !descMatch) return false;
+    }
+    if (statusFilter !== 'All') {
+      if (p.status !== statusFilter) return false;
+    }
+    if (priorityFilter !== 'All') {
+      if (p.priority !== priorityFilter) return false;
+    }
+    if (techStackFilter !== 'All') {
+      if (!p.techStack || !p.techStack.includes(techStackFilter)) return false;
+    }
+    return true;
+  });
+
+  // Sort filtered projects
+  const sortedProjects = [...filteredProjects].sort((a, b) => {
+    if (sortOrder === 'Newest') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+    if (sortOrder === 'Oldest') {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+    if (sortOrder === 'Alphabetical') {
+      return a.name.localeCompare(b.name);
+    }
+    return 0;
+  });
+
+  // Put pinned projects first
+  const displayProjects = [...sortedProjects].sort((a, b) => {
+    if (a.isPinned && !b.isPinned) return -1;
+    if (!a.isPinned && b.isPinned) return 1;
+    return 0;
+  });
+
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 relative min-h-screen">
 
@@ -193,7 +244,19 @@ export default function ProjectsPage() {
           <StatsCards projects={projects} />
           
           {/* ── Filter & Search Toolbar ── */}
-          <ProjectsToolbar />
+          <ProjectsToolbar 
+            searchQuery={searchQuery}
+            onSearchQueryChange={setSearchQuery}
+            statusFilter={statusFilter}
+            onStatusFilterChange={setStatusFilter}
+            priorityFilter={priorityFilter}
+            onPriorityFilterChange={setPriorityFilter}
+            techStackFilter={techStackFilter}
+            onTechStackFilterChange={setTechStackFilter}
+            sortOrder={sortOrder}
+            onSortOrderChange={setSortOrder}
+            availableTechStacks={availableTechStacks}
+          />
           
           {/* ── Main 2-Column Split Layout ── */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 xl:gap-10">
@@ -201,18 +264,14 @@ export default function ProjectsPage() {
             {/* Left Column: Projects Feed */}
             <div className="flex flex-col gap-8 lg:col-span-2">
               <PinnedProjects
-                projects={projects}
+                projects={filteredProjects}
                 onEdit={handleEditClick}
                 onDelete={handleDeleteClick}
                 onPinToggle={handlePinToggle}
                 onFavoriteToggle={handleFavoriteToggle}
               />
               <ProjectGrid
-                projects={[...projects].sort((a, b) => {
-                  if (a.isPinned && !b.isPinned) return -1;
-                  if (!a.isPinned && b.isPinned) return 1;
-                  return new Date(b.createdAt) - new Date(a.createdAt);
-                })}
+                projects={displayProjects}
                 onEdit={handleEditClick}
                 onDelete={handleDeleteClick}
                 onPinToggle={handlePinToggle}
@@ -222,7 +281,7 @@ export default function ProjectsPage() {
             
             {/* Right Column: Context Widgets */}
             <div className="flex flex-col gap-6 lg:col-span-1">
-              <RecentlyEdited />
+              <RecentlyEdited projects={projects} />
               <StackOverview data={getDynamicStackOverview()} />
               <HelpCard />
             </div>
