@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
+const emailService = require('../services/emailService');
 
 /**
  * @desc    Register a new user
@@ -40,18 +41,29 @@ exports.register = async (req, res, next) => {
       password,
       provider: 'local',
     });
+    console.log('✅ User Created');
 
     // 4. Generate JWT & Set cookie
     const token = generateToken(res, user._id);
+    console.log('✅ JWT Generated');
+
+    // 5. Send Welcome Email
+    const emailResult = await emailService.sendWelcomeEmail(user);
 
     // Hide password before returning
     user.password = undefined;
 
-    return res.status(201).json({
+    const response = {
       success: true,
       token,
       user,
-    });
+    };
+
+    if (emailResult && !emailResult.success) {
+      response.warning = 'Account created successfully, but welcome email could not be sent. We will retry delivering it.';
+    }
+
+    return res.status(201).json(response);
   } catch (error) {
     console.error(`Register Error: ${error.message}`);
     next(error);
@@ -178,6 +190,12 @@ exports.googleCallback = async (req, res, next) => {
 
     // Generate JWT token for Google user
     const token = generateToken(res, req.user._id);
+    console.log('✅ JWT Generated');
+
+    // Send welcome email only on first sign up
+    if (req.user.isNewRegistration) {
+      await emailService.sendWelcomeEmail(req.user);
+    }
 
     // Redirect to frontend login/dashboard with the token
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
