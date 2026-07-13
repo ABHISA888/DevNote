@@ -9,17 +9,11 @@ import ProductivityCard from '../../components/dashboard/ProductivityCard';
 import RecentProjects from '../../components/dashboard/RecentProjects';
 import Loader from '../../components/common/Loader';
 import ErrorState from '../../components/common/ErrorState';
-import { PRODUCTIVITY_INSIGHTS } from '../../constants/dashboardData';
+import { useAuth } from '../../context/AuthContext';
 import { projectService } from '../../services/api/projectService';
 
-/**
- * 🎓 TEACHING MOMENT: Dashboard Data Fetching
- * 
- * Dashboards act as aggregate portals for a platform.
- * By fetching the core projects array at the page root, we can distribute slices of the same
- * array to the sub-sections, minimizing duplicate API requests and network latency.
- */
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,6 +40,53 @@ export default function DashboardPage() {
     fetchDashboardData();
   }, []);
 
+  // Compute completed projects in current month
+  const now = new Date();
+  const completedThisMonth = projects.filter(p => {
+    if (p.status !== 'Completed') return false;
+    const date = new Date(p.updatedAt || p.createdAt);
+    return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+  }).length;
+
+  // Compute current streak of active days (days with creation or update)
+  const calculateStreak = (projectsList) => {
+    if (projectsList.length === 0) return 0;
+    const dates = projectsList.map(p => {
+      const d = new Date(p.updatedAt || p.createdAt);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    });
+    const uniqueDates = [...new Set(dates)].sort((a, b) => new Date(b) - new Date(a));
+    
+    let streak = 0;
+    let checkDate = new Date();
+    checkDate.setHours(0, 0, 0, 0);
+
+    const latestDateStr = uniqueDates[0];
+    if (!latestDateStr) return 0;
+
+    const latestDate = new Date(latestDateStr);
+    const diffTime = checkDate - latestDate;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 1) return 0;
+
+    let currentCheck = latestDate;
+    for (let i = 0; i < uniqueDates.length; i++) {
+      const dateStr = `${currentCheck.getFullYear()}-${String(currentCheck.getMonth() + 1).padStart(2, '0')}-${String(currentCheck.getDate()).padStart(2, '0')}`;
+      if (uniqueDates.includes(dateStr)) {
+        streak++;
+        currentCheck.setDate(currentCheck.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  };
+  const currentStreak = calculateStreak(projects);
+
+  const firstName = user?.name ? user.name.split(' ')[0] : 'Developer';
+  const quote = `"The only way to do great work is to love what you do. Stay focused, ${firstName}."`;
+
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       
@@ -69,14 +110,18 @@ export default function DashboardPage() {
             
             {/* Left Column (Wider, approx 66%) */}
             <div className="flex flex-col gap-6 lg:col-span-2">
-              <UpcomingDeadlines />
-              <RecentActivity />
+              <UpcomingDeadlines projects={projects} />
+              <RecentActivity projects={projects} />
             </div>
             
             {/* Right Column (Narrower, approx 33%) */}
             <div className="flex flex-col gap-6 lg:col-span-1">
               <PinnedProjects projects={projects} />
-              <ProductivityCard {...PRODUCTIVITY_INSIGHTS} />
+              <ProductivityCard 
+                completedThisMonth={completedThisMonth} 
+                currentStreak={currentStreak} 
+                quote={quote} 
+              />
             </div>
             
           </div>

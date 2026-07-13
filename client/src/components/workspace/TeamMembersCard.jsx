@@ -34,11 +34,15 @@ export default function TeamMembersCard({ members }) {
         Project Team
       </h3>
 
-      <div className="space-y-4">
-        {members.map((member) => (
-          <MemberRow key={member.id} {...member} />
-        ))}
-      </div>
+      {!members || members.length === 0 ? (
+        <p className="text-xs font-semibold text-slate-400 py-1">No team members added.</p>
+      ) : (
+        <div className="space-y-4">
+          {members.map((member) => (
+            <MemberRow key={member.id || member.name} {...member} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

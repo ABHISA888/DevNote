@@ -26,6 +26,27 @@ export default function StatsGrid({ projects = [] }) {
   // Calculate active percentage for the progress-style card
   const activePercent = totalCount > 0 ? Math.round((activeCount / totalCount) * 100) : 0;
 
+  // Calculate upcoming deadlines count (active projects with future deadlines within 7 days)
+  const upcomingDeadlinesCount = projects.filter(p => {
+    if (!p.deadline || p.status === 'Completed') return false;
+    const diffTime = new Date(p.deadline) - new Date();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays >= 0 && diffDays <= 7;
+  }).length;
+
+  // Calculate overall Health Score
+  const atRiskCount = projects.filter(p => {
+    if (p.priority === 'Critical') return true;
+    if (p.deadline) {
+      const diffTime = new Date(p.deadline) - new Date();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays < 0 && p.status !== 'Completed') return true;
+    }
+    return false;
+  }).length;
+  const healthyCount = totalCount - atRiskCount;
+  const healthScorePercent = totalCount > 0 ? Math.round((healthyCount / totalCount) * 100) : 100;
+
   const stats = [
     { 
       id: 'total', 
@@ -53,16 +74,16 @@ export default function StatsGrid({ projects = [] }) {
     { 
       id: 'deadlines', 
       label: 'DEADLINES', 
-      value: '3', // Keep placeholder until tasks collections are integrated
-      metaText: 'Critical', 
-      metaColor: 'text-red-500' 
+      value: String(upcomingDeadlinesCount),
+      metaText: upcomingDeadlinesCount > 0 ? 'Critical' : 'None', 
+      metaColor: upcomingDeadlinesCount > 0 ? 'text-red-500' : 'text-slate-500' 
     },
     { 
-      id: 'tasks', 
-      label: 'TASKS', 
-      value: '15', // Keep placeholder until kanban board is integrated
-      metaText: 'Pending', 
-      metaColor: 'text-slate-500' 
+      id: 'health', 
+      label: 'HEALTH SCORE', 
+      value: `${healthScorePercent}%`,
+      metaText: healthScorePercent >= 80 ? 'Healthy' : (healthScorePercent >= 50 ? 'Warning' : 'At Risk'), 
+      metaColor: healthScorePercent >= 80 ? 'text-emerald-500' : (healthScorePercent >= 50 ? 'text-amber-500' : 'text-red-500') 
     },
     { 
       id: 'favorites', 

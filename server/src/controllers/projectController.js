@@ -170,7 +170,7 @@ exports.getProjects = async (req, res, next) => {
  */
 exports.getProjectById = async (req, res, next) => {
   try {
-    const project = await Project.findById(req.params.id);
+    const project = await Project.findById(req.params.id).populate('owner', 'name email avatar');
 
     if (!project) {
       return res.status(404).json({
@@ -180,7 +180,8 @@ exports.getProjectById = async (req, res, next) => {
     }
 
     // Verify owner
-    if (project.owner.toString() !== req.user._id.toString()) {
+    const ownerId = project.owner._id ? project.owner._id.toString() : project.owner.toString();
+    if (ownerId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Access Forbidden: You do not own this project',
@@ -189,6 +190,7 @@ exports.getProjectById = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
+      project: project,
       data: project,
     });
   } catch (error) {
