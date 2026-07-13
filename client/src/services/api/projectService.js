@@ -18,5 +18,25 @@ export const projectService = {
   createProject: async (projectData) => {
     const response = await api.post('/projects', projectData);
     return response.data; // e.g. { success: true, message: "...", data: {...} }
+  },
+
+  updateProject: async (id, projectData) => {
+    const response = await api.put(`/projects/${id}`, projectData);
+    return response.data;
+  },
+
+  deleteProject: async (id) => {
+    const response = await api.delete(`/projects/${id}`);
+    return response.data;
+  },
+
+  pinProject: async (id) => {
+    const response = await api.patch(`/projects/${id}/pin`);
+    return response.data;
+  },
+
+  favoriteProject: async (id) => {
+    const response = await api.patch(`/projects/${id}/favorite`);
+    return response.data;
   }
 };

@@ -46,6 +46,10 @@ const ProjectSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isPinned: {
+      type: Boolean,
+      default: false,
+    },
     templateId: {
       type: String,
       default: 'blank',

@@ -9,7 +9,13 @@ import ProjectCard from './ProjectCard';
  * a pure mapper function inside `ProjectGrid.jsx`. This transforms the MongoDB project payload 
  * into the visual contracts required by the pre-built `ProjectCard` component.
  */
-export default function ProjectGrid({ projects = [] }) {
+export default function ProjectGrid({
+  projects = [],
+  onEdit,
+  onDelete,
+  onPinToggle,
+  onFavoriteToggle
+}) {
   // Pre-defined static team member list to match client/src/components/projects/wizard/TimelineStep.jsx
   const TEAM_MEMBERS_DIRECTORY = [
     { id: 1, name: 'Elena Rodriguez', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
@@ -77,6 +83,7 @@ export default function ProjectGrid({ projects = [] }) {
       initialsColor: themeColorMap[p.themeColor] || 'bg-indigo-50 text-indigo-600 border-indigo-100',
       lastUpdated,
       isFavorite: p.isFavorite || false,
+      isPinned: p.isPinned || false,
       description: p.description,
       badges: p.techStack || [],
       progress,
@@ -106,9 +113,19 @@ export default function ProjectGrid({ projects = [] }) {
     <div>
       <h2 className="mb-4 text-base font-bold text-slate-800">All Projects</h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {mappedProjects.map((project) => (
-          <ProjectCard key={project.id} {...project} />
-        ))}
+        {mappedProjects.map((project) => {
+          const original = projects.find(p => String(p._id) === String(project.id));
+          return (
+            <ProjectCard
+              key={project.id}
+              {...project}
+              onEdit={() => onEdit(original)}
+              onDelete={() => onDelete(original)}
+              onPinToggle={onPinToggle}
+              onFavoriteToggle={onFavoriteToggle}
+            />
+          );
+        })}
       </div>
     </div>
   );

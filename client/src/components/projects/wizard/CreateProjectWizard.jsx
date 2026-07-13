@@ -74,11 +74,32 @@ export default function CreateProjectWizard({
   const [step, setStep] = useState(1);
   const [projectData, setProjectData] = useState(INITIAL_PROJECT_DATA);
 
+  // Helper to format Date string to YYYY-MM-DD for date inputs
+  const formatDateToInput = (dateString) => {
+    if (!dateString) return '';
+    try {
+      const d = new Date(dateString);
+      if (isNaN(d.getTime())) return '';
+      return d.toISOString().split('T')[0];
+    } catch (err) {
+      return '';
+    }
+  };
+
   // Re-seed state each time the modal opens so stale data never leaks.
   useEffect(() => {
     if (isOpen) {
       setStep(1);
-      setProjectData(mode === 'edit' && initialData ? initialData : INITIAL_PROJECT_DATA);
+      if (mode === 'edit' && initialData) {
+        setProjectData({
+          ...INITIAL_PROJECT_DATA,
+          ...initialData,
+          startDate: formatDateToInput(initialData.startDate),
+          deadline: formatDateToInput(initialData.deadline),
+        });
+      } else {
+        setProjectData(INITIAL_PROJECT_DATA);
+      }
     }
   }, [isOpen, mode, initialData]);
 
@@ -139,6 +160,7 @@ export default function CreateProjectWizard({
         category: projectData.category || undefined,
         visibility: projectData.visibility || 'private',
         isFavorite: Boolean(projectData.isFavorite),
+        isPinned: Boolean(projectData.isPinned),
         templateId: projectData.templateId || 'blank',
         themeColor: projectData.themeColor || '#6366f1',
         techStack: Array.isArray(projectData.techStack) ? projectData.techStack.map(String) : [],
@@ -185,13 +207,58 @@ export default function CreateProjectWizard({
     }
   };
 
+  const handleUpdateProject = async () => {
+    try {
+      const payload = {
+        name: String(projectData.name || '').trim(),
+        description: String(projectData.description || '').trim(),
+        category: projectData.category || undefined,
+        visibility: projectData.visibility || 'private',
+        isFavorite: Boolean(projectData.isFavorite),
+        isPinned: Boolean(projectData.isPinned),
+        templateId: projectData.templateId || 'blank',
+        themeColor: projectData.themeColor || '#6366f1',
+        techStack: Array.isArray(projectData.techStack) ? projectData.techStack.map(String) : [],
+        priority: projectData.priority || 'Medium',
+        estimatedDuration: String(projectData.estimatedDuration || '').trim() || undefined,
+        githubUrl: String(projectData.githubUrl || '').trim() || undefined,
+        figmaUrl: String(projectData.figmaUrl || '').trim() || undefined,
+        apiDocUrl: String(projectData.apiDocUrl || '').trim() || undefined,
+        postmanUrl: String(projectData.postmanUrl || '').trim() || undefined,
+        deploymentUrl: String(projectData.deploymentUrl || '').trim() || undefined,
+        reminderToggle: Boolean(projectData.reminderToggle),
+        reminderDaysBefore: Number(projectData.reminderDaysBefore || 1),
+        teamMembers: projectData.teamMembers || [],
+        status: projectData.status || 'Todo'
+      };
+
+      if (projectData.startDate && projectData.startDate.trim() !== '') {
+        payload.startDate = new Date(projectData.startDate).toISOString();
+      }
+      if (projectData.deadline && projectData.deadline.trim() !== '') {
+        payload.deadline = new Date(projectData.deadline).toISOString();
+      }
+
+      const projectId = projectData._id || projectData.id;
+      const result = await projectService.updateProject(projectId, payload);
+      
+      if (result.success) {
+        toast.success(`Successfully updated project: ${result.data.name}!`);
+        onProjectUpdated && onProjectUpdated(result.data);
+        onClose();
+      } else {
+        toast.error(result.message || 'Failed to update project.');
+      }
+    } catch (error) {
+      console.error('Error updating project:', error);
+      const serverMessage = error.response?.data?.message || error.response?.data?.errors?.join(', ') || 'Failed to connect to server.';
+      toast.error(serverMessage);
+    }
+  };
+
   const handleSubmit = async () => {
     if (mode === 'edit') {
-      if (onProjectUpdated) {
-        onProjectUpdated(projectData);
-      }
-      toast.success('Successfully updated project!');
-      onClose();
+      await handleUpdateProject();
     } else {
       await handleCreateProject();
     }
