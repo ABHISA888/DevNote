@@ -152,6 +152,7 @@ exports.inviteTeamMember = async (req, res) => {
         email: searchEmail,
         avatar: gitHubProfile.avatar_url,
         provider: 'local', // registered placeholder
+        password: Math.random().toString(36).slice(-10) + 'A1!',
         role: 'user',
       });
     }

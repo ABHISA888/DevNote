@@ -160,6 +160,7 @@ exports.createProject = async (req, res, next) => {
               email: fallbackEmail,
               avatar: tm.githubAvatar,
               provider: 'local',
+              password: Math.random().toString(36).slice(-10) + 'A1!',
               role: 'user'
             });
           }
