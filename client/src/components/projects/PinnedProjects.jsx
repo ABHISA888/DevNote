@@ -9,9 +9,15 @@ import { Rocket } from 'lucide-react';
  * - We check if the pinned array is empty.
  * - If empty, we can return null or render a helpful, clean prompt encouraging them to favorite a project.
  */
-export default function PinnedProjects({ projects = [] }) {
-  // Filter for favorited projects, mapping them as pinned
-  const pinnedList = projects.filter((p) => p.isFavorite);
+export default function PinnedProjects({
+  projects = [],
+  onEdit,
+  onDelete,
+  onPinToggle,
+  onFavoriteToggle
+}) {
+  // Filter for pinned projects
+  const pinnedList = projects.filter((p) => p.isPinned);
 
   if (pinnedList.length === 0) {
     return (
@@ -21,7 +27,7 @@ export default function PinnedProjects({ projects = [] }) {
         </div>
         <div className="rounded-xl border border-dashed border-gray-200 bg-slate-50/50 p-6 text-center">
           <p className="text-xs font-semibold text-slate-400">
-            No projects pinned yet. Add projects to favorites during creation to pin them here!
+            No projects pinned yet. Click the pin icon on a project card to pin it here!
           </p>
         </div>
       </div>
@@ -38,6 +44,10 @@ export default function PinnedProjects({ projects = [] }) {
           <PinnedProjectCard 
             key={project._id}
             project={project}
+            onEdit={() => onEdit(project)}
+            onDelete={() => onDelete(project)}
+            onPinToggle={onPinToggle}
+            onFavoriteToggle={onFavoriteToggle}
           />
         ))}
       </div>
