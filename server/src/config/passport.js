@@ -50,6 +50,8 @@ passport.use(
           avatar: avatar,
           provider: 'google',
         });
+        console.log('✅ User Created');
+        user.isNewRegistration = true;
 
         return done(null, user);
       } catch (error) {
