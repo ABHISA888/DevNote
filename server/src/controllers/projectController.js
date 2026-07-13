@@ -1,4 +1,34 @@
 const Project = require('../models/Project');
+const axios = require('axios');
+
+function parseGithubUrl(url) {
+  if (!url) return null;
+  const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+  if (match) {
+    return { owner: match[1], repo: match[2].replace(/\.git$/, '') };
+  }
+  return null;
+}
+
+async function fetchReadme(owner, repo) {
+  try {
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'DevNote-App'
+    };
+    if (process.env.GITHUB_TOKEN) {
+      headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+    }
+    const res = await axios.get(`https://api.github.com/repos/${owner}/${repo}/readme`, { headers });
+    if (res.data && res.data.content) {
+      const decoded = Buffer.from(res.data.content, 'base64').toString('utf8');
+      return decoded;
+    }
+  } catch (err) {
+    console.error(`Failed to fetch README for ${owner}/${repo}:`, err.message);
+  }
+  return '';
+}
 
 /**
  * @desc    Create a new developer project workspace
@@ -75,6 +105,15 @@ exports.createProject = async (req, res, next) => {
       });
     }
 
+    // Fetch readme if githubUrl is supplied
+    let readme = '';
+    if (githubUrl) {
+      const githubInfo = parseGithubUrl(githubUrl);
+      if (githubInfo) {
+        readme = await fetchReadme(githubInfo.owner, githubInfo.repo);
+      }
+    }
+
     // Instantiating the Project document using the data
     const newProject = new Project({
       name,
@@ -98,6 +137,7 @@ exports.createProject = async (req, res, next) => {
       reminderDaysBefore,
       teamMembers,
       status,
+      readme,
       owner: req.user._id // Automatically assign owner from authenticated user
     });
 
@@ -379,6 +419,117 @@ exports.favoriteProject = async (req, res, next) => {
     return res.status(500).json({
       success: false,
       message: 'Internal Server Error',
+    });
+  }
+};
+
+/**
+ * @desc    Get repository details from GitHub
+ * @route   GET /api/projects/github/repo
+ * @access  Private
+ */
+exports.getGithubRepoInfo = async (req, res, next) => {
+  try {
+    const { owner, repo } = req.query;
+    if (!owner || !repo) {
+      return res.status(400).json({
+        success: false,
+        message: 'Owner and Repo query parameters are required'
+      });
+    }
+
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'DevNote-App'
+    };
+    if (process.env.GITHUB_TOKEN) {
+      headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+    }
+
+    const response = await axios.get(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`, { headers });
+    const data = response.data;
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        name: data.name,
+        description: data.description || '',
+        homepage: data.homepage || '',
+        language: data.language || '',
+        visibility: data.private ? 'private' : 'public',
+        stars: data.stargazers_count,
+        forks: data.forks_count,
+        topics: data.topics || [],
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+        htmlUrl: data.html_url
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching github repo info:', error.message);
+    return res.status(error.response?.status || 500).json({
+      success: false,
+      message: error.response?.data?.message || 'Failed to fetch repository details from GitHub'
+    });
+  }
+};
+
+/**
+ * @desc    Get project README content
+ * @route   GET /api/projects/:id/readme
+ * @access  Private
+ */
+exports.getProjectReadme = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: 'Project not found'
+      });
+    }
+
+    // Verify owner
+    const ownerId = project.owner._id ? project.owner._id.toString() : project.owner.toString();
+    if (ownerId !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access Forbidden: You do not own this project',
+      });
+    }
+
+    if (project.readme) {
+      return res.status(200).json({
+        success: true,
+        readme: project.readme
+      });
+    }
+
+    // Fetch dynamically if githubUrl exists but readme is empty
+    if (project.githubUrl) {
+      const githubInfo = parseGithubUrl(project.githubUrl);
+      if (githubInfo) {
+        const readmeText = await fetchReadme(githubInfo.owner, githubInfo.repo);
+        if (readmeText) {
+          project.readme = readmeText;
+          await project.save();
+          return res.status(200).json({
+            success: true,
+            readme: readmeText
+          });
+        }
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      readme: ''
+    });
+  } catch (error) {
+    console.error('Error getting project readme:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error'
     });
   }
 };

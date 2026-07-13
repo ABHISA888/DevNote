@@ -140,6 +140,10 @@ const ProjectSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.Mixed], // Flexible to store IDs or detailed member objects
       default: [],
     },
+    readme: {
+      type: String,
+      default: '',
+    },
     status: {
       type: String,
       enum: {

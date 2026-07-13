@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Braces, ClipboardList, Settings, CheckCircle2, Rocket } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
 
 // Layout & Common
 import WorkspaceHeader from '../../components/workspace/WorkspaceHeader';
@@ -31,6 +32,9 @@ import NotesTab from '../../components/workspace/notes/NotesTab';
 
 // Environment Tab
 import EnvironmentTab from '../../components/workspace/environment/EnvironmentTab';
+
+// README Tab
+import ReadmeTab from '../../components/workspace/readme/ReadmeTab';
 
 // API Service
 import { projectService } from '../../services/api/projectService';
@@ -95,12 +99,15 @@ const membersList = [
 ];
 
 export default function ProjectWorkspacePage() {
+  const { user: currentUser } = useAuth();
   const { projectId } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [teamLoading, setTeamLoading] = useState(true);
 
   const comingSoonTab = COMING_SOON_TABS[activeTab];
 
@@ -126,11 +133,60 @@ export default function ProjectWorkspacePage() {
     }
   }, [projectId]);
 
+  const fetchTeam = useCallback(async () => {
+    try {
+      setTeamLoading(true);
+      const res = await projectService.getTeam(projectId);
+      if (res.success) {
+        setTeamMembers(res.data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching team members:', err);
+    } finally {
+      setTeamLoading(false);
+    }
+  }, [projectId]);
+
   useEffect(() => {
     if (projectId) {
       fetchProject();
+      fetchTeam();
     }
-  }, [projectId, fetchProject]);
+  }, [projectId, fetchProject, fetchTeam]);
+
+  const handleInviteMember = (newMember) => {
+    setTeamMembers((prev) => [...prev, newMember]);
+  };
+
+  const handleRemoveMember = async (memberId) => {
+    try {
+      const res = await projectService.removeTeamMember(projectId, memberId);
+      if (res.success) {
+        setTeamMembers((prev) => prev.filter((m) => m._id !== memberId));
+        toast.success('Team member removed successfully');
+      } else {
+        toast.error(res.message || 'Failed to remove team member');
+      }
+    } catch (err) {
+      console.error('Error removing member:', err);
+      toast.error(err.response?.data?.message || 'Failed to remove team member');
+    }
+  };
+
+  const handleRoleChange = async (memberId, newRole) => {
+    try {
+      const res = await projectService.updateTeamMemberRole(projectId, memberId, newRole);
+      if (res.success) {
+        setTeamMembers((prev) => prev.map((m) => m._id === memberId ? res.data : m));
+        toast.success('Role updated successfully');
+      } else {
+        toast.error(res.message || 'Failed to update role');
+      }
+    } catch (err) {
+      console.error('Error updating role:', err);
+      toast.error(err.response?.data?.message || 'Failed to update role');
+    }
+  };
 
   const handleFavoriteToggle = async () => {
     if (!project) return;
@@ -350,21 +406,7 @@ export default function ProjectWorkspacePage() {
     color: stackColors[index % stackColors.length]
   }));
 
-  // Resolve team members including owner
-  const projectMembers = [];
-  if (project.owner) {
-    projectMembers.push({
-      id: project.owner._id,
-      name: project.owner.name,
-      role: 'Owner',
-      avatar: project.owner.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${project.owner.name}&backgroundColor=c7d2fe`
-    });
-  }
-  const otherMembersList = (project.teamMembers || []).map(idOrObj => {
-    if (typeof idOrObj === 'object' && idOrObj !== null) return idOrObj;
-    return membersList.find(m => m.id === Number(idOrObj)) || { id: idOrObj, name: `Member ${idOrObj}`, role: 'Contributor', avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${idOrObj}` };
-  });
-  projectMembers.push(...otherMembersList);
+
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f8f9fe]">
@@ -439,7 +481,15 @@ export default function ProjectWorkspacePage() {
                   postmanUrl={project.postmanUrl}
                 />
                 <TechnologyStackCard stack={techStack} />
-                <TeamMembersCard members={projectMembers} />
+                <TeamMembersCard
+                  projectId={projectId}
+                  members={teamMembers}
+                  primaryOwnerId={project.owner ? (project.owner._id ? project.owner._id.toString() : project.owner.toString()) : ''}
+                  isProjectOwner={project.owner && currentUser && (project.owner._id ? project.owner._id.toString() : project.owner.toString()) === currentUser._id?.toString()}
+                  onInvite={handleInviteMember}
+                  onRemove={handleRemoveMember}
+                  onRoleChange={handleRoleChange}
+                />
               </div>
 
             </div>
@@ -448,6 +498,9 @@ export default function ProjectWorkspacePage() {
 
         {/* ── Notes Tab Content ── */}
         {activeTab === 'notes' && <NotesTab />}
+
+        {/* ── README Tab Content ── */}
+        {activeTab === 'readme' && <ReadmeTab project={project} />}
 
         {/* ── Environment Tab Content ── */}
         {activeTab === 'environment' && <EnvironmentTab />}
