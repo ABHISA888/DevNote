@@ -158,6 +158,16 @@ const ProjectSchema = new mongoose.Schema(
       publishedAt: { type: Date },
       htmlUrl: { type: String },
     },
+    tasks: {
+      type: [{
+        name: { type: String, required: true },
+        description: { type: String },
+        status: { type: String, enum: ['Todo', 'In Progress', 'In Review', 'Completed'], default: 'Todo' },
+        priority: { type: String, enum: ['Low', 'Medium', 'High', 'Critical'], default: 'Medium' },
+        dueDate: { type: Date }
+      }],
+      default: []
+    },
     status: {
       type: String,
       enum: {
