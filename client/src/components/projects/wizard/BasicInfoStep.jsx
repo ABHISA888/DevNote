@@ -36,11 +36,12 @@ export default function BasicInfoStep({ projectData, onChange }) {
       if (res.success) {
         toast.success('Successfully loaded GitHub repository details!');
         
+        const repoDetails = res.data;
         // Phase 3E: Show languages as Tech Stack badges
-        const importedLanguages = res.data.languages ? Object.keys(res.data.languages) : (res.data.language ? [res.data.language] : []);
+        const importedLanguages = repoDetails.languages ? Object.keys(repoDetails.languages) : (repoDetails.language ? [repoDetails.language] : []);
         
         // Phase 3F: Automatically suggest Project Members from contributors
-        const mappedContributors = (res.data.contributors || []).map(c => ({
+        const mappedContributors = (repoDetails.contributors || []).map(c => ({
           githubUsername: c.login,
           displayName: c.login,
           githubAvatar: c.avatar_url,
@@ -49,20 +50,22 @@ export default function BasicInfoStep({ projectData, onChange }) {
         }));
 
         onChange({
-          name: res.data.name || '',
-          description: res.data.description || '',
-          visibility: res.data.visibility || 'private',
-          githubUrl: res.data.htmlUrl || '',
+          name: repoDetails.name || '',
+          description: repoDetails.description || '',
+          visibility: repoDetails.visibility || 'private',
+          githubUrl: repoDetails.htmlUrl || '',
+          deploymentUrl: repoDetails.homepage || '', // Phase 3I: deploy link
           techStack: importedLanguages.length > 0 ? importedLanguages : ['JavaScript'],
-          category: mapLanguageToCategory(res.data.language || importedLanguages[0]),
+          category: mapLanguageToCategory(repoDetails.language || importedLanguages[0]),
           githubStats: {
-            stars: res.data.stars || 0,
-            forks: res.data.forks || 0,
-            openIssues: res.data.openIssues || 0,
-            watchers: res.data.watchers || 0,
-            defaultBranch: res.data.defaultBranch || 'main',
-            lastUpdated: res.data.updatedAt
+            stars: repoDetails.stats?.stars || 0,
+            forks: repoDetails.stats?.forks || 0,
+            openIssues: repoDetails.stats?.openIssues || 0,
+            watchers: repoDetails.stats?.watchers || 0,
+            defaultBranch: repoDetails.stats?.defaultBranch || 'main',
+            lastUpdated: repoDetails.stats?.lastUpdated
           },
+          githubRelease: repoDetails.latestRelease || null, // Phase 3H: Releases
           suggestedContributors: mappedContributors
         });
         setImportSource('manual'); // Switch back so they can see and edit the fields

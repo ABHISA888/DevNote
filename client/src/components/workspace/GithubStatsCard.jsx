@@ -1,6 +1,6 @@
-import { Star, GitFork, AlertCircle, Eye, GitBranch, Calendar, Github } from 'lucide-react';
+import { Star, GitFork, AlertCircle, Eye, GitBranch, Calendar, Github, Tag } from 'lucide-react';
 
-export default function GithubStatsCard({ stats, githubUrl }) {
+export default function GithubStatsCard({ stats, release, githubUrl }) {
   if (!githubUrl || !stats) return null;
 
   const statItems = [
@@ -54,6 +54,29 @@ export default function GithubStatsCard({ stats, githubUrl }) {
             {stats.defaultBranch || 'main'}
           </span>
         </div>
+
+        {release && (
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
+            <div className="flex items-center gap-2">
+              <Tag size={13} className="text-slate-400" />
+              <span>Latest Release</span>
+            </div>
+            {release.htmlUrl ? (
+              <a
+                href={release.htmlUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-primary-600 hover:underline hover:text-primary-700 bg-primary-50 px-2 py-0.5 rounded text-[10px]"
+              >
+                {release.tagName || release.name}
+              </a>
+            ) : (
+              <span className="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded text-[10px]">
+                {release.tagName || release.name}
+              </span>
+            )}
+          </div>
+        )}
 
         {formattedDate && (
           <div className="flex items-center justify-between text-xs font-semibold text-slate-600">

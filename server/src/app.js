@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const passport = require('passport');
 const projectRoutes = require('./routes/projectRoutes');
 const authRoutes = require('./routes/authRoutes');
+const githubRoutes = require('./routes/github.routes');
 
 // Load Passport config
 require('./config/passport');
@@ -66,6 +67,7 @@ app.use(passport.initialize());
 // 3. API Routes Mount Points
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/github', githubRoutes);
 
 // Simple health check endpoint to check server availability
 app.get('/api/health', (req, res) => {

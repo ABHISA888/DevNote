@@ -152,6 +152,12 @@ const ProjectSchema = new mongoose.Schema(
       defaultBranch: { type: String, default: 'main' },
       lastUpdated: { type: Date },
     },
+    githubRelease: {
+      tagName: { type: String },
+      name: { type: String },
+      publishedAt: { type: Date },
+      htmlUrl: { type: String },
+    },
     status: {
       type: String,
       enum: {

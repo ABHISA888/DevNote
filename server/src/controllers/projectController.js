@@ -70,6 +70,7 @@ exports.createProject = async (req, res, next) => {
       reminderDaysBefore,
       teamMembers,
       status,
+      githubRelease,
       owner
     } = req.body;
 
@@ -110,6 +111,9 @@ exports.createProject = async (req, res, next) => {
     // Fetch readme & stats if githubUrl is supplied
     let readme = '';
     let fetchedStats = {};
+    let fetchedDeploymentUrl = '';
+    let fetchedRelease = null;
+
     if (githubUrl) {
       const githubInfo = parseGithubUrl(githubUrl);
       if (githubInfo) {
@@ -134,6 +138,30 @@ exports.createProject = async (req, res, next) => {
             defaultBranch: repoRes.data.default_branch || 'main',
             lastUpdated: repoRes.data.updated_at
           };
+
+          // Phase 3I: deploy link from homepage
+          if (repoRes.data.homepage) {
+            fetchedDeploymentUrl = repoRes.data.homepage;
+          }
+
+          // Phase 3H: fetch releases
+          try {
+            const releasesRes = await axios.get(
+              `https://api.github.com/repos/${encodeURIComponent(githubInfo.owner)}/${encodeURIComponent(githubInfo.repo)}/releases`,
+              { headers }
+            );
+            if (releasesRes.data && releasesRes.data.length > 0) {
+              fetchedRelease = {
+                tagName: releasesRes.data[0].tag_name,
+                name: releasesRes.data[0].name || releasesRes.data[0].tag_name,
+                publishedAt: releasesRes.data[0].published_at,
+                htmlUrl: releasesRes.data[0].html_url
+              };
+            }
+          } catch (relErr) {
+            console.error('Failed to auto-fetch releases during creation:', relErr.message);
+          }
+
         } catch (err) {
           console.error('Failed to auto-fetch stats during creation:', err.message);
         }
@@ -156,7 +184,7 @@ exports.createProject = async (req, res, next) => {
       figmaUrl,
       apiDocUrl,
       postmanUrl,
-      deploymentUrl,
+      deploymentUrl: deploymentUrl || fetchedDeploymentUrl,
       startDate,
       deadline,
       reminderToggle,
@@ -165,6 +193,7 @@ exports.createProject = async (req, res, next) => {
       status,
       readme,
       githubStats: req.body.githubStats || fetchedStats,
+      githubRelease: req.body.githubRelease || fetchedRelease,
       owner: req.user._id // Automatically assign owner from authenticated user
     });
 

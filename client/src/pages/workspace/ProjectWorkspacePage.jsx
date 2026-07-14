@@ -483,6 +483,7 @@ export default function ProjectWorkspacePage() {
                 />
                 <GithubStatsCard
                   stats={project.githubStats}
+                  release={project.githubRelease}
                   githubUrl={project.githubUrl}
                 />
                 <TechnologyStackCard stack={techStack} />

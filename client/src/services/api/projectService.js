@@ -66,12 +66,12 @@ export const projectService = {
   },
 
   searchGithubUsers: async (q) => {
-    const response = await api.get(`/projects/github/search?q=${encodeURIComponent(q)}`);
+    const response = await api.get(`/github/users/search?q=${encodeURIComponent(q)}`);
     return response.data;
   },
 
   getGithubRepoInfo: async (owner, repo) => {
-    const response = await api.get(`/projects/github/repo?owner=${encodeURIComponent(owner)}&repo=${encodeURIComponent(repo)}`);
+    const response = await api.get(`/github/repository?owner=${encodeURIComponent(owner)}&repo=${encodeURIComponent(repo)}`);
     return response.data;
   },
 
