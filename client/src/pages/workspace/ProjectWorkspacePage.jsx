@@ -24,6 +24,7 @@ import RecentActivity from '../../components/workspace/RecentActivity';
 import HealthScoreCard from '../../components/workspace/HealthScoreCard';
 import TimelineAlertsCard from '../../components/workspace/TimelineAlertsCard';
 import ConnectedResourcesCard from '../../components/workspace/ConnectedResourcesCard';
+import GithubStatsCard from '../../components/workspace/GithubStatsCard';
 import TechnologyStackCard from '../../components/workspace/TechnologyStackCard';
 import TeamMembersCard from '../../components/workspace/TeamMembersCard';
 
@@ -479,6 +480,10 @@ export default function ProjectWorkspacePage() {
                   figmaUrl={project.figmaUrl}
                   apiDocUrl={project.apiDocUrl}
                   postmanUrl={project.postmanUrl}
+                />
+                <GithubStatsCard
+                  stats={project.githubStats}
+                  githubUrl={project.githubUrl}
                 />
                 <TechnologyStackCard stack={techStack} />
                 <TeamMembersCard

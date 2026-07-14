@@ -35,13 +35,35 @@ export default function BasicInfoStep({ projectData, onChange }) {
       const res = await projectService.getGithubRepoInfo(githubOwner, githubRepo);
       if (res.success) {
         toast.success('Successfully loaded GitHub repository details!');
+        
+        // Phase 3E: Show languages as Tech Stack badges
+        const importedLanguages = res.data.languages ? Object.keys(res.data.languages) : (res.data.language ? [res.data.language] : []);
+        
+        // Phase 3F: Automatically suggest Project Members from contributors
+        const mappedContributors = (res.data.contributors || []).map(c => ({
+          githubUsername: c.login,
+          displayName: c.login,
+          githubAvatar: c.avatar_url,
+          githubUrl: c.html_url,
+          role: 'Viewer'
+        }));
+
         onChange({
           name: res.data.name || '',
           description: res.data.description || '',
           visibility: res.data.visibility || 'private',
           githubUrl: res.data.htmlUrl || '',
-          techStack: res.data.language ? [res.data.language] : [],
-          category: mapLanguageToCategory(res.data.language),
+          techStack: importedLanguages.length > 0 ? importedLanguages : ['JavaScript'],
+          category: mapLanguageToCategory(res.data.language || importedLanguages[0]),
+          githubStats: {
+            stars: res.data.stars || 0,
+            forks: res.data.forks || 0,
+            openIssues: res.data.openIssues || 0,
+            watchers: res.data.watchers || 0,
+            defaultBranch: res.data.defaultBranch || 'main',
+            lastUpdated: res.data.updatedAt
+          },
+          suggestedContributors: mappedContributors
         });
         setImportSource('manual'); // Switch back so they can see and edit the fields
       } else {

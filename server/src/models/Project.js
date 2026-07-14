@@ -144,6 +144,14 @@ const ProjectSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    githubStats: {
+      stars: { type: Number, default: 0 },
+      forks: { type: Number, default: 0 },
+      openIssues: { type: Number, default: 0 },
+      watchers: { type: Number, default: 0 },
+      defaultBranch: { type: String, default: 'main' },
+      lastUpdated: { type: Date },
+    },
     status: {
       type: String,
       enum: {
