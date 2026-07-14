@@ -55,6 +55,7 @@ export const PROJECT_STATS = [
 // ─── Workspace Tabs ───────────────────────────────────────────────────────────
 export const WORKSPACE_TABS = [
   { id: 'overview',     label: 'Overview',             path: 'overview' },
+  { id: 'readme',       label: 'README',               path: 'readme' },
   { id: 'tasks',        label: 'Tasks',                path: 'tasks' },
   { id: 'notes',        label: 'Notes',                path: 'notes' },
   { id: 'apis',         label: 'APIs',                 path: 'apis' },
