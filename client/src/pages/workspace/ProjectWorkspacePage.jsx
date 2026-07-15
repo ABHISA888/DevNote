@@ -473,7 +473,7 @@ export default function ProjectWorkspacePage() {
         )}
 
         {/* ── Notes Tab Content ── */}
-        {activeTab === 'notes' && <NotesTab />}
+        {activeTab === 'notes' && <NotesTab project={project} />}
 
         {/* ── README Tab Content ── */}
         {activeTab === 'readme' && <ReadmeTab project={project} />}
