@@ -36,7 +36,7 @@ export default function AboutSection() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Engineered By</h4>
-                  <p className="text-sm font-extrabold text-slate-800 mt-1">Abhinivesh S</p>
+                  <p className="text-sm font-extrabold text-slate-800 mt-1">Abhinivesh S and DevaHarsheni</p>
                 </div>
               </div>
 
