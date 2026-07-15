@@ -1,4 +1,5 @@
-import { Pencil, Calendar, AlertCircle, Layers, Github, Figma, BookOpen, Link2 } from 'lucide-react';
+import { Pencil, Calendar, AlertCircle, Layers, BookOpen, Link2 } from 'lucide-react';
+import { Github, Figma } from '../../common/BrandIcons';
 
 /**
  * 🎓 TEACHING MOMENT: ReviewStep.jsx

@@ -1,12 +1,12 @@
 import { 
   FolderKanban, 
-  Github, 
   FileText, 
   Users, 
   Key, 
   CheckSquare, 
   Terminal 
 } from 'lucide-react';
+import { Github } from '../common/BrandIcons';
 
 const features = [
   {

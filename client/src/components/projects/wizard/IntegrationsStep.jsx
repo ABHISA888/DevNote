@@ -1,4 +1,5 @@
-import { Github, Figma, Link2, BookOpen, Layers } from 'lucide-react';
+import { Link2, BookOpen, Layers } from 'lucide-react';
+import { Github, Figma } from '../../common/BrandIcons';
 
 /**
  * 🎓 TEACHING MOMENT: IntegrationsStep.jsx

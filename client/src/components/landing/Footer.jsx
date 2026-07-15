@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
+import { Github, Linkedin } from '../common/BrandIcons';
 
 const columns = [
   {
