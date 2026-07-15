@@ -451,6 +451,7 @@ export default function ProjectWorkspacePage() {
                   figmaUrl={project.figmaUrl}
                   apiDocUrl={project.apiDocUrl}
                   postmanUrl={project.postmanUrl}
+                  deploymentUrl={project.deploymentUrl}
                 />
                 <GithubStatsCard
                   stats={project.githubStats}

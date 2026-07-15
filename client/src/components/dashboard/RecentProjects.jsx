@@ -32,10 +32,12 @@ export default function RecentProjects({ projects = [] }) {
           {recentList.map((project, index) => (
             <ProjectCard 
               key={project._id}
+              id={project._id}
               title={project.name}
               description={project.description}
               badges={project.techStack || []}
               thumbnailColor={colors[index % colors.length]}
+              deploymentUrl={project.deploymentUrl}
             />
           ))}
         </div>

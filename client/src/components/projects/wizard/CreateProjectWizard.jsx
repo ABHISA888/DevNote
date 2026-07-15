@@ -126,6 +126,7 @@ export default function CreateProjectWizard({
       case 3:
         return true; // Optional fields
       case 4:
+        if (projectData.status === 'Completed') return true;
         if (!projectData.deadline) return false;
         if (projectData.startDate && projectData.deadline) {
           return new Date(projectData.deadline) >= new Date(projectData.startDate);

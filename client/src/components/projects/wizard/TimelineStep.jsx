@@ -123,13 +123,13 @@ export default function TimelineStep({ projectData, onChange }) {
 
           <div>
             <label htmlFor="deadline" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
-              Deadline <span className="text-red-500">*</span>
+              Deadline {projectData.status !== 'Completed' && <span className="text-red-500">*</span>}
             </label>
             <div className="relative">
               <input
                 id="deadline"
                 type="date"
-                required
+                required={projectData.status !== 'Completed'}
                 value={projectData.deadline}
                 onChange={(e) => onChange({ deadline: e.target.value })}
                 className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"

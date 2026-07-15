@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Star, ArrowRight, Calendar, Pin } from 'lucide-react';
+import { Star, ArrowRight, Calendar, Pin, ExternalLink } from 'lucide-react';
 import ProjectActionMenu from './ProjectActionMenu';
 
 function ProgressBar({ progress }) {
@@ -111,6 +111,17 @@ export default function ProjectCard({
               )}
             </div>
             <StatusBadge status={status} statusColor={statusColor} />
+            {rest.deploymentUrl && (
+              <a 
+                href={rest.deploymentUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 hover:text-emerald-700 transition"
+              >
+                Live Demo <ExternalLink size={11} />
+              </a>
+            )}
           </div>
           <button onClick={() => navigate(`/project/${id}`)} className="group/btn flex items-center gap-1 text-[11px] font-bold text-primary-600 transition hover:text-primary-700">
             Open Project <ArrowRight size={12} className="transition-transform group-hover/btn:translate-x-0.5" />

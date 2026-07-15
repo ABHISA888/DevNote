@@ -1,12 +1,13 @@
 import { Link2, ExternalLink } from 'lucide-react';
 import { Github } from '../common/BrandIcons';
 
-export default function ConnectedResourcesCard({ githubUrl, figmaUrl, apiDocUrl, postmanUrl }) {
+export default function ConnectedResourcesCard({ githubUrl, figmaUrl, apiDocUrl, postmanUrl, deploymentUrl }) {
   // Check if any link is present
-  const hasLinks = githubUrl || figmaUrl || apiDocUrl || postmanUrl;
+  const hasLinks = githubUrl || figmaUrl || apiDocUrl || postmanUrl || deploymentUrl;
   if (!hasLinks) return null;
 
   const links = [
+    { label: 'Live Demo', url: deploymentUrl, icon: ExternalLink },
     { label: 'GitHub', url: githubUrl, icon: Github },
     { label: 'Figma', url: figmaUrl, icon: Link2 },
     { label: 'API Docs', url: apiDocUrl, icon: Link2 },

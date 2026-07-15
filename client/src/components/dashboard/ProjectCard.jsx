@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 
 /**
  * 🎓 TEACHING MOMENT: ProjectCard.jsx
@@ -7,7 +9,8 @@ import React from 'react';
  * Renders rich project entities. It handles its own internal layout (thumbnail top, 
  * content middle, footer actions) so the parent grid only has to pass data.
  */
-export default function ProjectCard({ title, description, badges, thumbnailColor }) {
+export default function ProjectCard({ id, title, description, badges, thumbnailColor, deploymentUrl }) {
+  const navigate = useNavigate();
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition hover:shadow-lg hover:border-primary-100">
       
@@ -25,7 +28,7 @@ export default function ProjectCard({ title, description, badges, thumbnailColor
       {/* Content Area */}
       <div className="flex flex-1 flex-col p-5">
         <h3 className="text-base font-bold text-slate-800">{title}</h3>
-        <p className="mt-2 flex-1 text-xs leading-relaxed text-slate-500">
+        <p className="mt-2 flex-1 text-xs leading-relaxed text-slate-500 line-clamp-3">
           {description}
         </p>
 
@@ -42,9 +45,24 @@ export default function ProjectCard({ title, description, badges, thumbnailColor
         </div>
 
         {/* Action Footer */}
-        <button className="mt-5 w-full rounded-lg bg-primary-50 py-2.5 text-sm font-bold text-primary-600 transition hover:bg-primary-100 hover:text-primary-700">
-          Open Project
-        </button>
+        <div className="mt-5 flex gap-2">
+          <button 
+            onClick={() => navigate(`/project/${id}`)}
+            className="flex-1 rounded-lg bg-primary-50 py-2 text-xs font-bold text-primary-600 transition hover:bg-primary-100 hover:text-primary-700"
+          >
+            Open Project
+          </button>
+          {deploymentUrl && (
+            <a
+              href={deploymentUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-600 transition hover:bg-emerald-100 hover:text-emerald-700"
+            >
+              Live Demo <ExternalLink size={12} />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
+
 /**
  * 🎓 TEACHING MOMENT: PinnedProjectCard.jsx
  * 
@@ -5,14 +8,31 @@
  * Displays priority projects at a glance in the right sidebar column.
  * It's small, dense, and uses tech badges for quick recognition.
  */
-export default function PinnedProjectCard({ title, badges, progressPercent }) {
+export default function PinnedProjectCard({ id, title, badges, progressPercent, deploymentUrl }) {
+  const navigate = useNavigate();
   return (
-    <div className="group rounded-xl border border-gray-100 bg-white p-4 transition hover:border-primary-200 hover:shadow-md">
-      <div className="flex items-start justify-between">
-        <h4 className="text-sm font-bold text-slate-800">{title}</h4>
+    <div 
+      onClick={() => navigate(`/project/${id}`)}
+      className="group cursor-pointer rounded-xl border border-gray-100 bg-white p-4 transition hover:border-primary-200 hover:shadow-md"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          <h4 className="text-sm font-bold text-slate-800 truncate">{title}</h4>
+          {deploymentUrl && (
+            <a 
+              href={deploymentUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={(e) => e.stopPropagation()}
+              className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:underline"
+            >
+              Live Demo <ExternalLink size={10} />
+            </a>
+          )}
+        </div>
         
         {/* Tech Badges */}
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5 shrink-0">
           {badges.map((badge) => (
             <span 
               key={badge} 

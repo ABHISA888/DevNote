@@ -20,10 +20,11 @@ export default function ProjectSummary({ project }) {
     { label: 'Status', value: project.status, type: 'badge', colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
     { label: 'Theme Color', value: project.themeColor, type: 'color' },
     { label: 'Start Date', value: formatDate(project.startDate), icon: Calendar },
-    { label: 'Deadline', value: formatDate(project.deadline), icon: Calendar },
+    { label: (project.status === 'Completed' || project.status === 'COMPLETED') ? 'Completion Date' : 'Deadline', value: formatDate(project.deadline), icon: Calendar },
   ].filter(item => item.value);
 
   const links = [
+    { label: 'Deployment Link', value: project.deploymentUrl, icon: ExternalLink },
     { label: 'GitHub Repository', value: project.githubUrl, icon: Github },
     { label: 'Figma Design', value: project.figmaUrl, icon: Figma },
     { label: 'API Documentation', value: project.apiDocUrl, icon: Link2 },

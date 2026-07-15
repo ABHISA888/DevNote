@@ -40,6 +40,8 @@ export default function BasicInfoStep({ projectData, onChange }) {
         const repoDetails = res.data;
         // Phase 3E: Show languages as Tech Stack badges
         const importedLanguages = repoDetails.languages ? Object.keys(repoDetails.languages) : (repoDetails.language ? [repoDetails.language] : []);
+        const detectedTechs = repoDetails.detectedTechnologies || [];
+        const combinedTechs = Array.from(new Set([...importedLanguages, ...detectedTechs]));
         
         // Phase 3F: Automatically suggest Project Members from contributors
         const mappedContributors = (repoDetails.contributors || []).map(c => ({
@@ -56,8 +58,8 @@ export default function BasicInfoStep({ projectData, onChange }) {
           visibility: repoDetails.visibility || 'private',
           githubUrl: repoDetails.htmlUrl || '',
           deploymentUrl: repoDetails.homepage || '', // Phase 3I: deploy link
-          techStack: importedLanguages.length > 0 ? importedLanguages : ['JavaScript'],
-          category: mapLanguageToCategory(repoDetails.language || importedLanguages[0]),
+          techStack: combinedTechs.length > 0 ? combinedTechs : ['JavaScript'],
+          category: mapLanguageToCategory(repoDetails.language || combinedTechs[0]),
           githubStats: {
             stars: repoDetails.stats?.stars || 0,
             forks: repoDetails.stats?.forks || 0,
