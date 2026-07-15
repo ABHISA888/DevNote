@@ -1,92 +1,102 @@
-import { LayoutDashboard, CheckSquare, FileCode, Rocket } from 'lucide-react';
-
-/**
- * WHY THIS SECTION EXISTS:
- * After the hero sells the "what", the Features section explains the "how".
- * It answers the visitor's second question: "But what exactly does it do?"
- * Feature cards are scannable — users can skim all 4 in seconds.
- *
- * REACT CONCEPT: Data-driven rendering with Array.map()
- * Instead of writing 4 identical card JSX blocks, we define the data
- * in a `features` array and map over it. This is the DRY (Don't Repeat Yourself)
- * principle applied to React — one change to the card template updates all 4.
- *
- * TAILWIND:
- * - `group` on the card + `group-hover:` on children enables parent-driven hover.
- * - `transition-all duration-300` for smooth animations.
- * - `bg-primary-50 group-hover:bg-primary-100` — icon container changes on card hover.
- */
+import { 
+  FolderKanban, 
+  Github, 
+  FileText, 
+  Users, 
+  Key, 
+  CheckSquare, 
+  Terminal 
+} from 'lucide-react';
 
 const features = [
   {
-    icon: LayoutDashboard,
-    title: 'Unified Workspaces',
-    description:
-      'Centralize all your projects in one workspace for your team or individual review across multiple domains.',
+    icon: FolderKanban,
+    title: 'Project Management',
+    description: 'Create, organize, pin, archive, and manage all your engineering projects inside a premium dashboard.',
     iconBg: 'bg-primary-50',
     iconColor: 'text-primary-600',
     hoverBg: 'group-hover:bg-primary-100',
   },
   {
-    icon: CheckSquare,
-    title: 'Smart Tasks',
-    description:
-      'Context-aware task management that integrates seamlessly with your project timeline and requires no setup.',
-    iconBg: 'bg-violet-50',
-    iconColor: 'text-violet-600',
-    hoverBg: 'group-hover:bg-violet-100',
+    icon: Github,
+    title: 'GitHub Integration',
+    description: 'Import repositories, Markdown README documentation, live statistics, and contributor activity instantly.',
+    iconBg: 'bg-slate-900/10',
+    iconColor: 'text-slate-800',
+    hoverBg: 'group-hover:bg-slate-900/20',
   },
   {
-    icon: FileCode,
-    title: 'Live API Docs',
-    description:
-      'Auto-generate living API documentation from your endpoints with real-time update capabilities and searchable index.',
+    icon: FileText,
+    title: 'Developer Notes',
+    description: 'Write project-specific notes and document architecture decisions using a fully functional Markdown editor.',
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-600',
+    hoverBg: 'group-hover:bg-amber-100',
+  },
+  {
+    icon: Users,
+    title: 'Team Collaboration',
+    description: 'Invite members to your workspace, assign editor/viewer roles, and track project contributions in real-time.',
+    iconBg: 'bg-emerald-50',
+    iconColor: 'text-emerald-600',
+    hoverBg: 'group-hover:bg-emerald-100',
+  },
+  {
+    icon: Key,
+    title: 'Environment Variables',
+    description: 'Securely manage project configuration keys across Development, Testing, and Production with visibility controls.',
+    iconBg: 'bg-purple-50',
+    iconColor: 'text-purple-600',
+    hoverBg: 'group-hover:bg-purple-100',
+  },
+  {
+    icon: CheckSquare,
+    title: 'Task Management',
+    description: 'Track development progress efficiently with board lists, due dates, statuses, and custom urgency labels.',
     iconBg: 'bg-blue-50',
     iconColor: 'text-blue-600',
     hoverBg: 'group-hover:bg-blue-100',
   },
   {
-    icon: Rocket,
-    title: 'Instant Deployment',
-    description:
-      'Configure your environment and deployments in a single command without complex configuration setups.',
-    iconBg: 'bg-primary-50',
-    iconColor: 'text-primary-600',
-    hoverBg: 'group-hover:bg-primary-100',
+    icon: Terminal,
+    title: 'Modern Workspace',
+    description: 'Everything developers need in one high-performance interface, eliminating tool sprawl and context-switching.',
+    iconBg: 'bg-rose-50',
+    iconColor: 'text-rose-600',
+    hoverBg: 'group-hover:bg-rose-100',
   },
 ];
 
 function FeatureCard({ icon: Icon, title, description, iconBg, iconColor, hoverBg }) {
   return (
-    <article className="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+    <article className="group rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-200/80">
       <div
         className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl ${iconBg} ${hoverBg} transition-colors duration-300`}
       >
         <Icon size={20} className={iconColor} />
       </div>
-      <h3 className="mb-2 text-base font-semibold text-gray-900">{title}</h3>
-      <p className="text-sm leading-relaxed text-gray-500">{description}</p>
+      <h3 className="mb-2 text-base font-bold text-gray-900">{title}</h3>
+      <p className="text-sm leading-relaxed text-slate-500">{description}</p>
     </article>
   );
 }
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="bg-gray-50 py-20 sm:py-24">
+    <section id="features" className="bg-slate-50/50 py-20 sm:py-24 border-y border-slate-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-            Built for the Modern Workflow
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+            Real Developer Capabilities
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-gray-500">
-            DevNote is wherever a team between individual writing and production. Everything your
-            team needs in one high-performance interface.
+          <p className="mt-4 text-base leading-relaxed text-slate-500">
+            DevNote aggregates the core tools developers need daily to construct, document, and ship production-grade systems.
           </p>
         </div>
 
         {/* Feature cards grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {features.map((feature) => (
             <FeatureCard key={feature.title} {...feature} />
           ))}
