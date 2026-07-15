@@ -479,7 +479,7 @@ export default function ProjectWorkspacePage() {
         {activeTab === 'readme' && <ReadmeTab project={project} />}
 
         {/* ── Environment Tab Content ── */}
-        {activeTab === 'environment' && <EnvironmentTab />}
+        {activeTab === 'environment' && <EnvironmentTab project={project} />}
 
         {/* ── Coming Soon Tabs ── */}
         {comingSoonTab && (

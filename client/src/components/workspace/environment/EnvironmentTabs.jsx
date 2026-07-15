@@ -7,7 +7,7 @@
  * rather than scrolling through a massive combined list of secrets.
  */
 export default function EnvironmentTabs({ activeTab, onTabChange }) {
-  const TABS = ['All', 'Development', 'Staging', 'Production'];
+  const TABS = ['All', 'Development', 'Testing', 'Production'];
 
   return (
     <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1 w-fit">

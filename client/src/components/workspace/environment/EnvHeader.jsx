@@ -8,7 +8,7 @@ import { FileText, Plus, AlertTriangle } from 'lucide-react';
  * It prominently features a security warning banner to continuously educate developers
  * about the risks of exposing secrets in frontend code.
  */
-export default function EnvHeader() {
+export default function EnvHeader({ onAddClick }) {
   return (
     <div className="mb-8">
       {/* Security Warning Banner */}
@@ -31,7 +31,10 @@ export default function EnvHeader() {
           <button className="flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-xs font-bold text-slate-600 shadow-sm transition hover:bg-slate-50 hover:text-primary-600">
             <FileText size={14} /> Import .env File
           </button>
-          <button className="flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700">
+          <button 
+            onClick={onAddClick}
+            className="flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700"
+          >
             <Plus size={14} strokeWidth={2.5} /> Add Variable
           </button>
         </div>
