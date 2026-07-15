@@ -1,5 +1,6 @@
 import ActionButton from './ActionButton';
-import { Plus, CheckSquare, FileText, Code2, Github } from 'lucide-react';
+import { Plus, CheckSquare, FileText, Code2 } from 'lucide-react';
+import { Github } from '../common/BrandIcons';
 
 /**
  * 🎓 TEACHING MOMENT: QuickActions.jsx

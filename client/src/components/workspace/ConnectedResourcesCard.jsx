@@ -1,4 +1,5 @@
-import { Link2, Github, ExternalLink } from 'lucide-react';
+import { Link2, ExternalLink } from 'lucide-react';
+import { Github } from '../common/BrandIcons';
 
 export default function ConnectedResourcesCard({ githubUrl, figmaUrl, apiDocUrl, postmanUrl }) {
   // Check if any link is present

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Heart, Globe, Lock, ShieldCheck, CheckCircle2, Github, Loader2 } from 'lucide-react';
+import { Heart, Globe, Lock, ShieldCheck, CheckCircle2, Loader2 } from 'lucide-react';
+import { Github } from '../../common/BrandIcons';
 import { projectService } from '../../../services/api/projectService';
 import toast from 'react-hot-toast';
 

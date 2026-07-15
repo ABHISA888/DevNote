@@ -1,4 +1,5 @@
-import { Star, GitFork, AlertCircle, Eye, GitBranch, Calendar, Github, Tag } from 'lucide-react';
+import { Star, GitFork, AlertCircle, Eye, GitBranch, Calendar, Tag } from 'lucide-react';
+import { Github } from '../common/BrandIcons';
 
 export default function GithubStatsCard({ stats, release, githubUrl }) {
   if (!githubUrl || !stats) return null;

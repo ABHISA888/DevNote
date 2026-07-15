@@ -1,4 +1,5 @@
-import { Github, Figma, Link2, Calendar, Code2, Palette, CheckCircle2, Shield, Tag, AlertTriangle, ExternalLink } from 'lucide-react';
+import { Link2, Calendar, Code2, Palette, CheckCircle2, Shield, Tag, AlertTriangle, ExternalLink } from 'lucide-react';
+import { Github, Figma } from '../common/BrandIcons';
 
 export default function ProjectSummary({ project }) {
   if (!project) return null;

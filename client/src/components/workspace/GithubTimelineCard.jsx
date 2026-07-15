@@ -1,4 +1,5 @@
-import { Calendar, GitCommit, DownloadCloud, Clock, Github, Shield, Award } from 'lucide-react';
+import { Calendar, GitCommit, DownloadCloud, Clock, Shield, Award } from 'lucide-react';
+import { Github } from '../common/BrandIcons';
 
 export default function GithubTimelineCard({ project }) {
   if (!project || !project.githubUrl) return null;
