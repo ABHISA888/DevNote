@@ -1,18 +1,26 @@
 import { useState } from 'react';
-import { Pencil, Trash2, MoreVertical } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import HiddenValue from './HiddenValue';
-import { EnvironmentBadge, CategoryBadge } from './Badges';
+import { EnvironmentBadge } from './Badges';
 
-/**
- * 🎓 TEACHING MOMENT: VariableRow.jsx
- * 
- * WHY THIS EXISTS:
- * This is the leaf node of our data layer — one row per environment variable.
- * Each row composes HiddenValue, EnvironmentBadge, and CategoryBadge together
- * to produce a compact, scannable, and actionable interface.
- */
 export default function VariableRow({ variable, onEdit, onDelete }) {
-  const [showMenu, setShowMenu] = useState(false);
+  const id = variable._id || variable.id;
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'Never';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(undefined, { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
+  };
+
+  const getEnvShorthand = (env) => {
+    if (env === 'Development') return 'DEV';
+    if (env === 'Testing') return 'TST';
+    return 'PRD';
+  };
 
   return (
     <tr className="group border-b border-gray-100 transition-colors hover:bg-slate-50/50">
@@ -30,29 +38,33 @@ export default function VariableRow({ variable, onEdit, onDelete }) {
         </div>
       </td>
 
-      {/* Value (Hidden by default) */}
+      {/* Value */}
       <td className="px-4 py-4 lg:px-6">
-        <HiddenValue value={variable.value} />
+        <HiddenValue value={variable.value} isSecret={variable.isSecret} />
       </td>
 
-      {/* Environment Badges */}
+      {/* Environment Badge */}
       <td className="px-4 py-4 lg:px-6">
-        <div className="flex flex-wrap items-center gap-1">
-          {variable.environments.map((env) => (
-            <EnvironmentBadge key={env} env={env} />
-          ))}
-        </div>
+        <EnvironmentBadge env={getEnvShorthand(variable.environment)} />
       </td>
 
-      {/* Category Badge */}
+      {/* Visibility Status */}
       <td className="px-4 py-4 lg:px-6">
-        <CategoryBadge category={variable.category} />
+        {variable.isSecret ? (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-100 uppercase tracking-wider">
+            Secret
+          </span>
+        ) : (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-50 text-slate-600 border border-slate-200 uppercase tracking-wider">
+            Plaintext
+          </span>
+        )}
       </td>
 
       {/* Last Updated */}
       <td className="hidden sm:table-cell px-4 py-4 lg:px-6">
         <span className="text-[10px] font-semibold text-slate-400 whitespace-nowrap">
-          {variable.lastUpdated}
+          {formatDate(variable.updatedAt || variable.createdAt)}
         </span>
       </td>
 
@@ -67,7 +79,7 @@ export default function VariableRow({ variable, onEdit, onDelete }) {
             <Pencil size={14} />
           </button>
           <button
-            onClick={() => onDelete?.(variable.id)}
+            onClick={() => onDelete?.(id)}
             className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition"
             title="Delete variable"
           >

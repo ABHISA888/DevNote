@@ -50,7 +50,7 @@ export default function VariableTable({ variables, onEdit, onDelete }) {
         <tbody>
           {variables.map((variable) => (
             <VariableRow
-              key={variable.id}
+              key={variable._id || variable.id}
               variable={variable}
               onEdit={onEdit}
               onDelete={onDelete}

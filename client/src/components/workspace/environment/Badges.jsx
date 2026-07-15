@@ -10,7 +10,7 @@
 // Environment badge — colored pill for DEV, STG, PRD
 const ENV_STYLES = {
   DEV: 'bg-primary-100 text-primary-700 border border-primary-200',
-  STG: 'bg-amber-100 text-amber-700 border border-amber-200',
+  TST: 'bg-amber-100 text-amber-700 border border-amber-200',
   PRD: 'bg-blue-100 text-blue-700 border border-blue-200'
 };
 

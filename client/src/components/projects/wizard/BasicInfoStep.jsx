@@ -35,13 +35,38 @@ export default function BasicInfoStep({ projectData, onChange }) {
       const res = await projectService.getGithubRepoInfo(githubOwner, githubRepo);
       if (res.success) {
         toast.success('Successfully loaded GitHub repository details!');
+        
+        const repoDetails = res.data;
+        // Phase 3E: Show languages as Tech Stack badges
+        const importedLanguages = repoDetails.languages ? Object.keys(repoDetails.languages) : (repoDetails.language ? [repoDetails.language] : []);
+        
+        // Phase 3F: Automatically suggest Project Members from contributors
+        const mappedContributors = (repoDetails.contributors || []).map(c => ({
+          githubUsername: c.login,
+          displayName: c.login,
+          githubAvatar: c.avatar_url,
+          githubUrl: c.html_url,
+          role: 'Viewer'
+        }));
+
         onChange({
-          name: res.data.name || '',
-          description: res.data.description || '',
-          visibility: res.data.visibility || 'private',
-          githubUrl: res.data.htmlUrl || '',
-          techStack: res.data.language ? [res.data.language] : [],
-          category: mapLanguageToCategory(res.data.language),
+          name: repoDetails.name || '',
+          description: repoDetails.description || '',
+          visibility: repoDetails.visibility || 'private',
+          githubUrl: repoDetails.htmlUrl || '',
+          deploymentUrl: repoDetails.homepage || '', // Phase 3I: deploy link
+          techStack: importedLanguages.length > 0 ? importedLanguages : ['JavaScript'],
+          category: mapLanguageToCategory(repoDetails.language || importedLanguages[0]),
+          githubStats: {
+            stars: repoDetails.stats?.stars || 0,
+            forks: repoDetails.stats?.forks || 0,
+            openIssues: repoDetails.stats?.openIssues || 0,
+            watchers: repoDetails.stats?.watchers || 0,
+            defaultBranch: repoDetails.stats?.defaultBranch || 'main',
+            lastUpdated: repoDetails.stats?.lastUpdated
+          },
+          githubRelease: repoDetails.latestRelease || null, // Phase 3H: Releases
+          suggestedContributors: mappedContributors
         });
         setImportSource('manual'); // Switch back so they can see and edit the fields
       } else {

@@ -24,6 +24,8 @@ import RecentActivity from '../../components/workspace/RecentActivity';
 import HealthScoreCard from '../../components/workspace/HealthScoreCard';
 import TimelineAlertsCard from '../../components/workspace/TimelineAlertsCard';
 import ConnectedResourcesCard from '../../components/workspace/ConnectedResourcesCard';
+import GithubStatsCard from '../../components/workspace/GithubStatsCard';
+import GithubTimelineCard from '../../components/workspace/GithubTimelineCard';
 import TechnologyStackCard from '../../components/workspace/TechnologyStackCard';
 import TeamMembersCard from '../../components/workspace/TeamMembersCard';
 
@@ -90,13 +92,6 @@ const themeColorMap = {
   '#ec4899': 'bg-pink-50 text-pink-700 border-pink-100',
   '#8b5cf6': 'bg-purple-50 text-purple-700 border-purple-100',
 };
-
-const membersList = [
-  { id: 1, name: 'Elena Rodriguez', role: 'Architect', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
-  { id: 2, name: 'James Wilson', role: 'Backend', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James' },
-  { id: 3, name: 'Jordan Kyosho', role: 'Designer', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jordan' },
-  { id: 4, name: 'Sarah Jenkins', role: 'QA Lead', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah' }
-];
 
 export default function ProjectWorkspacePage() {
   const { user: currentUser } = useAuth();
@@ -298,10 +293,16 @@ export default function ProjectWorkspacePage() {
 
   // Compute project stats
   const getProjectStats = (proj) => {
-    let progress = '0%';
-    if (proj.status === 'Completed') progress = '100%';
-    else if (proj.status === 'In Review') progress = '75%';
-    else if (proj.status === 'In Progress') progress = '50%';
+    const totalTasks = proj.tasks ? proj.tasks.length : 0;
+    const completedTasks = proj.tasks ? proj.tasks.filter(t => t.status === 'Completed').length : 0;
+    
+    const progress = totalTasks > 0 
+      ? `${Math.round((completedTasks / totalTasks) * 100)}%` 
+      : 'No Tasks';
+
+    const tasksStr = totalTasks > 0
+      ? `${completedTasks} / ${totalTasks}`
+      : 'No Tasks';
 
     let daysLeft = 'No Deadline';
     if (proj.deadline) {
@@ -311,7 +312,7 @@ export default function ProjectWorkspacePage() {
     }
 
     const stackStr = proj.techStack && proj.techStack.length > 0
-      ? proj.techStack.slice(0, 2).join(', ')
+      ? proj.techStack.join(', ')
       : 'None';
 
     const updatedStr = proj.updatedAt
@@ -319,20 +320,14 @@ export default function ProjectWorkspacePage() {
       : 'Recently';
 
     return [
-      { id: 'status',    label: 'STATUS',     value: proj.status || 'Todo',       valueColor: 'text-primary-600' },
+      { id: 'status',    label: 'STATUS',     value: proj.status || 'Todo',       valueColor: 'text-primary-600 font-bold font-mono' },
       { id: 'progress',  label: 'PROGRESS',   value: progress,                    valueColor: 'text-slate-800' },
-      { id: 'priority',  label: 'PRIORITY',   value: proj.priority || 'Medium',   valueColor: 'text-slate-800' },
-      { id: 'days',      label: 'DAYS LEFT',  value: daysLeft,                    valueColor: 'text-amber-600' },
-      { id: 'stack',     label: 'STACK',      value: stackStr,                    valueColor: 'text-slate-800' },
-      { id: 'updated',   label: 'UPDATED',    value: updatedStr,                  valueColor: 'text-slate-800' },
+      { id: 'tasks',     label: 'TASKS',      value: tasksStr,                    valueColor: 'text-slate-800 font-mono' },
+      { id: 'days',      label: 'DAYS LEFT',  value: daysLeft,                    valueColor: 'text-amber-600 font-bold' },
+      { id: 'stack',     label: 'STACK',      value: stackStr,                    valueColor: 'text-slate-800 truncate max-w-[150px]' },
+      { id: 'updated',   label: 'UPDATED',    value: updatedStr,                  valueColor: 'text-slate-800 font-mono' },
     ];
   };
-
-  // Compute overall percent & modules
-  const overallPercent = project.status === 'Completed' ? 100 : (project.status === 'In Review' ? 75 : (project.status === 'In Progress' ? 50 : 0));
-  const modules = [
-    { id: 1, name: 'Project Implementation', progress: overallPercent, color: 'bg-primary-500' }
-  ];
 
   // Compute deadlines
   const deadlines = [];
@@ -377,18 +372,7 @@ export default function ProjectWorkspacePage() {
     });
   }
 
-  // Compute health score
-  const getHealthScore = (proj) => {
-    let score = 'Healthy';
-    let riskLabel = 'Low Risk Index';
-    if (proj.priority === 'Critical' || proj.priority === 'High') {
-      score = 'At Risk';
-      riskLabel = 'High Priority Action Needed';
-    }
-    const docsStatus = proj.apiDocUrl ? 'Linked' : 'Missing Docs';
-    return { score, riskLabel, docsStatus };
-  };
-  const healthScore = getHealthScore(project);
+
 
   // Compute tech stack
   const stackColors = [
@@ -437,22 +421,11 @@ export default function ProjectWorkspacePage() {
 
               {/* ── Left Column ── */}
               <div className="flex flex-col gap-6 lg:col-span-2">
-                <ProjectSummary
-                  fullDescription={project.description}
-                  tags={[project.category, project.priority, project.visibility].filter(Boolean)}
-                  tagStyles={{
-                    [project.category]: 'bg-slate-100 text-slate-600 border-slate-200',
-                    [project.priority]: 'bg-primary-100 text-primary-700 border-primary-200',
-                    [project.visibility]: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-                  }}
-                />
+                <ProjectSummary project={project} />
 
                 {/* Completion + Deadlines — side by side on md screens */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <CompletionCard
-                    overallPercent={overallPercent}
-                    modules={modules}
-                  />
+                  <CompletionCard tasks={project.tasks || []} />
                   <UpcomingDeadlines deadlines={deadlines} />
                 </div>
 
@@ -462,9 +435,8 @@ export default function ProjectWorkspacePage() {
               {/* ── Right Sidebar ── */}
               <div className="flex flex-col gap-6 lg:col-span-1">
                 <HealthScoreCard
-                  score={healthScore.score}
-                  riskLabel={healthScore.riskLabel}
-                  docsStatus={healthScore.docsStatus}
+                  tasks={project.tasks || []}
+                  apiDocUrl={project.apiDocUrl}
                 />
                 <TimelineAlertsCard
                   startDate={project.startDate}
@@ -480,6 +452,12 @@ export default function ProjectWorkspacePage() {
                   apiDocUrl={project.apiDocUrl}
                   postmanUrl={project.postmanUrl}
                 />
+                <GithubStatsCard
+                  stats={project.githubStats}
+                  release={project.githubRelease}
+                  githubUrl={project.githubUrl}
+                />
+                <GithubTimelineCard project={project} />
                 <TechnologyStackCard stack={techStack} />
                 <TeamMembersCard
                   projectId={projectId}
@@ -497,13 +475,13 @@ export default function ProjectWorkspacePage() {
         )}
 
         {/* ── Notes Tab Content ── */}
-        {activeTab === 'notes' && <NotesTab />}
+        {activeTab === 'notes' && <NotesTab project={project} />}
 
         {/* ── README Tab Content ── */}
         {activeTab === 'readme' && <ReadmeTab project={project} />}
 
         {/* ── Environment Tab Content ── */}
-        {activeTab === 'environment' && <EnvironmentTab />}
+        {activeTab === 'environment' && <EnvironmentTab project={project} />}
 
         {/* ── Coming Soon Tabs ── */}
         {comingSoonTab && (

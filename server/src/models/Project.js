@@ -144,6 +144,44 @@ const ProjectSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    githubStats: {
+      stars: { type: Number, default: 0 },
+      forks: { type: Number, default: 0 },
+      openIssues: { type: Number, default: 0 },
+      watchers: { type: Number, default: 0 },
+      defaultBranch: { type: String, default: 'main' },
+      lastUpdated: { type: Date },
+    },
+    githubRelease: {
+      tagName: { type: String },
+      name: { type: String },
+      publishedAt: { type: Date },
+      htmlUrl: { type: String },
+    },
+    repositoryCreatedAt: { type: Date },
+    lastPushAt: { type: Date },
+    defaultBranch: { type: String },
+    openIssues: { type: Number, default: 0 },
+    stars: { type: Number, default: 0 },
+    forks: { type: Number, default: 0 },
+    watchers: { type: Number, default: 0 },
+    primaryLanguage: { type: String },
+    license: { type: String },
+    ownerAvatar: { type: String },
+    ownerName: { type: String },
+    latestCommitDate: { type: Date },
+    latestCommitMessage: { type: String },
+    latestCommitSha: { type: String },
+    tasks: {
+      type: [{
+        name: { type: String, required: true },
+        description: { type: String },
+        status: { type: String, enum: ['Todo', 'In Progress', 'In Review', 'Completed'], default: 'Todo' },
+        priority: { type: String, enum: ['Low', 'Medium', 'High', 'Critical'], default: 'Medium' },
+        dueDate: { type: Date }
+      }],
+      default: []
+    },
     status: {
       type: String,
       enum: {

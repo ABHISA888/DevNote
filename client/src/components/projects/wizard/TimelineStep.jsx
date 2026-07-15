@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, BellRing, Search, Trash2, Loader2 } from 'lucide-react';
+import { Calendar, Clock, BellRing, Search, Trash2, Loader2, Plus, Check } from 'lucide-react';
 import { projectService } from '../../../services/api/projectService';
 import toast from 'react-hot-toast';
 
@@ -237,6 +237,54 @@ export default function TimelineStep({ projectData, onChange }) {
                   </span>
                 </button>
               ))}
+            </div>
+          )}
+
+          {/* Phase 3F: Suggested GitHub Contributors */}
+          {projectData.suggestedContributors && projectData.suggestedContributors.length > 0 && (
+            <div className="space-y-2 rounded-xl border border-indigo-100 bg-indigo-50/30 p-3.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-600 block">
+                Suggested from GitHub Contributors
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {projectData.suggestedContributors.slice(0, 10).map((contrib) => {
+                  const isAdded = (projectData.teamMembers || []).some(
+                    (m) => m.githubUsername.toLowerCase() === contrib.githubUsername.toLowerCase()
+                  );
+                  return (
+                    <button
+                      key={contrib.githubUsername}
+                      type="button"
+                      disabled={isAdded}
+                      onClick={() => {
+                        const newMember = {
+                          githubUsername: contrib.githubUsername,
+                          displayName: contrib.githubUsername,
+                          githubAvatar: contrib.githubAvatar,
+                          githubUrl: contrib.githubUrl,
+                          role: 'Viewer'
+                        };
+                        onChange({ teamMembers: [...(projectData.teamMembers || []), newMember] });
+                        toast.success(`Added @${contrib.githubUsername} to team`);
+                      }}
+                      className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold transition ${
+                        isAdded
+                          ? 'border-emerald-200 bg-emerald-50 text-emerald-600 cursor-not-allowed opacity-80'
+                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm'
+                      }`}
+                    >
+                      <img
+                        src={contrib.githubAvatar}
+                        alt={contrib.githubUsername}
+                        className="h-4 w-4 rounded-full border border-slate-200"
+                      />
+                      <span>{contrib.githubUsername}</span>
+                      {!isAdded && <Plus size={11} className="text-slate-400" />}
+                      {isAdded && <Check size={11} className="text-emerald-500" />}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
 

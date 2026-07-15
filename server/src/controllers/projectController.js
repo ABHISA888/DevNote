@@ -70,6 +70,7 @@ exports.createProject = async (req, res, next) => {
       reminderDaysBefore,
       teamMembers,
       status,
+      githubRelease,
       owner
     } = req.body;
 
@@ -107,12 +108,108 @@ exports.createProject = async (req, res, next) => {
       });
     }
 
-    // Fetch readme if githubUrl is supplied
+    // Fetch readme & stats if githubUrl is supplied
     let readme = '';
+    let fetchedStats = {};
+    let fetchedDeploymentUrl = '';
+    let fetchedRelease = null;
+
+    let repositoryCreatedAt = null;
+    let lastPushAt = null;
+    let defaultBranch = 'main';
+    let openIssues = 0;
+    let stars = 0;
+    let forks = 0;
+    let watchers = 0;
+    let primaryLanguage = '';
+    let license = '';
+    let ownerAvatar = '';
+    let ownerName = '';
+
+    let latestCommitDate = null;
+    let latestCommitMessage = '';
+    let latestCommitSha = '';
+
     if (githubUrl) {
       const githubInfo = parseGithubUrl(githubUrl);
       if (githubInfo) {
         readme = await fetchReadme(githubInfo.owner, githubInfo.repo);
+        try {
+          const headers = {
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'DevNote-App'
+          };
+          if (process.env.GITHUB_TOKEN) {
+            headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+          }
+          const repoRes = await axios.get(
+            `https://api.github.com/repos/${encodeURIComponent(githubInfo.owner)}/${encodeURIComponent(githubInfo.repo)}`,
+            { headers }
+          );
+          
+          repositoryCreatedAt = repoRes.data.created_at;
+          lastPushAt = repoRes.data.pushed_at;
+          defaultBranch = repoRes.data.default_branch || 'main';
+          openIssues = repoRes.data.open_issues_count || 0;
+          stars = repoRes.data.stargazers_count || 0;
+          forks = repoRes.data.forks_count || 0;
+          watchers = repoRes.data.watchers_count || repoRes.data.subscribers_count || 0;
+          primaryLanguage = repoRes.data.language || '';
+          license = repoRes.data.license?.name || repoRes.data.license?.spdx_id || '';
+          ownerAvatar = repoRes.data.owner?.avatar_url || '';
+          ownerName = repoRes.data.owner?.login || '';
+
+          fetchedStats = {
+            stars: stars,
+            forks: forks,
+            openIssues: openIssues,
+            watchers: watchers,
+            defaultBranch: defaultBranch,
+            lastUpdated: repoRes.data.updated_at
+          };
+
+          // Phase 3I: deploy link from homepage
+          if (repoRes.data.homepage) {
+            fetchedDeploymentUrl = repoRes.data.homepage;
+          }
+
+          // Fetch latest commit
+          try {
+            const commitsRes = await axios.get(
+              `https://api.github.com/repos/${encodeURIComponent(githubInfo.owner)}/${encodeURIComponent(githubInfo.repo)}/commits`,
+              { headers }
+            );
+            if (commitsRes.data && commitsRes.data.length > 0) {
+              const latestCommit = commitsRes.data[0];
+              latestCommitDate = latestCommit.commit?.author?.date || latestCommit.commit?.committer?.date || null;
+              latestCommitMessage = latestCommit.commit?.message || '';
+              latestCommitSha = latestCommit.sha || '';
+            }
+          } catch (commitErr) {
+            console.error('Failed to auto-fetch commits during creation:', commitErr.message);
+          }
+
+          // Phase 3H: fetch releases
+          try {
+            const releasesRes = await axios.get(
+              `https://api.github.com/repos/${encodeURIComponent(githubInfo.owner)}/${encodeURIComponent(githubInfo.repo)}/releases`,
+              { headers }
+            );
+            if (releasesRes.data && releasesRes.data.length > 0) {
+              fetchedRelease = {
+                tagName: releasesRes.data[0].tag_name,
+                name: releasesRes.data[0].name || releasesRes.data[0].tag_name,
+                publishedAt: releasesRes.data[0].published_at,
+                htmlUrl: releasesRes.data[0].html_url
+              };
+            }
+          } catch (relErr) {
+            console.error('Failed to auto-fetch releases during creation:', relErr.message);
+          }
+
+        } catch (err) {
+          console.error('Failed to auto-fetch stats during creation:', err.message);
+        }
       }
     }
 
@@ -132,7 +229,7 @@ exports.createProject = async (req, res, next) => {
       figmaUrl,
       apiDocUrl,
       postmanUrl,
-      deploymentUrl,
+      deploymentUrl: deploymentUrl || fetchedDeploymentUrl,
       startDate,
       deadline,
       reminderToggle,
@@ -140,6 +237,22 @@ exports.createProject = async (req, res, next) => {
       teamMembers,
       status,
       readme,
+      githubStats: req.body.githubStats || fetchedStats,
+      githubRelease: req.body.githubRelease || fetchedRelease,
+      repositoryCreatedAt,
+      lastPushAt,
+      defaultBranch,
+      openIssues,
+      stars,
+      forks,
+      watchers,
+      primaryLanguage,
+      license,
+      ownerAvatar,
+      ownerName,
+      latestCommitDate,
+      latestCommitMessage,
+      latestCommitSha,
       owner: req.user._id // Automatically assign owner from authenticated user
     });
 
@@ -481,30 +594,66 @@ exports.getGithubRepoInfo = async (req, res, next) => {
       headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
     }
 
-    const response = await axios.get(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`, { headers });
-    const data = response.data;
+    let repoData = {};
+    let languages = {};
+    let contributors = [];
+
+    try {
+      const repoRes = await axios.get(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`, { headers });
+      repoData = repoRes.data;
+    } catch (err) {
+      console.error('Error fetching basic repo info:', err.message);
+      return res.status(err.response?.status || 500).json({
+        success: false,
+        message: err.response?.data?.message || 'Failed to fetch repository details from GitHub'
+      });
+    }
+
+    try {
+      const langRes = await axios.get(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/languages`, { headers });
+      languages = langRes.data || {};
+    } catch (err) {
+      console.error('Error fetching repo languages:', err.message);
+    }
+
+    try {
+      const contribRes = await axios.get(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contributors`, { headers });
+      contributors = (contribRes.data || []).map(c => ({
+        login: c.login,
+        avatar_url: c.avatar_url,
+        html_url: c.html_url,
+        contributions: c.contributions
+      }));
+    } catch (err) {
+      console.error('Error fetching repo contributors:', err.message);
+    }
 
     return res.status(200).json({
       success: true,
       data: {
-        name: data.name,
-        description: data.description || '',
-        homepage: data.homepage || '',
-        language: data.language || '',
-        visibility: data.private ? 'private' : 'public',
-        stars: data.stargazers_count,
-        forks: data.forks_count,
-        topics: data.topics || [],
-        createdAt: data.created_at,
-        updatedAt: data.updated_at,
-        htmlUrl: data.html_url
+        name: repoData.name,
+        description: repoData.description || '',
+        homepage: repoData.homepage || '',
+        language: repoData.language || '',
+        visibility: repoData.private ? 'private' : 'public',
+        stars: repoData.stargazers_count || 0,
+        forks: repoData.forks_count || 0,
+        watchers: repoData.watchers_count || repoData.subscribers_count || 0,
+        openIssues: repoData.open_issues_count || 0,
+        defaultBranch: repoData.default_branch || 'main',
+        topics: repoData.topics || [],
+        createdAt: repoData.created_at,
+        updatedAt: repoData.updated_at,
+        htmlUrl: repoData.html_url,
+        languages,
+        contributors
       }
     });
   } catch (error) {
     console.error('Error fetching github repo info:', error.message);
-    return res.status(error.response?.status || 500).json({
+    return res.status(500).json({
       success: false,
-      message: error.response?.data?.message || 'Failed to fetch repository details from GitHub'
+      message: 'Failed to fetch repository details from GitHub'
     });
   }
 };
