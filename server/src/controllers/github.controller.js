@@ -96,6 +96,14 @@ exports.getRepository = async (req, res, next) => {
       console.warn('Languages not available for this repository:', e.message);
     }
 
+    // Detect frameworks/technologies
+    let detectedTechnologies = [];
+    try {
+      detectedTechnologies = await githubService.detectFrameworks(owner, repo, repoData.homepage);
+    } catch (e) {
+      console.warn('Framework detection not available:', e.message);
+    }
+
     // Fetch contributors (Phase 3F)
     let contributors = [];
     try {
@@ -128,7 +136,8 @@ exports.getRepository = async (req, res, next) => {
         stats,
         latestRelease, // Phase 3H: Releases
         languages,
-        contributors
+        contributors,
+        detectedTechnologies
       }
     });
   } catch (error) {

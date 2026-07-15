@@ -2,6 +2,7 @@ const Project = require('../models/Project');
 const axios = require('axios');
 const User = require('../models/User');
 const TeamMember = require('../models/TeamMember');
+const githubService = require('../services/github/github.service');
 
 function parseGithubUrl(url) {
   if (!url) return null;
@@ -101,7 +102,8 @@ exports.createProject = async (req, res, next) => {
         message: 'Validation Error: Tech stack must be an array containing at least one technology'
       });
     }
-    if (!deadline) {
+    const isCompleted = status === 'Completed' || status === 'COMPLETED';
+    if (!isCompleted && !deadline) {
       return res.status(400).json({
         success: false,
         message: 'Validation Error: Project deadline date is required'
@@ -214,6 +216,14 @@ exports.createProject = async (req, res, next) => {
     }
 
     // Instantiating the Project document using the data
+    const resolvedStartDate = (isCompleted && repositoryCreatedAt) 
+      ? repositoryCreatedAt 
+      : (startDate && startDate.trim() !== '' ? new Date(startDate) : undefined);
+      
+    const resolvedDeadline = (isCompleted && (latestCommitDate || lastPushAt))
+      ? (latestCommitDate || lastPushAt)
+      : (deadline && deadline.trim() !== '' ? new Date(deadline) : undefined);
+
     const newProject = new Project({
       name,
       description,
@@ -230,8 +240,8 @@ exports.createProject = async (req, res, next) => {
       apiDocUrl,
       postmanUrl,
       deploymentUrl: deploymentUrl || fetchedDeploymentUrl,
-      startDate,
-      deadline,
+      startDate: resolvedStartDate,
+      deadline: resolvedDeadline,
       reminderToggle,
       reminderDaysBefore,
       teamMembers,
@@ -628,6 +638,14 @@ exports.getGithubRepoInfo = async (req, res, next) => {
       console.error('Error fetching repo contributors:', err.message);
     }
 
+    // Detect frameworks/technologies
+    let detectedTechnologies = [];
+    try {
+      detectedTechnologies = await githubService.detectFrameworks(owner, repo, repoData.homepage);
+    } catch (e) {
+      console.warn('Framework detection not available:', e.message);
+    }
+
     return res.status(200).json({
       success: true,
       data: {
@@ -646,7 +664,8 @@ exports.getGithubRepoInfo = async (req, res, next) => {
         updatedAt: repoData.updated_at,
         htmlUrl: repoData.html_url,
         languages,
-        contributors
+        contributors,
+        detectedTechnologies
       }
     });
   } catch (error) {

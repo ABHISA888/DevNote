@@ -115,9 +115,18 @@ const ProjectSchema = new mongoose.Schema(
     },
     deadline: {
       type: Date,
-      required: [true, 'Project deadline/target date is required'],
+      required: [
+        function() {
+          return this.status !== 'Completed' && this.status !== 'COMPLETED';
+        },
+        'Project deadline/target date is required'
+      ],
       validate: {
         validator: function (value) {
+          if (this.status === 'Completed' || this.status === 'COMPLETED') {
+            return true;
+          }
+          if (!value) return true;
           // If startDate exists, check if deadline is on or after startDate
           if (this.startDate) {
             return value >= this.startDate;
