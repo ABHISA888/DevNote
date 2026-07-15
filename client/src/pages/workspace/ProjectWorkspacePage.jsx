@@ -25,6 +25,7 @@ import HealthScoreCard from '../../components/workspace/HealthScoreCard';
 import TimelineAlertsCard from '../../components/workspace/TimelineAlertsCard';
 import ConnectedResourcesCard from '../../components/workspace/ConnectedResourcesCard';
 import GithubStatsCard from '../../components/workspace/GithubStatsCard';
+import GithubTimelineCard from '../../components/workspace/GithubTimelineCard';
 import TechnologyStackCard from '../../components/workspace/TechnologyStackCard';
 import TeamMembersCard from '../../components/workspace/TeamMembersCard';
 
@@ -456,6 +457,7 @@ export default function ProjectWorkspacePage() {
                   release={project.githubRelease}
                   githubUrl={project.githubUrl}
                 />
+                <GithubTimelineCard project={project} />
                 <TechnologyStackCard stack={techStack} />
                 <TeamMembersCard
                   projectId={projectId}

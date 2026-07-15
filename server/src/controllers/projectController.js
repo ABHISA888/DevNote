@@ -114,6 +114,22 @@ exports.createProject = async (req, res, next) => {
     let fetchedDeploymentUrl = '';
     let fetchedRelease = null;
 
+    let repositoryCreatedAt = null;
+    let lastPushAt = null;
+    let defaultBranch = 'main';
+    let openIssues = 0;
+    let stars = 0;
+    let forks = 0;
+    let watchers = 0;
+    let primaryLanguage = '';
+    let license = '';
+    let ownerAvatar = '';
+    let ownerName = '';
+
+    let latestCommitDate = null;
+    let latestCommitMessage = '';
+    let latestCommitSha = '';
+
     if (githubUrl) {
       const githubInfo = parseGithubUrl(githubUrl);
       if (githubInfo) {
@@ -130,18 +146,47 @@ exports.createProject = async (req, res, next) => {
             `https://api.github.com/repos/${encodeURIComponent(githubInfo.owner)}/${encodeURIComponent(githubInfo.repo)}`,
             { headers }
           );
+          
+          repositoryCreatedAt = repoRes.data.created_at;
+          lastPushAt = repoRes.data.pushed_at;
+          defaultBranch = repoRes.data.default_branch || 'main';
+          openIssues = repoRes.data.open_issues_count || 0;
+          stars = repoRes.data.stargazers_count || 0;
+          forks = repoRes.data.forks_count || 0;
+          watchers = repoRes.data.watchers_count || repoRes.data.subscribers_count || 0;
+          primaryLanguage = repoRes.data.language || '';
+          license = repoRes.data.license?.name || repoRes.data.license?.spdx_id || '';
+          ownerAvatar = repoRes.data.owner?.avatar_url || '';
+          ownerName = repoRes.data.owner?.login || '';
+
           fetchedStats = {
-            stars: repoRes.data.stargazers_count || 0,
-            forks: repoRes.data.forks_count || 0,
-            openIssues: repoRes.data.open_issues_count || 0,
-            watchers: repoRes.data.watchers_count || repoRes.data.subscribers_count || 0,
-            defaultBranch: repoRes.data.default_branch || 'main',
+            stars: stars,
+            forks: forks,
+            openIssues: openIssues,
+            watchers: watchers,
+            defaultBranch: defaultBranch,
             lastUpdated: repoRes.data.updated_at
           };
 
           // Phase 3I: deploy link from homepage
           if (repoRes.data.homepage) {
             fetchedDeploymentUrl = repoRes.data.homepage;
+          }
+
+          // Fetch latest commit
+          try {
+            const commitsRes = await axios.get(
+              `https://api.github.com/repos/${encodeURIComponent(githubInfo.owner)}/${encodeURIComponent(githubInfo.repo)}/commits`,
+              { headers }
+            );
+            if (commitsRes.data && commitsRes.data.length > 0) {
+              const latestCommit = commitsRes.data[0];
+              latestCommitDate = latestCommit.commit?.author?.date || latestCommit.commit?.committer?.date || null;
+              latestCommitMessage = latestCommit.commit?.message || '';
+              latestCommitSha = latestCommit.sha || '';
+            }
+          } catch (commitErr) {
+            console.error('Failed to auto-fetch commits during creation:', commitErr.message);
           }
 
           // Phase 3H: fetch releases
@@ -194,6 +239,20 @@ exports.createProject = async (req, res, next) => {
       readme,
       githubStats: req.body.githubStats || fetchedStats,
       githubRelease: req.body.githubRelease || fetchedRelease,
+      repositoryCreatedAt,
+      lastPushAt,
+      defaultBranch,
+      openIssues,
+      stars,
+      forks,
+      watchers,
+      primaryLanguage,
+      license,
+      ownerAvatar,
+      ownerName,
+      latestCommitDate,
+      latestCommitMessage,
+      latestCommitSha,
       owner: req.user._id // Automatically assign owner from authenticated user
     });
 
