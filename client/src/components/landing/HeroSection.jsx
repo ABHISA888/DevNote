@@ -1,109 +1,15 @@
 import { Link } from 'react-router-dom';
-import { CheckCircle, Users, GitBranch } from 'lucide-react';
-
-/**
- * WHY THIS SECTION EXISTS:
- * The Hero is the most valuable real estate on any SaaS landing page.
- * Its job is to communicate the value proposition in under 5 seconds
- * and convert visitors into signups. Every word and pixel matters.
- *
- * LAYOUT DECISION (Two-column):
- * Left = message (what + why). Right = proof (what it looks like).
- * This pattern is used by Linear, Vercel, and Stripe because it lets
- * the visitor read the pitch while simultaneously seeing the product.
- *
- * REACT CONCEPT: Pure presentational component — no state, no side effects.
- * All it does is render JSX. This is the most common React component type.
- *
- * TAILWIND:
- * - `lg:grid-cols-2` splits to two columns only on large screens.
- * - `order-first/order-last` swaps column order on mobile.
- * - `bg-gradient-to-br` creates diagonal gradient backgrounds.
- */
-
-/* ── Dashboard card mock (right side illustration) ── */
-function DashboardCard() {
-  return (
-    <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-primary-100/50">
-      {/* Card header */}
-      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
-        <div className="flex gap-3">
-          <button className="text-xs font-semibold text-primary-600 border-b-2 border-primary-600 pb-1">
-            Workspaces
-          </button>
-          <button className="text-xs font-medium text-gray-400 pb-1">Tasks</button>
-          <button className="text-xs font-medium text-gray-400 pb-1">Docs</button>
-        </div>
-      </div>
-
-      {/* Active Projects header */}
-      <div className="flex items-center justify-between px-5 py-3">
-        <span className="text-xs font-semibold text-gray-600">Active Projects</span>
-        {/* Toggle */}
-        <div className="flex h-5 w-9 items-center rounded-full bg-primary-600 px-0.5">
-          <div className="h-4 w-4 rounded-full bg-white shadow-sm translate-x-4" />
-        </div>
-      </div>
-
-      {/* Project rows */}
-      <div className="space-y-1 px-5 pb-3">
-        {[
-          { name: 'Project A', progress: 72, color: 'bg-primary-500' },
-          { name: 'Project B', progress: 45, color: 'bg-violet-400' },
-        ].map((p) => (
-          <div key={p.name} className="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-2.5">
-            <div className={`h-2.5 w-2.5 rounded-full ${p.color}`} />
-            <span className="flex-1 text-xs font-medium text-gray-700">{p.name}</span>
-            <div className="h-1.5 w-16 overflow-hidden rounded-full bg-gray-200">
-              <div className={`h-full ${p.color} rounded-full`} style={{ width: `${p.progress}%` }} />
-            </div>
-            <span className="text-[10px] text-gray-400">{p.progress}%</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Divider */}
-      <div className="mx-5 border-t border-dashed border-gray-100" />
-
-      {/* Critical tasks */}
-      <div className="px-5 py-3">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-          Critical Tasks
-        </span>
-        <div className="mt-2 space-y-1.5">
-          {[
-            'Update API authentication before staging deploy',
-            'Update env variables for staging env',
-          ].map((task, i) => (
-            <div key={i} className="flex items-start gap-2 rounded-md bg-red-50 px-3 py-2">
-              <span className="mt-0.5 h-2 w-2 flex-shrink-0 rounded-full bg-red-400" />
-              <span className="text-[11px] text-gray-600 leading-tight">{task}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Stats badge */}
-      <div className="m-5 mt-2 flex items-center justify-between rounded-xl bg-gradient-to-r from-primary-50 to-violet-50 px-4 py-3">
-        <div>
-          <div className="text-xs text-gray-400">Team Velocity</div>
-          <div className="text-lg font-bold text-gray-800">+128%</div>
-        </div>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white text-xs font-bold shadow-lg shadow-primary-200">
-          ↑
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const stats = [
-  { icon: CheckCircle, label: '10k+ Users Contributed' },
-  { icon: GitBranch, label: 'Open Source Friendly' },
-  { icon: Users, label: 'Free for Students' },
-];
+import { Check } from 'lucide-react';
+import heroMockup from '../../assets/hero_mockup.png';
 
 export default function HeroSection() {
+  const trustBadges = [
+    'Free Forever',
+    'GitHub Integration',
+    'Team Collaboration',
+    'Modern Workspace'
+  ];
+
   return (
     <section className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24">
       {/* Subtle background gradient */}
@@ -115,51 +21,60 @@ export default function HeroSection() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
 
-          {/* ── Left: Copy ── */}
-          <div className="text-center lg:text-left">
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl lg:text-[3.5rem] lg:leading-[1.15]">
-              Plan. Build. Ship.
+          {/* ── Left: Value Prop Copy ── */}
+          <div className="text-center lg:text-left space-y-6">
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl lg:text-[3.25rem] lg:leading-[1.15]">
+              Your Complete <br />
+              <span className="bg-gradient-to-r from-primary-600 to-violet-600 bg-clip-text text-transparent">
+                Developer Workspace
+              </span>
             </h1>
 
-            <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-gray-500 lg:mx-0 lg:text-lg">
-              The ultimate high-performance workspace for developer teams.
-              Integrate your stack, manage complex tasks, and deploy at the
-              speed of thought.
+            <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-slate-500 lg:mx-0 lg:text-[1.05rem]">
+              Plan projects, collaborate with your team, organize notes, manage APIs,
+              store environment variables, and import GitHub repositories — all from one workspace.
             </p>
 
             {/* CTA buttons */}
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
               <Link
                 to="/signup"
-                className="inline-flex items-center justify-center rounded-lg bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-primary-200 transition hover:bg-primary-700"
+                className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary-600 to-violet-600 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-200 transition-all hover:opacity-95 hover:shadow-xl active:scale-[0.98]"
               >
-                Get Started Free
+                Get Started
               </Link>
-              <button
-                type="button"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+              <a
+                href="#features"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-7 py-3.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
               >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-100 text-gray-500">
-                  ▶
-                </span>
-                View Demo
-              </button>
+                Explore Features
+              </a>
             </div>
 
-            {/* Stat badges */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-              {stats.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-1.5 text-xs text-gray-400">
-                  <Icon size={13} className="text-primary-400" />
-                  <span>{label}</span>
+            {/* Trust Badges */}
+            <div className="mt-8 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-center gap-y-2 gap-x-5 lg:justify-start">
+              {trustBadges.map((badge) => (
+                <div key={badge} className="flex items-center gap-1.5 text-xs font-bold text-slate-600">
+                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-primary-50 text-primary-600">
+                    <Check size={10} strokeWidth={3} />
+                  </div>
+                  <span>{badge}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ── Right: Dashboard illustration ── */}
+          {/* ── Right: Premium Mockup Image ── */}
           <div className="flex justify-center lg:justify-end">
-            <DashboardCard />
+            <div className="relative group max-w-lg lg:max-w-none">
+              {/* Decorative Glow */}
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary-500 to-violet-600 opacity-20 blur-xl transition duration-500 group-hover:opacity-30" />
+              <img
+                src={heroMockup}
+                alt="DevNote Premium SaaS Mockup"
+                className="relative rounded-2xl border border-slate-200/80 bg-white shadow-2xl transition duration-500 group-hover:scale-[1.01]"
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -1,47 +1,39 @@
 import { Link } from 'react-router-dom';
-import { Github, Twitter, Linkedin } from 'lucide-react';
-
-/**
- * WHY THIS COMPONENT EXISTS:
- * The Footer is navigation infrastructure — it helps users who didn't convert
- * on the hero find the page they're looking for (pricing, docs, contact).
- * It also signals product maturity: a footer with real links tells visitors
- * this is a real product, not a side project.
- *
- * LAYOUT: Four-column grid on desktop (brand, product, resources, support).
- * On mobile it collapses to a single column. This is the standard SaaS footer
- * pattern used by Vercel, Linear, and Stripe.
- *
- * REACT CONCEPT: Rendering nested data structures.
- * The `columns` array contains objects with arrays inside them. We .map()
- * the outer array for columns, then .map() the inner `links` for list items.
- * This is "nested rendering" — a fundamental React pattern.
- */
+import { Github, Linkedin, Mail } from 'lucide-react';
 
 const columns = [
   {
     heading: 'Product',
-    links: ['Features', 'About', 'Blog', 'Pricing', 'Changelog'],
+    links: [
+      { label: 'Features', href: '#features' },
+      { label: 'Pricing', href: '#pricing' },
+      { label: 'About', href: '#about' }
+    ]
   },
   {
     heading: 'Resources',
-    links: ['Documentation', 'DevNotes', 'Guides'],
+    links: [
+      { label: 'GitHub Docs', href: 'https://docs.github.com' },
+      { label: 'Tailwind CSS', href: 'https://tailwindcss.com' }
+    ]
   },
   {
-    heading: 'Support',
-    links: ['Privacy', 'Contact', 'Login', 'Legal'],
-  },
+    heading: 'Contact',
+    links: [
+      { label: 'Support & Inquiries', href: 'mailto:abhinivesh@devnote.io' }
+    ]
+  }
 ];
 
 const socialLinks = [
-  { icon: Github, label: 'GitHub', href: '#' },
-  { icon: Twitter, label: 'Twitter', href: '#' },
-  { icon: Linkedin, label: 'LinkedIn', href: '#' },
+  { icon: Github, label: 'GitHub', href: 'https://github.com/ABHISA888/DevNote' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com' },
+  { icon: Mail, label: 'Email', href: 'mailto:abhinivesh@devnote.io' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-100 bg-white">
+    <footer className="border-t border-slate-100 bg-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 lg:grid-cols-4">
 
@@ -54,9 +46,8 @@ export default function Footer() {
               <span className="text-sm font-bold tracking-tight text-gray-900">DevNote</span>
             </Link>
 
-            <p className="mt-4 text-xs leading-relaxed text-gray-400">
-              The ultimate developer workspace. Organize your stack, manage complex tasks,
-              and ship faster with your team.
+            <p className="mt-4 text-xs leading-relaxed text-slate-400">
+              The complete developer workspace to plan projects, write notes, store environment variables, and sync with GitHub.
             </p>
 
             {/* Social icons */}
@@ -65,8 +56,10 @@ export default function Footer() {
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-400 transition hover:border-gray-300 hover:text-gray-600"
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-400 transition hover:border-slate-300 hover:text-slate-600 hover:bg-slate-50"
                 >
                   <Icon size={14} />
                 </a>
@@ -77,17 +70,17 @@ export default function Footer() {
           {/* Link columns */}
           {columns.map((col) => (
             <div key={col.heading}>
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-900">
+              <h3 className="mb-4 text-xs font-extrabold uppercase tracking-wider text-slate-800">
                 {col.heading}
               </h3>
               <ul className="space-y-3">
                 {col.links.map((link) => (
-                  <li key={link}>
+                  <li key={link.label}>
                     <a
-                      href="#"
-                      className="text-xs text-gray-500 transition hover:text-gray-900"
+                      href={link.href}
+                      className="text-xs font-semibold text-slate-500 transition hover:text-primary-600"
                     >
-                      {link}
+                      {link.label}
                     </a>
                   </li>
                 ))}
@@ -97,9 +90,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 border-t border-gray-100 pt-6 text-center">
-          <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} DevNote. All rights reserved.
+        <div className="mt-12 border-t border-slate-100 pt-6 text-center">
+          <p className="text-xs font-semibold text-slate-400">
+            © {new Date().getFullYear()} DevNote. Designed and built by Abhinivesh S. All rights reserved.
           </p>
         </div>
       </div>

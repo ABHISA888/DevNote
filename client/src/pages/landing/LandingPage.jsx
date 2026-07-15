@@ -22,7 +22,8 @@ import HeroSection from '../../components/landing/HeroSection';
 import FeaturesSection from '../../components/landing/FeaturesSection';
 import WorkflowSection from '../../components/landing/WorkflowSection';
 import EnvironmentSection from '../../components/landing/EnvironmentSection';
-import TestimonialsSection from '../../components/landing/TestimonialsSection';
+import PricingSection from '../../components/landing/PricingSection';
+import AboutSection from '../../components/landing/AboutSection';
 import CTASection from '../../components/landing/CTASection';
 import Footer from '../../components/landing/Footer';
 
@@ -35,7 +36,8 @@ export default function LandingPage() {
         <FeaturesSection />
         <WorkflowSection />
         <EnvironmentSection />
-        <TestimonialsSection />
+        <PricingSection />
+        <AboutSection />
         <CTASection />
       </main>
       <Footer />

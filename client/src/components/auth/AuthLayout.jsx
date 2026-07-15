@@ -1,4 +1,5 @@
-import { Shield, Check, Clock, Layers } from 'lucide-react';
+import { Shield } from 'lucide-react';
+import loginImg from '../../assets/login.png';
 
 /**
  * AuthLayout component
@@ -7,51 +8,22 @@ import { Shield, Check, Clock, Layers } from 'lucide-react';
  * Shared split-screen template for both Login and Signup screens.
  * Centralizes layout grids, responsiveness breakpoints, ambient glows,
  * trust badges, and footers.
- * 
- * DESIGN SPEC (Matching screenshot 2):
- * Left panel is light-themed (light slate background) and positioned higher up
- * (`justify-start pt-28`) with custom border boxes for icons.
  */
 export default function AuthLayout({ children }) {
   return (
     <div className="flex min-h-screen flex-col lg:flex-row bg-[#eef0f8]">
-      {/* ── LEFT PANEL: Value Proposition (Desktop Only) ── */}
-      <div className="hidden lg:flex flex-1 flex-col items-center justify-start pt-28 pb-16 bg-gradient-to-b from-[#f8f9fe] to-[#ecf0fc] text-slate-800 px-16 relative overflow-hidden">
+      {/* ── LEFT PANEL: Illustration (Desktop Only) ── */}
+      <div className="hidden lg:flex flex-1 items-center justify-center bg-gradient-to-b from-[#f8f9fe] to-[#ecf0fc] px-16 relative overflow-hidden">
         {/* Glow decoration */}
         <div className="absolute -left-20 top-1/4 h-80 w-80 rounded-full bg-primary-500/5 blur-3xl pointer-events-none" />
         <div className="absolute right-0 bottom-1/4 h-64 w-64 rounded-full bg-violet-500/5 blur-3xl pointer-events-none" />
 
-        <div className="max-w-md space-y-10 relative z-10 text-left">
-          {/* Header */}
-          <div className="space-y-4">
-            <h1 className="text-3xl font-extrabold tracking-tight text-primary-950">
-              Start Building Smarter.
-            </h1>
-            <p className="text-xs leading-relaxed text-slate-500 font-medium max-w-sm">
-              The unified workspace for engineering teams to organize architectural decisions,
-              track sprint tasks, and manage API documentation in one place.
-            </p>
-          </div>
-
-          {/* Features check list */}
-          <div className="space-y-5">
-            {[
-              { title: 'Organize every project', icon: Check },
-              { title: 'Track tasks & deadlines', icon: Clock },
-              { title: 'Store APIs & documentation', icon: Layers },
-            ].map((f) => {
-              const Icon = f.icon;
-              return (
-                <div key={f.title} className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-gray-100 shadow-sm text-primary-600">
-                    <Icon size={16} strokeWidth={2.5} />
-                  </div>
-                  <span className="text-xs font-semibold text-slate-600">{f.title}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <img
+          src={loginImg}
+          alt="DevNote Workspace Illustration"
+          className="w-full max-w-[460px] h-auto object-contain select-none rounded-2xl"
+          draggable="false"
+        />
       </div>
 
       {/* ── RIGHT PANEL: Active Card Context ── */}
