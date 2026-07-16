@@ -1,22 +1,14 @@
 import { useState } from 'react';
 import TaskHeader from './TaskHeader';
-import TaskStats from './TaskStats';
-import TaskFilters from './TaskFilters';
-import KanbanBoard from './KanbanBoard';
+import TaskStatistics from './TaskStatistics';
+import TaskTable from '../../tasks/TaskTable';
+import CreateTaskModal from '../../tasks/CreateTaskModal';
 import { BOARD_TASKS, TASK_STATS } from '../../../mock/tasks';
 
-/**
- * 🎓 TEACHING MOMENT: TasksTab.jsx
- * 
- * WHY THIS EXISTS:
- * This is the parent controller for the entire Tasks module inside the Project Workspace.
- * It holds the shared state (`tasks`, `searchQuery`, `activeView`) and passes data down to the board
- * components. When the backend is ready, this file will simply replace `BOARD_TASKS` with a `useQuery` hook.
- */
-export default function TasksTab() {
+export default function TasksTab({ project }) {
   const [tasks, setTasks] = useState(BOARD_TASKS);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeView, setActiveView] = useState('board');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Filter tasks based on search query
   const filteredTasks = tasks.filter((t) => 
@@ -27,26 +19,25 @@ export default function TasksTab() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      {/* Module Header Area */}
-      <TaskHeader />
-      <TaskStats stats={TASK_STATS} />
-      
-      {/* Interactive Filters */}
-      <TaskFilters 
-        activeView={activeView} 
-        onViewChange={setActiveView}
+      {/* Header Area with integrated controls */}
+      <TaskHeader 
+        projectName={project?.name || 'DevNote'}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        onNewTask={() => setIsModalOpen(true)}
       />
+
+      {/* Statistics Row */}
+      <TaskStatistics stats={TASK_STATS} />
       
-      {/* Board vs List View Rendering */}
-      {activeView === 'board' ? (
-        <KanbanBoard tasks={filteredTasks} />
-      ) : (
-        <div className="flex h-64 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-slate-50 text-slate-500 text-sm font-bold uppercase tracking-widest">
-          List View (Coming Soon)
-        </div>
-      )}
+      {/* List View Rendering */}
+      <TaskTable tasks={filteredTasks} />
+
+      {/* Create Task Modal */}
+      <CreateTaskModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 }

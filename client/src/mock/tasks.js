@@ -100,11 +100,10 @@ export const BOARD_TASKS = [
 
 export const TASK_STATS = [
   { id: 'total', label: 'Total Tasks', value: '24' },
-  { id: 'completed', label: 'Completed', value: '18', valueColor: 'text-primary-600' },
+  { id: 'todo', label: 'Todo', value: '5', valueColor: 'text-slate-600' },
   { id: 'inprogress', label: 'In Progress', value: '4', valueColor: 'text-primary-600' },
-  { id: 'overdue', label: 'Overdue', value: '2', valueColor: 'text-red-500' },
-  { id: 'high', label: 'High Priority', value: '6' },
-  { id: 'percent', label: '75% Done', isPercent: true }
+  { id: 'review', label: 'Review', value: '1', valueColor: 'text-purple-500' },
+  { id: 'completed', label: 'Completed', value: '14', valueColor: 'text-emerald-500' }
 ];
 
 export const PRODUCTIVITY_METRICS = {
