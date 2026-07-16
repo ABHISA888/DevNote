@@ -14,9 +14,9 @@ export default function TaskStats({ stats }) {
           className="flex flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 shadow-sm min-w-[100px] flex-1 sm:flex-none"
         >
           {stat.isPercent ? (
-            <div className="flex items-center gap-1.5">
-              <span className="text-xl font-extrabold text-slate-800">75%</span>
-              <span className="text-sm font-bold text-slate-500">Done</span>
+            <div className="flex flex-col items-center justify-center">
+              <span className="mb-1 text-xs font-bold text-slate-500 text-center">{stat.label}</span>
+              <span className="text-xl font-extrabold text-slate-800">{stat.value}</span>
             </div>
           ) : (
             <>

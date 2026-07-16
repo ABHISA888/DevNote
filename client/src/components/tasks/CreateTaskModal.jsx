@@ -240,15 +240,6 @@ export default function CreateTaskModal({ isOpen, onClose }) {
             </div>
           </div>
 
-          {/* Attachments */}
-          <div>
-            <label className="mb-1.5 block text-xs font-bold text-slate-700">Attachments</label>
-            <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 py-8 text-center transition hover:border-primary-300 hover:bg-primary-50/30 cursor-pointer">
-              <Upload size={28} className="text-primary-400" />
-              <p className="text-xs font-semibold text-slate-600">Click to upload or drag and drop</p>
-              <p className="text-[10px] text-slate-400">Max file size: 25MB (ZIP, PDF, PNG, JPG)</p>
-            </div>
-          </div>
         </div>
 
         {/* ── Footer ── */}

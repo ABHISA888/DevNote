@@ -41,20 +41,10 @@ import ReadmeTab from '../../components/workspace/readme/ReadmeTab';
 // API Service
 import { projectService } from '../../services/api/projectService';
 
+// Tasks Tab
+import TasksTab from '../../components/workspace/tasks/TasksTab';
+
 const COMING_SOON_TABS = {
-  tasks: {
-    title: 'Tasks',
-    description: 'Plan, assign, and track project work from inside your DevNote workspace.',
-    icon: ClipboardList,
-    features: [
-      'Create Tasks',
-      'Assign Members',
-      'Priority Levels',
-      'Due Dates',
-      'Kanban Board',
-      'Progress Tracking',
-    ],
-  },
   apis: {
     title: 'APIs',
     description: 'Document endpoints, examples, authentication, and test flows for your project APIs.',
@@ -473,6 +463,9 @@ export default function ProjectWorkspacePage() {
             </div>
           </div>
         )}
+
+        {/* ── Tasks Tab Content ── */}
+        {activeTab === 'tasks' && <TasksTab project={project} />}
 
         {/* ── Notes Tab Content ── */}
         {activeTab === 'notes' && <NotesTab project={project} />}

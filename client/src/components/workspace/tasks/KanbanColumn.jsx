@@ -13,7 +13,7 @@ import TaskCard from './TaskCard';
  */
 export default function KanbanColumn({ id, title, colorClass, tasks, onAddTask }) {
   return (
-    <div className="flex flex-col w-[300px] shrink-0">
+    <div className="flex flex-col w-full">
       {/* Column Header */}
       <div className="flex items-center justify-between mb-4 px-1">
         <div className="flex items-center gap-2">
@@ -44,7 +44,7 @@ export default function KanbanColumn({ id, title, colorClass, tasks, onAddTask }
         ))}
         {tasks.length === 0 && (
           <div className="flex h-24 items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-            Drop tasks here
+            No tasks yet.
           </div>
         )}
       </div>
