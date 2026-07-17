@@ -9,7 +9,6 @@ import {
   LayoutDashboard,
   CheckSquare,
   FileText,
-  Code2,
   Database,
   Settings,
   Target
@@ -20,9 +19,6 @@ export const SIDEBAR_NAV = [
   { id: 'projects', label: 'Projects', icon: FolderGit2, path: '/projects' },
   { id: 'tasks', label: 'Tasks', icon: CheckSquare, path: '/tasks' },
   { id: 'notes', label: 'Notes', icon: FileText, path: '/notes' },
-  { id: 'apis', label: 'APIs', icon: Code2, path: '/apis' },
-  { id: 'env', label: 'Environment Variables', icon: Database, path: '/env' },
-  { id: 'favorites', label: 'Favorites', icon: Star, path: '/favorites' },
   { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
