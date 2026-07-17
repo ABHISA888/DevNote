@@ -18,6 +18,7 @@ import SettingsPage from '../pages/settings/SettingsPage';
 import NotificationsPage from '../pages/notifications/NotificationsPage';
 import ProjectsPage from '../pages/projects/ProjectsPage';
 import TasksPage from '../pages/tasks/TasksPage';
+import MyNotesPage from '../components/notes/MyNotesPage';
 
 // ─── Project Workspace (full-screen, own chrome) ──────────────────────────────
 import ProjectWorkspacePage from '../pages/workspace/ProjectWorkspacePage';
@@ -50,10 +51,9 @@ export default function AppRoutes() {
           {/* ── Feature Modules ── */}
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/notes" element={<MyNotesPage />} />
 
           {/* ── Placeholder routes ── */}
-          <Route path="/notes" element={<div className="p-8 text-slate-500 font-semibold">Notes — Coming Soon</div>} />
-          <Route path="/apis" element={<div className="p-8 text-slate-500 font-semibold">APIs — Coming Soon</div>} />
           <Route path="/env" element={<div className="p-8 text-slate-500 font-semibold">Environment Variables — Coming Soon</div>} />
           <Route path="/favorites" element={<div className="p-8 text-slate-500 font-semibold">Favorites — Coming Soon</div>} />
         </Route>

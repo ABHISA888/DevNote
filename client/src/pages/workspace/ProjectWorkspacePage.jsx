@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Braces, ClipboardList, Settings, CheckCircle2, Rocket } from 'lucide-react';
+import { ClipboardList, Settings, CheckCircle2, Rocket } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
@@ -44,20 +44,10 @@ import { projectService } from '../../services/api/projectService';
 // Tasks Tab
 import TasksTab from '../../components/workspace/tasks/TasksTab';
 
+// API Documentation Tab
+import APIPage from '../../components/workspace/api/APIPage';
+
 const COMING_SOON_TABS = {
-  apis: {
-    title: 'APIs',
-    description: 'Document endpoints, examples, authentication, and test flows for your project APIs.',
-    icon: Braces,
-    features: [
-      'API Collection',
-      'Endpoint Documentation',
-      'Request & Response Examples',
-      'Authentication Guide',
-      'Import Postman Collection',
-      'API Testing',
-    ],
-  },
   settings: {
     title: 'Settings',
     description: 'Manage project-level preferences, permissions, notifications, and lifecycle actions.',
@@ -475,6 +465,9 @@ export default function ProjectWorkspacePage() {
 
         {/* ── Environment Tab Content ── */}
         {activeTab === 'environment' && <EnvironmentTab project={project} />}
+
+        {/* ── API Documentation Tab ── */}
+        {activeTab === 'apis' && <APIPage />}
 
         {/* ── Coming Soon Tabs ── */}
         {comingSoonTab && (
