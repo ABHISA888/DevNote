@@ -25,7 +25,8 @@ export const BOARD_TASKS = [
     subtasksCompleted: 0,
     subtasksTotal: 3,
     dueDate: 'Oct 29, 2023',
-    progress: 30
+    progress: 30,
+    projectName: 'DevNote'
   },
   {
     id: 'TSK-102',
@@ -42,7 +43,8 @@ export const BOARD_TASKS = [
     subtasksCompleted: 0,
     subtasksTotal: 0,
     dueDate: 'Due Today',
-    progress: 10
+    progress: 10,
+    projectName: 'Portfolio'
   },
   {
     id: 'TSK-103',
@@ -59,7 +61,8 @@ export const BOARD_TASKS = [
     subtasksCompleted: 3,
     subtasksTotal: 5,
     dueDate: 'Oct 28, 2023',
-    progress: 60
+    progress: 60,
+    projectName: 'AI Workspace'
   },
   {
     id: 'TSK-104',
@@ -77,7 +80,8 @@ export const BOARD_TASKS = [
     subtasksTotal: 1,
     dueDate: 'Oct 27, 2023',
     progress: 90,
-    badgeText: '2 Pending'
+    badgeText: '2 Pending',
+    projectName: 'College ERP'
   },
   {
     id: 'TSK-105',
@@ -94,7 +98,8 @@ export const BOARD_TASKS = [
     subtasksCompleted: 4,
     subtasksTotal: 4,
     dueDate: 'Finished Oct 12',
-    progress: 100
+    progress: 100,
+    projectName: 'E-Commerce'
   }
 ];
 
