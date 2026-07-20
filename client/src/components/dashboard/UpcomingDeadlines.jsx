@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import DeadlineCard from './DeadlineCard';
 
 export default function UpcomingDeadlines({ projects = [] }) {
@@ -11,9 +12,9 @@ export default function UpcomingDeadlines({ projects = [] }) {
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-base font-bold text-slate-800">Upcoming Deadlines</h2>
-        <a href="/projects" className="text-xs font-bold text-primary-600 hover:text-primary-700">
+        <Link to="/projects" className="text-xs font-bold text-primary-600 hover:text-primary-700">
           View all
-        </a>
+        </Link>
       </div>
       
       {upcomingDeadlines.length === 0 ? (
@@ -48,7 +49,8 @@ export default function UpcomingDeadlines({ projects = [] }) {
 
             return (
               <DeadlineCard 
-                key={p._id} 
+                key={p._id || p.id} 
+                id={p._id || p.id}
                 title={p.name}
                 timeLabel={timeLabel}
                 timeColor={timeColor}

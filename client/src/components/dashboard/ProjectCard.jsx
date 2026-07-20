@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * 🎓 TEACHING MOMENT: ProjectCard.jsx
@@ -7,7 +8,9 @@ import React from 'react';
  * Renders rich project entities. It handles its own internal layout (thumbnail top, 
  * content middle, footer actions) so the parent grid only has to pass data.
  */
-export default function ProjectCard({ title, description, badges, thumbnailColor }) {
+export default function ProjectCard({ id, title, description, badges, thumbnailColor }) {
+  const navigate = useNavigate();
+
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition hover:shadow-lg hover:border-primary-100">
       
@@ -42,7 +45,10 @@ export default function ProjectCard({ title, description, badges, thumbnailColor
         </div>
 
         {/* Action Footer */}
-        <button className="mt-5 w-full rounded-lg bg-primary-50 py-2.5 text-sm font-bold text-primary-600 transition hover:bg-primary-100 hover:text-primary-700">
+        <button 
+          onClick={() => id && navigate(`/project/${id}`)}
+          className="mt-5 w-full rounded-lg bg-primary-50 py-2.5 text-sm font-bold text-primary-600 transition hover:bg-primary-100 hover:text-primary-700"
+        >
           Open Project
         </button>
       </div>

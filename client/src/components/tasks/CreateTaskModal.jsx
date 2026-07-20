@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, Pencil, Calendar, Clock, Upload, UserPlus } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { TASK_PROJECTS } from '../../constants/tasksData';
 
 /**
@@ -253,6 +254,10 @@ export default function CreateTaskModal({ isOpen, onClose }) {
           </button>
           <button
             type="button"
+            onClick={() => {
+              toast.success('Task created successfully');
+              onClose();
+            }}
             className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700 active:scale-95"
           >
             Create Task

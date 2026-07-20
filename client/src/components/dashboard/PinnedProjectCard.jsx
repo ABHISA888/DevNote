@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 /**
  * 🎓 TEACHING MOMENT: PinnedProjectCard.jsx
  * 
@@ -5,9 +7,14 @@
  * Displays priority projects at a glance in the right sidebar column.
  * It's small, dense, and uses tech badges for quick recognition.
  */
-export default function PinnedProjectCard({ title, badges, progressPercent }) {
+export default function PinnedProjectCard({ id, title, badges, progressPercent }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="group rounded-xl border border-gray-100 bg-white p-4 transition hover:border-primary-200 hover:shadow-md">
+    <div 
+      onClick={() => id && navigate(`/project/${id}`)}
+      className="group rounded-xl border border-gray-100 bg-white p-4 transition hover:border-primary-200 hover:shadow-md cursor-pointer"
+    >
       <div className="flex items-start justify-between">
         <h4 className="text-sm font-bold text-slate-800">{title}</h4>
         
