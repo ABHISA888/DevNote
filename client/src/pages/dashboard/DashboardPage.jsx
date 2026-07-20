@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import WelcomeSection from '../../components/dashboard/WelcomeSection';
 import StatsGrid from '../../components/dashboard/StatsGrid';
 import QuickActions from '../../components/dashboard/QuickActions';
@@ -9,14 +11,23 @@ import ProductivityCard from '../../components/dashboard/ProductivityCard';
 import RecentProjects from '../../components/dashboard/RecentProjects';
 import Loader from '../../components/common/Loader';
 import ErrorState from '../../components/common/ErrorState';
+import CreateProjectWizard from '../../components/projects/wizard/CreateProjectWizard';
+import CreateTaskModal from '../../components/tasks/CreateTaskModal';
+import AddApiModal from '../../components/workspace/api/AddApiModal';
 import { useAuth } from '../../context/AuthContext';
 import { projectService } from '../../services/api/projectService';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Modal states
+  const [isProjectWizardOpen, setIsProjectWizardOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [isApiModalOpen, setIsApiModalOpen] = useState(false);
 
   const fetchDashboardData = async () => {
     try {
@@ -103,7 +114,13 @@ export default function DashboardPage() {
           <StatsGrid projects={projects} />
           
           {/* ── Action Bar ── */}
-          <QuickActions />
+          <QuickActions 
+            onNewProject={() => setIsProjectWizardOpen(true)}
+            onAddTask={() => setIsTaskModalOpen(true)}
+            onCreateNote={() => navigate('/notes')}
+            onSaveApi={() => setIsApiModalOpen(true)}
+            onImportGithub={() => setIsProjectWizardOpen(true)}
+          />
           
           {/* ── Main Dashboard Split Area ── */}
           <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -130,6 +147,30 @@ export default function DashboardPage() {
           <RecentProjects projects={projects} />
         </>
       )}
+
+      {/* ── Modals ── */}
+      <CreateProjectWizard 
+        isOpen={isProjectWizardOpen} 
+        onClose={() => setIsProjectWizardOpen(false)} 
+        onProjectCreated={() => {
+          fetchDashboardData();
+          setIsProjectWizardOpen(false);
+        }} 
+      />
+
+      <CreateTaskModal 
+        isOpen={isTaskModalOpen} 
+        onClose={() => setIsTaskModalOpen(false)} 
+      />
+
+      <AddApiModal 
+        open={isApiModalOpen} 
+        onClose={() => setIsApiModalOpen(false)} 
+        onSave={() => {
+          toast.success('API endpoint saved successfully');
+          setIsApiModalOpen(false);
+        }} 
+      />
       
     </div>
   );

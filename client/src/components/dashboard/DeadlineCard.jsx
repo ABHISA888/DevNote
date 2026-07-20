@@ -1,4 +1,5 @@
 import { Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * 🎓 TEACHING MOMENT: DeadlineCard.jsx
@@ -8,6 +9,7 @@ import { Clock } from 'lucide-react';
  * Includes a progress bar visualization.
  */
 export default function DeadlineCard({ 
+  id,
   title, 
   timeLabel, 
   timeColor, 
@@ -15,8 +17,13 @@ export default function DeadlineCard({
   iconBg, 
   iconColor 
 }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-4 hover:shadow-md transition">
+    <div 
+      onClick={() => id && navigate(`/project/${id}`)}
+      className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-4 hover:shadow-md transition cursor-pointer"
+    >
       {/* Left Icon Badge */}
       <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconBg} ${iconColor}`}>
         <Clock size={20} strokeWidth={2.5} />

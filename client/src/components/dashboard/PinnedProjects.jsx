@@ -36,7 +36,8 @@ export default function PinnedProjects({ projects = [] }) {
         ) : (
           pinnedList.map((project) => (
             <PinnedProjectCard 
-              key={project._id} 
+              key={project._id || project.id}
+              id={project._id || project.id}
               title={project.name}
               badges={(project.techStack || []).slice(0, 2)} // Show max 2 badges in dense layout
               progressPercent={getProgress(project.status)}

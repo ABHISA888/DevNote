@@ -31,7 +31,8 @@ export default function RecentProjects({ projects = [] }) {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {recentList.map((project, index) => (
             <ProjectCard 
-              key={project._id}
+              key={project._id || project.id}
+              id={project._id || project.id}
               title={project.name}
               description={project.description}
               badges={project.techStack || []}
