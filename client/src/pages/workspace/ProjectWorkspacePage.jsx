@@ -47,6 +47,11 @@ import TasksTab from '../../components/workspace/tasks/TasksTab';
 // API Documentation Tab
 import APIPage from '../../components/workspace/api/APIPage';
 
+// Members Modal
+import MembersModal from '../../components/workspace/MembersModal';
+import EditProjectModal from '../../components/workspace/EditProjectModal';
+import DeleteProjectModal from '../../components/workspace/DeleteProjectModal';
+
 const COMING_SOON_TABS = {
   settings: {
     title: 'Settings',
@@ -83,6 +88,9 @@ export default function ProjectWorkspacePage() {
   const [error, setError] = useState(null);
   const [teamMembers, setTeamMembers] = useState([]);
   const [teamLoading, setTeamLoading] = useState(true);
+  const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
+  const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
 
   const comingSoonTab = COMING_SOON_TABS[activeTab];
 
@@ -183,6 +191,16 @@ export default function ProjectWorkspacePage() {
       setProject(project);
       toast.error('An error occurred while updating favorite status');
     }
+  };
+
+  const handleEditProject = (updatedData) => {
+    setProject(prev => ({ ...prev, ...updatedData }));
+    toast.success('Project updated successfully.');
+  };
+
+  const handleDeleteProject = () => {
+    toast.success('Project deleted successfully.');
+    navigate('/projects');
   };
 
   if (loading) {
@@ -389,6 +407,9 @@ export default function ProjectWorkspacePage() {
             description={project.description}
             isFavorite={project.isFavorite}
             onFavoriteToggle={handleFavoriteToggle}
+            onOpenMembers={() => setIsMembersModalOpen(true)}
+            onOpenEditProject={() => setIsEditProjectModalOpen(true)}
+            onOpenDeleteProject={() => setIsDeleteProjectModalOpen(true)}
           />
           <ProjectStats stats={getProjectStats(project)} />
           <WorkspaceTabs activeTab={activeTab} onTabChange={setActiveTab} />
@@ -483,6 +504,27 @@ export default function ProjectWorkspacePage() {
 
       {/* ── Footer ── */}
       <WorkspaceFooter />
+
+      {/* ── Members Modal ── */}
+      <MembersModal 
+        isOpen={isMembersModalOpen} 
+        onClose={() => setIsMembersModalOpen(false)} 
+      />
+
+      {/* ── Edit Project Modal ── */}
+      <EditProjectModal
+        isOpen={isEditProjectModalOpen}
+        onClose={() => setIsEditProjectModalOpen(false)}
+        project={project}
+        onSave={handleEditProject}
+      />
+
+      {/* ── Delete Project Modal ── */}
+      <DeleteProjectModal
+        isOpen={isDeleteProjectModalOpen}
+        onClose={() => setIsDeleteProjectModalOpen(false)}
+        onConfirm={handleDeleteProject}
+      />
     </div>
   );
 }
