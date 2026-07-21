@@ -1,181 +1,145 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
-import { SearchX } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
-
-import TaskHeader     from './TaskHeader';
+import TaskHeader from './TaskHeader';
 import TaskStatistics from './TaskStatistics';
 import TaskTable      from '../../tasks/TaskTable';
 import CreateTaskModal from '../../tasks/CreateTaskModal';
-import EditTaskModal   from '../../tasks/EditTaskModal';
-import DeleteTaskModal from '../../tasks/DeleteTaskModal';
+import { taskService } from '../../../services/api/taskService';
 
-import { BOARD_TASKS } from '../../../mock/tasks';
-
-// Auto-progress by status
-const STATUS_PROGRESS = {
-  'TODO':        0,
-  'IN PROGRESS': 50,
-  'REVIEW':      80,
-  'COMPLETED':   100,
-};
-
+/**
+ * 🎓 TEACHING MOMENT: TasksTab.jsx
+ * Unified, database-driven container for Task Management in DevNote.
+ */
 export default function TasksTab({ project }) {
-  const isGlobal = !project;
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
 
-  const [tasks,           setTasks]           = useState(BOARD_TASKS);
-  const [searchQuery,     setSearchQuery]     = useState('');
-  const [selectedProject, setSelectedProject] = useState('All Projects');
+  // Fetch tasks from MongoDB backend
+  const fetchTasks = useCallback(async () => {
+    setLoading(true);
+    try {
+      let data = [];
+      if (project?._id || project?.id) {
+        const res = await taskService.getProjectTasks(project._id || project.id);
+        data = res.data || res.tasks || [];
+      } else {
+        const res = await taskService.getTasks();
+        data = res.data || res.tasks || [];
+      }
+      setTasks(data);
+    } catch (err) {
+      console.error('Failed to fetch tasks from backend:', err);
+      toast.error('Failed to load tasks from server.');
+    } finally {
+      setLoading(false);
+    }
+  }, [project]);
 
-  // Modal states
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editTask,     setEditTask]     = useState(null);  // task object
-  const [deleteTask,   setDeleteTask]   = useState(null);  // task object
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
 
-  // ─── Filtered tasks ───────────────────────────────────────────
-  const filteredTasks = useMemo(() => {
-    return tasks.filter((t) => {
-      const matchesSearch =
-        t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (t.labels && t.labels.some((l) => l.toLowerCase().includes(searchQuery.toLowerCase())));
+  // Handle Delete Task
+  const handleDeleteTask = async (taskId) => {
+    if (!window.confirm('Are you sure you want to delete this task?')) return;
 
-      const matchesProject =
-        !isGlobal || selectedProject === 'All Projects' || t.projectName === selectedProject;
-
-      return matchesSearch && matchesProject;
-    });
-  }, [tasks, searchQuery, selectedProject, isGlobal]);
-
-  // ─── Dynamic summary cards ────────────────────────────────────
-  const dynamicStats = useMemo(() => {
-    const pool = isGlobal && selectedProject !== 'All Projects'
-      ? tasks.filter((t) => t.projectName === selectedProject)
-      : tasks;
-
-    const total     = pool.length;
-    const todo      = pool.filter((t) => t.status === 'TODO').length;
-    const inProgress = pool.filter((t) => t.status === 'IN PROGRESS').length;
-    const review    = pool.filter((t) => t.status === 'REVIEW').length;
-    const completed = pool.filter((t) => t.status === 'COMPLETED').length;
-
-    return [
-      { id: 'total',      label: 'Total Tasks', value: total.toString() },
-      { id: 'todo',       label: 'Todo',        value: todo.toString(),       valueColor: 'text-slate-600' },
-      { id: 'inprogress', label: 'In Progress', value: inProgress.toString(), valueColor: 'text-primary-600' },
-      { id: 'review',     label: 'Review',      value: review.toString(),     valueColor: 'text-purple-500' },
-      { id: 'completed',  label: 'Completed',   value: completed.toString(),  valueColor: 'text-emerald-500' },
-    ];
-  }, [tasks, selectedProject, isGlobal]);
-
-  // ─── Handlers ─────────────────────────────────────────────────
-
-  const handleOpenEdit = useCallback((taskId) => {
-    const t = tasks.find((t) => t.id === taskId);
-    if (t) setEditTask(t);
-  }, [tasks]);
-
-  const handleSaveEdit = useCallback((updatedTask) => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
-    );
-    toast.success('Task updated successfully.');
-  }, []);
-
-  const handleOpenDelete = useCallback((taskId) => {
-    const t = tasks.find((t) => t.id === taskId);
-    if (t) setDeleteTask(t);
-  }, [tasks]);
-
-  const handleConfirmDelete = useCallback((taskId) => {
-    setTasks((prev) => prev.filter((t) => t.id !== taskId));
-    toast('Task deleted.', { icon: '🗑️' });
-  }, []);
-
-  const handleStatusChange = useCallback((taskId, newStatus) => {
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId
-          ? { ...t, status: newStatus, progress: STATUS_PROGRESS[newStatus] ?? t.progress }
-          : t
-      )
-    );
-  }, []);
-
-  const handleResetFilters = () => {
-    setSearchQuery('');
-    setSelectedProject('All Projects');
+    try {
+      await taskService.deleteTask(taskId);
+      toast.success('Task deleted successfully');
+      fetchTasks();
+    } catch (err) {
+      console.error('Failed to delete task:', err);
+      toast.error(err.response?.data?.message || 'Failed to delete task');
+    }
   };
 
-  // ─── Render ───────────────────────────────────────────────────
+  // Handle Edit Task (opens modal)
+  const handleEditTask = (task) => {
+    setTaskToEdit(task);
+    setIsModalOpen(true);
+  };
+
+  // Handle Create Task (opens modal)
+  const handleNewTask = () => {
+    setTaskToEdit(null);
+    setIsModalOpen(true);
+  };
+
+  // Handle Inline Progress Update
+  const handleUpdateProgress = async (taskId, newProgress) => {
+    try {
+      const updateData = { progress: newProgress };
+      if (newProgress === 100) {
+        updateData.status = 'Completed';
+      }
+      await taskService.updateTask(taskId, updateData);
+      toast.success('Progress updated');
+      fetchTasks();
+    } catch (err) {
+      console.error('Failed to update progress:', err);
+      toast.error('Failed to update progress');
+    }
+  };
+
+  // STEP 8: Real-Time Dynamic Search Filtering
+  const filteredTasks = tasks.filter((t) => {
+    const q = searchQuery.toLowerCase();
+    const titleMatch = (t.title || t.name || '').toLowerCase().includes(q);
+    const descMatch = (t.description || '').toLowerCase().includes(q);
+    const projMatch = (t.project?.name || t.projectName || '').toLowerCase().includes(q);
+    const userMatch = (t.githubUsername || t.assignedTo?.name || '').toLowerCase().includes(q);
+    return titleMatch || descMatch || projMatch || userMatch;
+  });
+
+  // STEP 7: Dynamic Global Statistics from MongoDB Data
+  const total = tasks.length;
+  const todo = tasks.filter((t) => (t.status || '').toLowerCase() === 'todo').length;
+  const inProgress = tasks.filter((t) => (t.status || '').toLowerCase() === 'in progress').length;
+  const review = tasks.filter((t) => (t.status || '').toLowerCase() === 'review' || (t.status || '').toLowerCase() === 'in review').length;
+  const completed = tasks.filter((t) => (t.status || '').toLowerCase() === 'completed' || (t.status || '').toLowerCase() === 'done').length;
+
+  const dynamicStats = [
+    { id: 'total',       label: 'TOTAL TASKS', value: total,      valueColor: 'text-slate-800' },
+    { id: 'todo',        label: 'TODO',        value: todo,       valueColor: 'text-amber-600' },
+    { id: 'in_progress', label: 'IN PROGRESS', value: inProgress, valueColor: 'text-indigo-600' },
+    { id: 'review',      label: 'REVIEW',      value: review,     valueColor: 'text-blue-600' },
+    { id: 'completed',   label: 'COMPLETED',   value: completed,  valueColor: 'text-emerald-600' },
+  ];
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-
-      {/* Header */}
-      <TaskHeader
-        projectName={project?.name || 'DevNote'}
+      {/* Header Area with integrated controls */}
+      <TaskHeader 
+        projectName={project?.name || 'DevNote Workspace'}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        selectedProject={selectedProject}
-        onProjectChange={setSelectedProject}
-        isGlobal={isGlobal}
-        onNewTask={() => setIsCreateOpen(true)}
+        onNewTask={handleNewTask}
       />
 
-      {/* Stats */}
+      {/* Dynamic Statistics Row */}
       <TaskStatistics stats={dynamicStats} />
-
-      {/* Table or Empty State */}
-      {filteredTasks.length > 0 ? (
-        <TaskTable
-          tasks={filteredTasks}
-          isGlobal={isGlobal}
-          onEdit={handleOpenEdit}
-          onDelete={handleOpenDelete}
-          onStatusChange={handleStatusChange}
-        />
-      ) : (
-        <div className="mt-8 flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-white py-16 text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-50">
-            <SearchX size={32} className="text-gray-400" />
-          </div>
-          {tasks.length === 0 ? (
-            <>
-              <h3 className="mb-1 text-lg font-bold text-gray-900">No Tasks Available</h3>
-              <p className="mb-6 text-sm text-gray-500">Create your first task using the "New Task" button.</p>
-            </>
-          ) : (
-            <>
-              <h3 className="mb-1 text-lg font-bold text-gray-900">No tasks found</h3>
-              <p className="mb-6 text-sm text-gray-500">Try changing your search or selecting another project.</p>
-              <button
-                onClick={handleResetFilters}
-                className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >
-                Reset Filters
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* ── Modals ── */}
-      <CreateTaskModal
-        isOpen={isCreateOpen}
-        onClose={() => setIsCreateOpen(false)}
+      
+      {/* List View Rendering with real MongoDB task data */}
+      <TaskTable
+        tasks={filteredTasks}
+        loading={loading}
+        onEdit={handleEditTask}
+        onDelete={handleDeleteTask}
+        onUpdateProgress={handleUpdateProgress}
       />
 
-      <EditTaskModal
-        isOpen={!!editTask}
-        task={editTask}
-        onClose={() => setEditTask(null)}
-        onSave={handleSaveEdit}
-      />
-
-      <DeleteTaskModal
-        isOpen={!!deleteTask}
-        task={deleteTask}
-        onClose={() => setDeleteTask(null)}
-        onConfirm={handleConfirmDelete}
+      {/* Create / Edit Task Modal */}
+      <CreateTaskModal 
+        isOpen={isModalOpen} 
+        onClose={() => {
+          setIsModalOpen(false);
+          setTaskToEdit(null);
+        }}
+        taskToEdit={taskToEdit}
+        onTaskSaved={fetchTasks}
       />
     </div>
   );

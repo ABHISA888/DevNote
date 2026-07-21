@@ -1,32 +1,32 @@
+import { CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+
 /**
  * 🎓 TEACHING MOMENT: StatusBadge.jsx
- *
- * WHY THIS EXISTS:
- * Status is the most-read field in any project management tool. Linear uses colored
- * circles, Jira uses colored rectangles, and our design uses outlined pill badges.
- * Isolating this ensures every status transition is visually consistent.
- *
- * FUTURE INTEGRATION:
- * The `status` string will map 1-to-1 to backend enum values:
- *   "TODO" | "IN_PROGRESS" | "DONE"
+ * Visual indicators for task status transitions (Todo, In Progress, Review, Completed).
  */
 
-import { CheckCircle2 } from 'lucide-react';
-
 const CONFIG = {
-  TODO:        { label: 'TODO',        classes: 'bg-slate-50 text-slate-500 border-slate-200', icon: '⊟', useIcon: false },
-  IN_PROGRESS: { label: 'IN PROGRESS', classes: 'bg-violet-50 text-violet-600 border-violet-200', icon: '↺', useIcon: false },
-  DONE:        { label: 'DONE',        classes: 'bg-blue-50 text-blue-600 border-blue-100',    icon: null, useIcon: true },
+  TODO:        { label: 'TODO',        classes: 'bg-slate-50 text-slate-500 border-slate-200', icon: '⊟' },
+  IN_PROGRESS: { label: 'IN PROGRESS', classes: 'bg-indigo-50 text-indigo-600 border-indigo-200', icon: '↺' },
+  REVIEW:      { label: 'REVIEW',      classes: 'bg-amber-50 text-amber-600 border-amber-200', icon: '👁' },
+  COMPLETED:   { label: 'COMPLETED',   classes: 'bg-emerald-50 text-emerald-600 border-emerald-200', isCheck: true },
 };
 
 export default function StatusBadge({ status }) {
-  const cfg = CONFIG[status] ?? CONFIG.TODO;
+  const normalized = (status || 'Todo').toUpperCase().replace(/\s+/g, '_');
+  let key = normalized;
+  if (normalized === 'DONE') key = 'COMPLETED';
+  if (normalized === 'IN_REVIEW') key = 'REVIEW';
+
+  const cfg = CONFIG[key] ?? CONFIG.TODO;
+
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cfg.classes}`}>
-      {cfg.useIcon
-        ? <CheckCircle2 size={11} strokeWidth={2.5} />
-        : <span className="text-xs leading-none opacity-70">{cfg.icon}</span>
-      }
+      {cfg.isCheck ? (
+        <CheckCircle2 size={11} strokeWidth={2.5} />
+      ) : (
+        <span className="text-xs leading-none opacity-70">{cfg.icon}</span>
+      )}
       {cfg.label}
     </span>
   );
