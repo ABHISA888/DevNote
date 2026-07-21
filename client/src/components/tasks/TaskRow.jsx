@@ -1,5 +1,5 @@
 import PriorityBadge from './PriorityBadge';
-import StatusBadge from './StatusBadge';
+import InlineStatusDropdown from './InlineStatusDropdown';
 import AssignedUsers from './AssignedUsers';
 import TaskProgressBar from './TaskProgressBar';
 import { Pencil, Trash2, Calendar, CheckCircle2, Circle } from 'lucide-react';
@@ -56,7 +56,7 @@ export default function TaskRow({ task, onEdit, onDelete, onUpdateProgress }) {
 
       {/* 4. Status */}
       <td className="px-4 py-4">
-        <StatusBadge status={status} />
+        <InlineStatusDropdown status={status} onStatusChange={(s) => onStatusChange(id, s)} />
       </td>
 
       {/* 5. Due Date */}
@@ -105,6 +105,11 @@ export default function TaskRow({ task, onEdit, onDelete, onUpdateProgress }) {
             <Trash2 size={15} />
           </button>
         </div>
+      </td>
+
+      {/* ── Actions ── */}
+      <td className="py-4 pr-6 text-right">
+        <TaskActionsMenu onEdit={() => onEdit(id)} onDelete={() => onDelete(id)} />
       </td>
     </tr>
   );

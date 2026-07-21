@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import TaskHeader from './TaskHeader';
 import TaskStatistics from './TaskStatistics';
-import TaskTable from '../../tasks/TaskTable';
+import TaskTable      from '../../tasks/TaskTable';
 import CreateTaskModal from '../../tasks/CreateTaskModal';
 import { taskService } from '../../../services/api/taskService';
 
