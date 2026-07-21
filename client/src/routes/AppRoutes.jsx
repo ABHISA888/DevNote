@@ -22,6 +22,7 @@ import MyNotesPage from '../components/notes/MyNotesPage';
 
 // ─── Project Workspace (full-screen, own chrome) ──────────────────────────────
 import ProjectWorkspacePage from '../pages/workspace/ProjectWorkspacePage';
+import InvitePage from '../pages/workspace/InvitePage';
 
 // ─── Fallback ──────────────────────────────────────────────────────────────────
 import NotFoundPage from '../pages/not-found/NotFoundPage';
@@ -34,6 +35,7 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/invite/:token" element={<InvitePage />} />
 
       {/* ── Protected Route Group ── */}
       <Route element={<ProtectedRoute />}>

@@ -508,7 +508,8 @@ export default function ProjectWorkspacePage() {
       {/* ── Members Modal ── */}
       <MembersModal 
         isOpen={isMembersModalOpen} 
-        onClose={() => setIsMembersModalOpen(false)} 
+        onClose={() => setIsMembersModalOpen(false)}
+        projectId={projectId}
       />
 
       {/* ── Edit Project Modal ── */}

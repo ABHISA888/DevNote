@@ -17,7 +17,8 @@ export default function StatCard({
   metaColor, 
   type, 
   progressValue,
-  fill 
+  fill,
+  layout = 'default'
 }) {
   return (
     <div className="flex flex-col justify-between rounded-xl bg-white p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-100 transition-all">
@@ -25,26 +26,50 @@ export default function StatCard({
         {label}
       </h3>
       
-      <div className="mt-4 flex items-end justify-between">
-        <span className="text-3xl font-extrabold text-slate-800 leading-none">
-          {value}
-        </span>
-        
-        {/* Dynamic Meta Content */}
-        {Icon && (
-          <Icon 
-            size={20} 
-            className={`${iconColor} ${fill ? 'fill-current' : ''}`} 
-            strokeWidth={2.5} 
-          />
-        )}
-        
-        {metaText && (
-          <span className={`text-xs font-bold ${metaColor}`}>
-            {metaText}
+      {layout === 'stacked' ? (
+        <div className="mt-4 flex flex-col items-center justify-center gap-1.5">
+          <span className="text-3xl font-extrabold text-slate-800 leading-none">
+            {value}
           </span>
-        )}
-      </div>
+          <div className="flex items-center gap-1">
+            {Icon && (
+              <Icon 
+                size={14} 
+                className={`${iconColor} ${fill ? 'fill-current' : ''}`} 
+                strokeWidth={2.5} 
+              />
+            )}
+            {metaText && (
+              <span className={`text-xs font-bold ${metaColor} whitespace-nowrap`}>
+                {metaText}
+              </span>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-4 flex items-end justify-between">
+          <span className="text-3xl font-extrabold text-slate-800 leading-none">
+            {value}
+          </span>
+          
+          <div className="flex items-center gap-1.5 pb-0.5">
+            {/* Dynamic Meta Content */}
+            {Icon && (
+              <Icon 
+                size={20} 
+                className={`${iconColor} ${fill ? 'fill-current' : ''}`} 
+                strokeWidth={2.5} 
+              />
+            )}
+            
+            {metaText && (
+              <span className={`text-xs font-bold ${metaColor} whitespace-nowrap`}>
+                {metaText}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Progress Bar Variant */}
       {type === 'progress' && (
