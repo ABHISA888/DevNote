@@ -74,9 +74,35 @@ const sendTaskNotification = async (user, taskDetails) => {
   return { success: true };
 };
 
-const sendProjectInvitation = async (user, projectDetails) => {
-  console.log(`[Future Email Service] sendProjectInvitation triggered for ${user.email}`, projectDetails);
-  return { success: true };
+const sendProjectInvitation = async ({ to, projectName, inviterName, inviteToken, role }) => {
+  try {
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    // The link the user clicks. The frontend will grab the token from the URL and call our verify/accept endpoints.
+    const inviteUrl = `${clientUrl}/invite/${inviteToken}`;
+    
+    const dataContent = {
+      projectName,
+      inviterName,
+      role,
+      inviteUrl
+    };
+
+    const htmlContent = await template.getCompiledTemplate('inviteEmail', dataContent);
+
+    console.log(`[Email Service] Sending Project Invitation to ${to}`);
+    const result = await brevoService.sendMailWithRetry({
+      from: process.env.MAIL_FROM || '"DevNote" <no-reply@devnote.com>',
+      to,
+      subject: `You're invited to collaborate on ${projectName}`,
+      html: htmlContent,
+    });
+
+    return result;
+  } catch (error) {
+    console.error(`[Email Service] Failed to send project invitation to ${to}: ${error.message}`);
+    // We throw the error so the InviteService (Option A) knows the email failed and can rollback!
+    throw error;
+  }
 };
 
 const sendDeadlineReminder = async (user, deadlineDetails) => {
