@@ -1,10 +1,10 @@
 import TaskColumn from './TaskColumn';
 
-export default function TaskBoard({ tasks }) {
-  const todoTasks = tasks.filter((t) => t.status === 'TODO');
-  const inProgressTasks = tasks.filter((t) => t.status === 'IN PROGRESS');
-  const reviewTasks = tasks.filter((t) => t.status === 'REVIEW');
-  const completedTasks = tasks.filter((t) => t.status === 'COMPLETED');
+export default function TaskBoard({ tasks = [] }) {
+  const todoTasks = tasks.filter((t) => (t.status || '').toLowerCase() === 'todo');
+  const inProgressTasks = tasks.filter((t) => (t.status || '').toLowerCase() === 'in progress');
+  const reviewTasks = tasks.filter((t) => (t.status || '').toLowerCase() === 'review' || (t.status || '').toLowerCase() === 'in review');
+  const completedTasks = tasks.filter((t) => (t.status || '').toLowerCase() === 'completed' || (t.status || '').toLowerCase() === 'done');
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full">
