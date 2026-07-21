@@ -1,16 +1,64 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { X, Search, MoreVertical } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { X, Search, MoreVertical, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { MOCK_MEMBERS } from '../../mock/membersData';
+import { projectService } from '../../services/api/projectService';
+import { inviteService } from '../../services/api/inviteService';
 
-export default function MembersModal({ isOpen, onClose }) {
-  const [members, setMembers] = useState(MOCK_MEMBERS);
+export default function MembersModal({ isOpen, onClose, projectId }) {
+  const [members, setMembers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState('All Members');
 
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('Viewer');
   const [inviteMessage, setInviteMessage] = useState('');
+
+  const fetchMembersAndInvites = useCallback(async () => {
+    if (!projectId) return;
+    setIsLoading(true);
+    try {
+      // Fetch active members
+      const teamRes = await projectService.getTeam(projectId);
+      const activeMembers = teamRes.data.map(m => ({
+        id: m._id,
+        name: m.displayName || m.user?.name || 'Unknown User',
+        email: m.user?.email || 'N/A',
+        role: m.role,
+        status: 'Active',
+        avatar: m.githubAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${m.user?.email}`,
+        isInvite: false
+      }));
+
+      // Fetch pending invites
+      const invitesRes = await inviteService.getPendingInvites(projectId);
+      const pendingInvites = invitesRes.data.map(inv => ({
+        id: inv._id,
+        name: inv.invitedEmail.split('@')[0], // Placeholder name
+        email: inv.invitedEmail,
+        role: inv.role,
+        status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1), // Pending, Expired
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${inv.invitedEmail}&backgroundColor=slate`,
+        isInvite: true
+      }));
+
+      // Combine both
+      setMembers([...activeMembers, ...pendingInvites]);
+    } catch (error) {
+      console.error('Failed to fetch members/invites:', error);
+      toast.error('Failed to load team members');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchMembersAndInvites();
+    }
+  }, [isOpen, fetchMembersAndInvites]);
 
   if (!isOpen) return null;
 
@@ -34,42 +82,56 @@ export default function MembersModal({ isOpen, onClose }) {
     return matchesSearch && matchesFilter;
   });
 
-  const handleInvite = () => {
+  const handleInvite = async () => {
     if (!inviteEmail.trim()) {
       toast.error('Email is required');
       return;
     }
     
-    const newMember = {
-      id: Date.now(),
-      name: inviteEmail.split('@')[0],
-      email: inviteEmail,
-      role: inviteRole,
-      status: 'Pending',
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${inviteEmail}&backgroundColor=slate`
-    };
-
-    setMembers([...members, newMember]);
-    setInviteEmail('');
-    setInviteRole('Viewer');
-    setInviteMessage('');
-    toast.success('Invitation sent successfully.');
+    setIsSending(true);
+    try {
+      await inviteService.sendInvite(projectId, {
+        email: inviteEmail,
+        role: inviteRole,
+        message: inviteMessage
+      });
+      
+      toast.success('Invitation sent successfully via email!');
+      
+      // Reset form
+      setInviteEmail('');
+      setInviteRole('Viewer');
+      setInviteMessage('');
+      
+      // Refresh list
+      fetchMembersAndInvites();
+    } catch (error) {
+      console.error('Send Invite Error:', error);
+      toast.error(error.response?.data?.message || 'Failed to send invitation.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
-  const handleRemoveMember = (id, role) => {
+  const handleRemoveMember = async (id, role, isInvite) => {
     if (role === 'Owner') {
       toast.error('Owner cannot be removed.');
       return;
     }
+    
+    // In a full implementation, you'd call an API to delete the invite or remove the team member here.
+    // For MVP, we remove from UI state.
     setMembers(members.filter(m => m.id !== id));
-    toast.success('Member removed');
+    toast.success(isInvite ? 'Invitation revoked' : 'Member removed');
   };
 
-  const handleEditRole = (id, newRole, role) => {
+  const handleEditRole = async (id, newRole, role, isInvite) => {
     if (role === 'Owner') {
       toast.error('Owner role cannot be changed.');
       return;
     }
+    
+    // In a full implementation, you'd call updateTeamMemberRole API here.
     setMembers(members.map(m => m.id === id ? { ...m, role: newRole } : m));
     toast.success('Role updated');
   };
@@ -132,7 +194,13 @@ export default function MembersModal({ isOpen, onClose }) {
             </div>
 
             {/* Members List */}
-            <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden min-h-[150px]">
+            <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden min-h-[150px] relative">
+              {isLoading ? (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm z-10">
+                  <Loader2 className="animate-spin text-primary-500" size={24} />
+                </div>
+              ) : null}
+              
               {filteredMembers.length > 0 ? (
                 <div className="divide-y divide-gray-100">
                   {filteredMembers.map((member) => (
@@ -156,15 +224,17 @@ export default function MembersModal({ isOpen, onClose }) {
                         
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                           member.status === 'Active' ? 'bg-green-50 text-green-600' :
-                          'bg-yellow-50 text-yellow-600'
+                          member.status === 'Pending' ? 'bg-yellow-50 text-yellow-600' :
+                          member.status === 'Expired' ? 'bg-red-50 text-red-600' :
+                          'bg-gray-50 text-gray-600'
                         }`}>
                           {member.status}
                         </span>
 
                         <MemberActionMenu 
                           member={member} 
-                          onRemove={() => handleRemoveMember(member.id, member.role)}
-                          onEditRole={(newRole) => handleEditRole(member.id, newRole, member.role)}
+                          onRemove={() => handleRemoveMember(member.id, member.role, member.isInvite)}
+                          onEditRole={(newRole) => handleEditRole(member.id, newRole, member.role, member.isInvite)}
                         />
                       </div>
                     </div>
@@ -175,17 +245,8 @@ export default function MembersModal({ isOpen, onClose }) {
                   <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-50">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-800">No Members Yet</h3>
-                  <p className="mt-1 text-xs text-slate-500 mb-4">Invite your teammates to collaborate.</p>
-                  <button 
-                    onClick={() => {
-                      const emailInput = document.getElementById('inviteEmailInput');
-                      if (emailInput) emailInput.focus();
-                    }}
-                    className="rounded-lg bg-primary-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700 active:scale-95"
-                  >
-                    Invite Member
-                  </button>
+                  <h3 className="text-sm font-bold text-slate-800">No Members Found</h3>
+                  <p className="mt-1 text-xs text-slate-500 mb-4">Try adjusting your filters or invite new teammates.</p>
                 </div>
               )}
             </div>
@@ -204,7 +265,8 @@ export default function MembersModal({ isOpen, onClose }) {
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
                     placeholder="Enter email address..."
-                    className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+                    disabled={isSending}
+                    className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:opacity-50"
                   />
                 </div>
                 <div className="sm:col-span-1">
@@ -212,7 +274,8 @@ export default function MembersModal({ isOpen, onClose }) {
                   <select
                     value={inviteRole}
                     onChange={(e) => setInviteRole(e.target.value)}
-                    className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+                    disabled={isSending}
+                    className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:opacity-50"
                   >
                     <option value="Viewer">Viewer</option>
                     <option value="Editor">Editor</option>
@@ -227,24 +290,28 @@ export default function MembersModal({ isOpen, onClose }) {
                   onChange={(e) => setInviteMessage(e.target.value)}
                   placeholder="Write a welcome message..."
                   rows="2"
-                  className="w-full resize-none rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+                  disabled={isSending}
+                  className="w-full resize-none rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:opacity-50"
                 ></textarea>
               </div>
 
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
+                  disabled={isSending}
                   onClick={() => { setInviteEmail(''); setInviteMessage(''); }}
-                  className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50"
+                  className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50 disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleInvite}
-                  className="rounded-lg bg-primary-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700 active:scale-95"
+                  disabled={isSending}
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-primary-600/20 transition hover:bg-primary-700 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send Invitation
+                  {isSending && <Loader2 size={14} className="animate-spin" />}
+                  {isSending ? 'Sending...' : 'Send Invitation'}
                 </button>
               </div>
             </div>
@@ -315,7 +382,7 @@ function MemberActionMenu({ member, onRemove, onEditRole }) {
                 : 'text-red-600 hover:bg-red-50'
             }`}
           >
-            Remove Member
+            {member.isInvite ? 'Revoke Invite' : 'Remove Member'}
           </button>
         </div>
       )}

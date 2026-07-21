@@ -47,6 +47,20 @@ export default function StatsGrid({ projects = [] }) {
   const healthyCount = totalCount - atRiskCount;
   const healthScorePercent = totalCount > 0 ? Math.round((healthyCount / totalCount) * 100) : 100;
 
+  let healthMetaText = 'Critical';
+  let healthMetaColor = 'text-red-500';
+
+  if (healthScorePercent >= 90) {
+    healthMetaText = 'Healthy';
+    healthMetaColor = 'text-emerald-500';
+  } else if (healthScorePercent >= 75) {
+    healthMetaText = 'Good';
+    healthMetaColor = 'text-blue-500';
+  } else if (healthScorePercent >= 50) {
+    healthMetaText = 'Warning';
+    healthMetaColor = 'text-orange-500';
+  }
+
   const stats = [
     { 
       id: 'total', 
@@ -82,8 +96,9 @@ export default function StatsGrid({ projects = [] }) {
       id: 'health', 
       label: 'HEALTH SCORE', 
       value: `${healthScorePercent}%`,
-      metaText: healthScorePercent >= 80 ? 'Healthy' : (healthScorePercent >= 50 ? 'Warning' : 'At Risk'), 
-      metaColor: healthScorePercent >= 80 ? 'text-emerald-500' : (healthScorePercent >= 50 ? 'text-amber-500' : 'text-red-500') 
+      metaText: `● ${healthMetaText}`, 
+      metaColor: healthMetaColor,
+      layout: 'stacked'
     },
     { 
       id: 'favorites', 

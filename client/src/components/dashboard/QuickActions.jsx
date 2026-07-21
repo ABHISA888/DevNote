@@ -21,7 +21,6 @@ export default function QuickActions({
       <ActionButton label="New Project" icon={Plus} variant="primary" onClick={onNewProject} />
       <ActionButton label="Add Task" icon={CheckSquare} variant="outline" onClick={onAddTask} />
       <ActionButton label="Create Note" icon={FileText} variant="outline" onClick={onCreateNote} />
-      <ActionButton label="Save API" icon={Code2} variant="outline" onClick={onSaveApi} />
       
       {/* Spacer to push Github button to right if there is room */}
       <div className="flex-1" />
