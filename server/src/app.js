@@ -68,6 +68,11 @@ app.use(cookieParser());
 // Initialize passport
 app.use(passport.initialize());
 
+
+const inviteRoutes = require('./routes/inviteRoutes');
+const inviteController = require('./controllers/inviteController');
+const { protect } = require('./middleware/authMiddleware');
+
 // 3. API Routes Mount Points
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
@@ -75,6 +80,9 @@ app.use('/api/projects/:projectId/notes', noteRoutes);
 app.use('/api/projects/:projectId/envvars', envVarRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/github', githubRoutes);
+
+// Standalone invitation endpoints (Accept, Verify)
+app.use('/api/invitations', inviteRoutes);
 
 // Simple health check endpoint to check server availability
 app.get('/api/health', (req, res) => {

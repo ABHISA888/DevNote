@@ -19,11 +19,16 @@ const {
   removeTeamMember
 } = require('../controllers/teamController');
 const { protect } = require('../middleware/authMiddleware');
+const inviteController = require('../controllers/inviteController');
 
 // 🎓 TEACHING MOMENT: Route Protection middleware
 // By mounting `protect` as a router-level middleware, we guarantee that all routes
 // defined in this file require a valid JWT token.
 router.use(protect);
+
+// Project Invitation Routes
+router.post('/:projectId/invite', inviteController.sendInvite);
+router.get('/:projectId/invites', inviteController.getPendingInvites);
 
 // GitHub user search proxy (before parameterised routes)
 router.get('/github/search', searchGithubUsers);
