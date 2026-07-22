@@ -14,12 +14,32 @@ const mongoose = require('mongoose');
  */
 
 /**
+ * Safely extract owner ID string from a Project document
+ */
+const getProjectOwnerId = (project) => {
+  if (!project) return null;
+  const owner = project.owner || project.user || project.createdBy;
+  if (!owner) return null;
+  if (typeof owner === 'object' && owner._id) {
+    return owner._id.toString();
+  }
+  return owner.toString();
+};
+
+/**
  * @desc    Get all tasks for the logged-in user across all projects
  * @route   GET /api/tasks
  * @access  Private
  */
 exports.getTasks = async (req, res, next) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication failed. User session not found.',
+      });
+    }
+
     const filter = { isArchived: false };
 
     if (req.query.projectId) {
@@ -78,6 +98,13 @@ exports.createTask = async (req, res, next) => {
       githubProfile,
     } = req.body;
 
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication failed. User session not found.',
+      });
+    }
+
     // Fail-Fast Validation: Title and Project are required
     if (!title || title.trim() === '') {
       return res.status(400).json({
@@ -103,6 +130,7 @@ exports.createTask = async (req, res, next) => {
 
     // Check if the parent Project exists
     const parentProject = await Project.findById(projectId);
+
     if (!parentProject) {
       return res.status(404).json({
         success: false,
@@ -111,10 +139,8 @@ exports.createTask = async (req, res, next) => {
     }
 
     // Authorization Check: Verify the logged-in user owns the project
-    const ownerId = parentProject.owner._id
-      ? parentProject.owner._id.toString()
-      : parentProject.owner.toString();
-    if (ownerId !== req.user._id.toString()) {
+    const ownerId = getProjectOwnerId(parentProject);
+    if (!ownerId || ownerId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Access Forbidden: You do not have permission to add tasks to this project.',
@@ -147,7 +173,7 @@ exports.createTask = async (req, res, next) => {
       project: projectId,
       user: req.user._id,
       createdBy: req.user._id,
-      assignedTo: assignedTo || null,
+      assignedTo: (assignedTo && mongoose.Types.ObjectId.isValid(assignedTo)) ? assignedTo : null,
       startDate: startDate || null,
       dueDate: dueDate || null,
       estimatedHours: estimatedHours || 0,
@@ -201,6 +227,13 @@ exports.createTask = async (req, res, next) => {
  */
 exports.getProjectTasks = async (req, res, next) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication failed. User session not found.',
+      });
+    }
+
     const { projectId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(projectId)) {
@@ -220,10 +253,8 @@ exports.getProjectTasks = async (req, res, next) => {
     }
 
     // Authorization Check
-    const ownerId = parentProject.owner._id
-      ? parentProject.owner._id.toString()
-      : parentProject.owner.toString();
-    if (ownerId !== req.user._id.toString()) {
+    const ownerId = getProjectOwnerId(parentProject);
+    if (!ownerId || ownerId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Access Forbidden: You do not have permission to view tasks for this project.',
@@ -264,6 +295,13 @@ exports.getProjectTasks = async (req, res, next) => {
  */
 exports.getTaskById = async (req, res, next) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication failed. User session not found.',
+      });
+    }
+
     const { taskId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(taskId)) {
@@ -295,10 +333,8 @@ exports.getTaskById = async (req, res, next) => {
       });
     }
 
-    const ownerId = parentProject.owner._id
-      ? parentProject.owner._id.toString()
-      : parentProject.owner.toString();
-    if (ownerId !== req.user._id.toString()) {
+    const ownerId = getProjectOwnerId(parentProject);
+    if (!ownerId || ownerId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Access Forbidden: You do not have permission to view this task.',
@@ -331,6 +367,13 @@ exports.getTaskById = async (req, res, next) => {
  */
 exports.updateTask = async (req, res, next) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication failed. User session not found.',
+      });
+    }
+
     const { taskId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(taskId)) {
@@ -357,10 +400,8 @@ exports.updateTask = async (req, res, next) => {
       });
     }
 
-    const ownerId = parentProject.owner._id
-      ? parentProject.owner._id.toString()
-      : parentProject.owner.toString();
-    if (ownerId !== req.user._id.toString()) {
+    const ownerId = getProjectOwnerId(parentProject);
+    if (!ownerId || ownerId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Access Forbidden: You do not have permission to update tasks for this project.',
@@ -432,6 +473,13 @@ exports.updateTask = async (req, res, next) => {
  */
 exports.deleteTask = async (req, res, next) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication failed. User session not found.',
+      });
+    }
+
     const { taskId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(taskId)) {
@@ -458,10 +506,8 @@ exports.deleteTask = async (req, res, next) => {
       });
     }
 
-    const ownerId = parentProject.owner._id
-      ? parentProject.owner._id.toString()
-      : parentProject.owner.toString();
-    if (ownerId !== req.user._id.toString()) {
+    const ownerId = getProjectOwnerId(parentProject);
+    if (!ownerId || ownerId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Access Forbidden: You do not have permission to delete tasks for this project.',
@@ -488,3 +534,4 @@ exports.deleteTask = async (req, res, next) => {
     });
   }
 };
+
