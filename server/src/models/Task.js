@@ -129,7 +129,7 @@ TaskSchema.index({ user: 1 });
 TaskSchema.index({ assignedTo: 1 });
 
 // Pre-save hook to update completion timestamp automatically
-TaskSchema.pre('save', function (next) {
+TaskSchema.pre('save', function () {
   if (this.isModified('status')) {
     if (this.status === 'Completed' && !this.completedAt) {
       this.completedAt = new Date();
@@ -137,7 +137,6 @@ TaskSchema.pre('save', function (next) {
       this.completedAt = null;
     }
   }
-  next();
 });
 
 const Task = mongoose.model('Task', TaskSchema);
