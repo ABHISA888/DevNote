@@ -18,6 +18,10 @@ exports.sendInvite = async (req, res) => {
     const { projectId } = req.params;
     const { email, role, message } = req.body;
     
+    const normalizedRole = (role || "viewer").trim().toLowerCase();
+    
+    console.log("Incoming Role:", role);
+    console.log("Normalized Role:", normalizedRole);
     console.log(`[DEBUG - Incoming Request] email: ${email}, role: ${role}`);
     const invitedByUserId = req.user._id;
 
@@ -25,11 +29,17 @@ exports.sendInvite = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email is required' });
     }
 
+    const allowedRoles = ["viewer", "editor", "owner"];
+    if (!allowedRoles.includes(normalizedRole)) {
+        throw new Error("Invalid project role.");
+    }
+
+    console.log("Saving Invite With Role:", normalizedRole);
     const invite = await InviteService.createInvitation({
       projectId,
       invitedEmail: email,
       invitedByUserId,
-      role,
+      role: normalizedRole,
       message
     });
 
