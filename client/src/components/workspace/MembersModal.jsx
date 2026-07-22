@@ -13,7 +13,7 @@ export default function MembersModal({ isOpen, onClose, projectId }) {
   const [filter, setFilter] = useState('All Members');
 
   const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState('Viewer');
+  const [inviteRole, setInviteRole] = useState('viewer');
   const [inviteMessage, setInviteMessage] = useState('');
 
   const fetchMembersAndInvites = useCallback(async () => {
@@ -92,7 +92,7 @@ export default function MembersModal({ isOpen, onClose, projectId }) {
     try {
       await inviteService.sendInvite(projectId, {
         email: inviteEmail,
-        role: inviteRole,
+        role: inviteRole.toLowerCase(),
         message: inviteMessage
       });
       
@@ -100,7 +100,7 @@ export default function MembersModal({ isOpen, onClose, projectId }) {
       
       // Reset form
       setInviteEmail('');
-      setInviteRole('Viewer');
+      setInviteRole('viewer');
       setInviteMessage('');
       
       // Refresh list
@@ -277,8 +277,9 @@ export default function MembersModal({ isOpen, onClose, projectId }) {
                     disabled={isSending}
                     className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:opacity-50"
                   >
-                    <option value="Viewer">Viewer</option>
-                    <option value="Editor">Editor</option>
+                    <option value="viewer">Viewer</option>
+                    <option value="editor">Editor</option>
+                    <option value="owner">Owner</option>
                   </select>
                 </div>
               </div>
