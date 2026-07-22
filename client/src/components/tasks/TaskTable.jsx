@@ -46,7 +46,7 @@ export default function TaskTable({ tasks = [], onEdit, onDelete, onUpdateProgre
       <table className="w-full min-w-[840px] border-collapse">
         <thead>
           <tr className="border-b border-gray-200 bg-gray-50/80">
-            {columns.map((col) => (
+            {COLUMNS.map((col) => (
               <th
                 key={col.id}
                 className={`py-3.5 text-left text-[10px] font-bold uppercase tracking-widest text-slate-500 ${col.className}`}

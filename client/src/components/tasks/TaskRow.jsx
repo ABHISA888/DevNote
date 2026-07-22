@@ -8,7 +8,7 @@ import { Pencil, Trash2, Calendar, CheckCircle2, Circle } from 'lucide-react';
  * 🎓 TEACHING MOMENT: TaskRow.jsx
  * Represents a single database task row connected to real MongoDB data & API actions.
  */
-export default function TaskRow({ task, onEdit, onDelete, onUpdateProgress }) {
+export default function TaskRow({ task, onEdit, onDelete, onUpdateProgress, onStatusChange }) {
   const taskId = task._id || task.id;
   const title = task.title || task.name || 'Untitled Task';
   const projectName = task.project?.name || task.projectName || 'General';
@@ -56,7 +56,10 @@ export default function TaskRow({ task, onEdit, onDelete, onUpdateProgress }) {
 
       {/* 4. Status */}
       <td className="px-4 py-4">
-        <InlineStatusDropdown status={status} onStatusChange={(s) => onStatusChange(id, s)} />
+        <InlineStatusDropdown
+          status={status}
+          onStatusChange={(s) => onStatusChange ? onStatusChange(taskId, s) : (onUpdateProgress && s === 'Completed' ? onUpdateProgress(taskId, 100) : null)}
+        />
       </td>
 
       {/* 5. Due Date */}
@@ -105,11 +108,6 @@ export default function TaskRow({ task, onEdit, onDelete, onUpdateProgress }) {
             <Trash2 size={15} />
           </button>
         </div>
-      </td>
-
-      {/* ── Actions ── */}
-      <td className="py-4 pr-6 text-right">
-        <TaskActionsMenu onEdit={() => onEdit(id)} onDelete={() => onDelete(id)} />
       </td>
     </tr>
   );

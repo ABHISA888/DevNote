@@ -27,7 +27,8 @@ export default function InlineStatusDropdown({ status, onStatusChange }) {
     return () => document.removeEventListener('mousedown', handle);
   }, []);
 
-  const cfg = BADGE_CONFIG[status] ?? BADGE_CONFIG['TODO'];
+  const key = (status || 'TODO').toUpperCase();
+  const cfg = BADGE_CONFIG[key] ?? BADGE_CONFIG['TODO'];
 
   return (
     <div ref={ref} className="relative inline-block">
